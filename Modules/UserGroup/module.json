@@ -1,0 +1,14 @@
+{
+    "name": "UserGroup",
+    "alias": "usergroup",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 2,
+    "providers": [
+        "Modules\\UserGroup\\Providers\\UserGroupServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

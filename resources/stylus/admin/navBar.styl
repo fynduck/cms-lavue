@@ -1,0 +1,336 @@
+.nav_side
+  margin-bottom 0
+  padding-left 0
+  list-style none
+
+  > li
+    position relative
+    display block
+
+    > a
+      position relative
+      display block
+      padding 10px 15px
+
+      &:focus,
+      &:hover
+        text-decoration none
+        background-color #eee
+
+      > img
+        max-width none
+
+    &.disabled
+      > a
+        color #777
+
+        &:focus,
+        &:hover
+          color #777
+          text-decoration none
+          background-color transparent
+          cursor not-allowed
+
+.navbar-toggler
+  outline none !important
+
+.el-main
+  overflow initial !important
+
+#content_wrapper
+  position relative
+  left 0
+  padding 1rem
+  background-color #fff
+  box-shadow 0 4px 70px -18px #707070
+  margin-left $aside-min-width
+  overflow hidden
+
+  &.maxWidth
+    margin-left $aside-width
+
+.el-aside
+  color #fff
+  font-size 13px
+  position fixed
+  top 0
+  left 0
+  padding-top 60px
+  padding-bottom 40px
+  background-color $dark
+  z-index 1028
+  overflow initial !important
+  height 100%
+
+  .aside
+    width $aside-min-width
+    min-height 100%
+    max-height 100%
+    overflow auto
+    overflow-x hidden
+
+    &::-webkit-scrollbar
+      width 8px
+
+    &::-webkit-scrollbar-thumb
+      background darken($vue-green, 20%)
+
+      &:hover
+        background darken($vue-green, 30%)
+
+    &.affix
+      width $aside-width
+
+      &.hideScroll
+        overflow initial
+
+      > ul
+        > li
+          > a
+            i
+              width 55px
+              font-size 18px
+
+            &.menu-open
+              + ul
+                position absolute
+                z-index 1
+
+
+#content_wrapper,
+.el-aside,
+.navbar-branding,
+.aside,
+.nav_side
+  -webkit-transition all .2s ease
+  transition all .2s ease
+
+.navbar
+  z-index 1030
+
+.navbar-branding
+  position relative
+  overflow hidden
+  float left
+  width 40px
+  background-color transparent
+
+  &.open
+    width $aside-width
+
+    .navbar-brand
+      display inline-block
+
+  .navbar-brand
+    display none
+    color #666
+    padding 0 0 0 18px
+    font-size 17px
+    font-weight 400
+    letter-spacing .5px
+
+    b
+      font-weight 700
+
+.toggle_aside
+  color #666
+  float right
+  cursor pointer
+  font-size 16px
+  max-height 60px
+  width 60px
+  text-align center
+  -webkit-touch-callout none
+  -webkit-user-select none
+  -khtml-user-select none
+  -moz-user-select none
+  -ms-user-select none
+  user-select none
+
+.sidebar-menu
+  padding-bottom 20px
+
+  .router-link-active
+    color $vue-green
+
+  > li
+    margin 0
+
+    &:first-child
+      padding-top 4px
+
+    > a
+      padding 0
+      line-height 35px
+      height 35px
+      overflow hidden
+      color $white
+
+      &:active,
+      &:focus,
+      &:hover
+        color inherit
+        background-color transparent
+
+      > span:nth-child(1),
+      > i:nth-child(1)
+        float left
+        top 0
+        line-height 35px
+        width 38px
+        font-size 13px
+        text-align center
+        padding-left 6px
+        color $vue-green
+
+      > span:nth-child(2),
+      > i:nth-child(2)
+        font-weight 600
+        padding-left 6px
+
+      > span.caret
+        position absolute
+        top 45%
+        right 13px
+        border-top 5px solid
+        border-right 5px solid transparent
+        border-left 5px solid transparent
+        color $vue-green
+
+      &.router-link-active
+        color $vue-green
+
+        > span.caret
+          border-top 0
+          border-bottom 5px solid
+          color $vue-green
+
+        + ul
+          display block
+
+    > ul
+      clear both
+      display none
+      width $aside-width
+      height auto
+      background-color $dark-gray
+
+      > li
+        > a
+          padding 11px 20px 11px 30px
+          color $white
+
+          &:focus,
+          &:hover
+            color inherit
+            background-color transparent
+
+        &:first-child
+          > a
+            padding-top 14px
+
+        &:last-child > a
+          padding-bottom 17px
+
+        > a
+          > span,
+          > i
+            &:nth-child(1)
+              margin-right 10px
+              font-size 11px
+
+          > span.label
+            float right
+            line-height 17px
+
+        ul
+          clear both
+          display none
+          width $aside-width
+          height auto
+
+          li
+            a
+              padding 9px 12px 9px 30px
+
+              .label.label-xs
+                float right
+                line-height 17px
+
+            &:last-child
+              a
+                padding-bottom 13px
+
+    &.active,
+    &:focus,
+    &:hover,
+    > ul > li.active,
+    > ul > li:focus,
+    > ul > li:hover
+      > a
+        color $light-green
+        background-color transparent
+
+        > span:nth-child(1),
+        > i:nth-child(1)
+          color $vue-green
+
+        &:after,
+        &.menu-open
+          :after
+            background 0 0
+            content ""
+            position absolute
+            left 0
+            top 0
+            height 100%
+            width 3px
+            background $vue-green
+
+        &.menu-open
+          > span:nth-child(1)
+            color $vue-green
+
+    > ul
+      > li
+        > ul
+          > li
+            &.active,
+            &:focus,
+            &:hover
+              > a:after
+                content ""
+                position absolute
+                left 0
+                top 5%
+                height 90%
+                width 3px
+
+  .sidebar-label
+    text-transform uppercase
+    font-weight 600
+    padding-left 18px
+    padding-bottom 3px
+    font-size 12px
+    color #70829a
+
+.navbar-nav
+  .dropdown-menu
+    background-color $dark
+    border-radius 0
+
+    &:focus
+      outline none
+
+    .dropdown-item
+      color $brand-primary
+
+      &:hover
+        color $light-green
+        background-color lightness($dark, 30%)
+
+  .nav-link
+    color $brand-primary !important
+
+    &:focus
+      outline none

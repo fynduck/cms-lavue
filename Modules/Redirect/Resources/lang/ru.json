@@ -1,0 +1,23 @@
+{
+    "redirect": "Редиректы",
+    "add_redirect": "Добавит редирект",
+    "edit_redirect": "Редактировать редирект",
+    "active": "Активный",
+    "inactive": "Неактивный",
+    "from": "Редирект с",
+    "to": "Редирект на",
+    "status_code": "Статус редиректа",
+    "status": "Статус",
+    "action": "Действие",
+    "filters": "Фильтры",
+    "search": "Поиск",
+    "insert_query": "Введите запрос",
+    "cancel": "Отмена",
+    "save": "Сохранить",
+    "title": "Название",
+    "clear": "Очистить",
+    "data_save": "Данные сохранены",
+    "data_not_save": "Data not save",
+    "data_delete": "Data delete",
+    "you_really_delete": "Вы действительно хотите удалить"
+}

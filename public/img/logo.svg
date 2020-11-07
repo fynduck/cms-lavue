@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="258" height="55" viewBox="0 0 258 55">
+    <g fill="none" fill-rule="evenodd">
+        <path stroke="#D73A51" stroke-linecap="square" d="M8 67.5h256" transform="translate(-7 -13)"/>
+        <text font-family="Montserrat-Black, Montserrat" font-size="56" font-weight="700" transform="translate(-7 -13)">
+            <tspan x="8.208" y="54" fill="#000">DILER</tspan> <tspan x="188.024" y="54" fill="#D73A51">06</tspan>
+        </text>
+    </g>
+</svg>

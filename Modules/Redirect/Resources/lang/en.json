@@ -1,0 +1,10 @@
+{
+  "redirect": "Redirect",
+  "add_redirect": "Add redirect",
+  "edit_redirect": "Edit redirect",
+  "active": "Active",
+  "inactive": "Inactive",
+  "from": "From",
+  "to": "To",
+  "status_code": "Status code"
+}

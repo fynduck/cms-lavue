@@ -1,0 +1,8 @@
+# Created by .ignore support plugin (hsz.mobi)
+mix-manifest.json
+/admin/css/*
+/admin/js/*
+!/admin/js/synctranslit.js
+/fonts/*
+vendor
+_nuxt

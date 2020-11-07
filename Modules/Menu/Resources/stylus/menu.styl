@@ -1,0 +1,185 @@
+.menu_top
+  position relative
+  background-color $blackGray
+
+  .bg-dark
+    background-color $blackGray !important
+
+  .navbar
+    justify-content center
+
+    .navbar-toggler
+      border none
+      color #fff
+
+      &:hover,
+      &:focus
+        border none
+        outline none
+
+      i
+        font-size 22px
+        text-shadow 0 3px 4px rgba(0, 0, 0, 0.5)
+
+    .navbar-nav
+      .nav-item
+        .nav-link
+          font-size 14px
+          font-weight 600
+          text-align center
+          color $white
+
+
+    .collapse_menu
+      +below(768px)
+        position absolute
+        top 3rem
+        min-width 288px
+        width 100%
+        z-index 11
+        background-color $black
+        left 0
+
+.catalog_search
+  background-color $grayWhite
+  z-index 1
+  +above(768px)
+    position relative
+
+    &:after
+      content ''
+      position absolute
+      top 0
+      left 0
+      height 100%
+      width 20%
+      background-color $brick
+      z-index -1
+  +below(768px)
+    flex 1
+
+  > .container
+    +below(768px)
+      padding-left 0
+      padding-right 0
+      .btn_catalog
+        font-size 19px
+        flex 1
+
+  .btn_catalog
+    background-color $brick
+    color $white
+    font-size 21px
+    font-weight bold
+    text-transform uppercase
+
+    &:focus
+      box-shadow none
+
+    svg
+      fill $white
+      margin-right .5rem
+      width 32px
+      height 33px
+
+.collapse_catalog
+  position absolute
+  top 4rem
+  z-index 11
+  min-width 290px
+  +below(768px)
+    top 3rem
+    left .9rem
+
+  .list-group
+    &:not(.child_menu)
+      .list-group-item
+        &.child
+          > .link
+            border-right 1px solid $grayWhite
+            width 88%
+            float left
+
+    &.child_menu
+      display none
+      min-width 245px
+      transition(.3s)
+      +below(768px)
+        margin-top 1rem
+        .list-group-item
+          border-right none
+          border-left none
+    +above(768px)
+      &.child_menu
+        position absolute
+        top 0
+        left 100%
+
+  .list-group-item
+    background-color $white
+
+    i
+      font-size 1.3rem
+      color $black
+      cursor pointer
+
+    &:hover,
+    &.show_child
+
+      > .link
+        color $brick
+
+      i
+        color $brick
+
+    &.show_child
+      .child_menu
+        display block
+
+    .link
+      display block
+      color $black
+      font-size .9rem
+      font-weight 600
+      text-decoration none
+
+.footer_links
+  list-style none
+  padding-left 0
+
+  &.last
+    .title
+      text-align left
+
+    > li
+      > ul
+        list-style none
+
+  &:not(.last)
+    > li
+      > ul
+        columns(150px)
+
+        li
+          font-size 20px
+          color $grayWhite
+
+  .title
+    text-transform uppercase
+    margin-bottom 1rem
+    text-align center
+    color $white
+
+    a
+      color $white
+
+      &:hover
+        text-decoration none
+
+  .item
+    .link
+      font-size 14px
+      color $grayWhite
+
+      &:hover
+        text-decoration none

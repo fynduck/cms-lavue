@@ -1,0 +1,66 @@
+.edit_profile_form
+  .time_on_site
+    font-size 12px
+    color $grayW
+    margin 5px 10px
+
+    .time
+      color $green
+
+.avatar_block
+  position relative
+  width 270px
+  height 270px
+  border 1px solid $grayW
+
+  img
+    max-width 100%
+
+  .upload_avatar
+    opacity 0
+    position absolute
+    top 0
+    width 100%
+    height 100%
+    display flex
+    flex-direction column
+    justify-content center
+    align-items center
+    color #fff
+    font-size 14px
+    transition(opacity, .2s)
+    background-color alpha($black, .4)
+
+    &:hover
+      opacity 1
+
+.to_show
+  &.min
+    +above(500px)
+      margin-top -31px
+
+  label
+    font-size 12px
+
+  .custom-checkbox
+    .custom-control-input
+      &:checked
+        & ~ .custom-control-label
+          &::before
+            background-color #fff
+            border 1px solid $black
+
+          &::after
+            background-image url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='27282a' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3E%3C/svg%3E")
+
+  .custom-control-label
+    &::before
+      background-color #fff
+      border 1px solid $black
+
+.friends_count
+  cursor pointer
+  color $grayW !important
+
+  &.active
+    color #fff !important

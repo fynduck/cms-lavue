@@ -1,0 +1,23 @@
+{
+  "language": "Language",
+  "add_language": "Add_language",
+  "edit_language": "Edit language",
+  "default": "Default",
+  "title": "Title",
+  "country_iso": "Country iso",
+  "url": "Url",
+  "choose_image": "Choose image",
+  "on_off": "On off",
+  "new_language": "New language",
+  "image": "Image",
+  "active": "Active",
+  "inactive": "Inactive",
+  "filters": "Filters",
+  "search": "Search",
+  "clear": "Clear",
+  "insert_query": "Insert query",
+  "status": "Status",
+  "action": "Action",
+  "sort": "Sort",
+  "data_save": "Data save"
+}

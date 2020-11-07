@@ -1,0 +1,14 @@
+{
+    "name": "CustomForm",
+    "alias": "customform",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 79,
+    "providers": [
+        "Modules\\CustomForm\\Providers\\CustomFormServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

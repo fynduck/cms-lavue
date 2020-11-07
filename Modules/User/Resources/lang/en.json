@@ -1,0 +1,20 @@
+{
+  "name": "Name",
+  "group": "Group",
+  "actions": "Actions",
+  "show_by": "Show_by",
+  "warning": "Warning",
+  "active_s": "Active_s",
+  "inactive_s": "Inactive_s",
+  "user": "User",
+  "add_user": "Add_user",
+  "edit_user": "Edit_user",
+  "email": "Email",
+  "password": "Password",
+  "password_confirmation": "Password_confirmation",
+  "groups": "Groups",
+  "default_option": "Default_option",
+  "phone": "Phone",
+  "birthday": "Birthday",
+  "username": "Username"
+}

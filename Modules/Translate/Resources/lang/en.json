@@ -1,0 +1,19 @@
+{
+  "slug": "Slug",
+  "current_lang": "Current_lang",
+  "translate": "Translate",
+  "file_admin": "File_admin",
+  "file_auth": "File_auth",
+  "file_chat": "File_chat",
+  "file_email": "File_email",
+  "file_events": "File_events",
+  "file_gallery": "File_gallery",
+  "file_global": "File_global",
+  "file_pagination": "File_pagination",
+  "file_passwords": "File_passwords",
+  "file_profile": "File_profile",
+  "file_validation": "File_validation",
+  "file_cart": "File_cart",
+  "file_order": "File_order",
+  "file_errors": "File_errors"
+}

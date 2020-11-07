@@ -1,0 +1,54 @@
+@charset "UTF-8"
+
+@import "_variables.styl"
+@import "navBar.styl"
+@import "aside_menu.styl"
+svg
+  width 20px
+  height 20px
+
+.container-fluid
+  background-color #fff
+  box-shadow 0 4px 70px -18px #707070
+  width calc(100% - 30px)
+  margin 1rem
+  padding 1rem
+  transition all .2s ease
+
+  &.minWidth
+    margin-left "calc(1rem + %s)" % $aside-width
+    width "calc(100% - 2rem - %s)" % $aside-width
+
+.title_form
+  border-bottom 2px solid $vue-darkest-blue
+  padding-bottom .7rem
+  font-weight bold
+  text-transform uppercase
+
+.submit_absolute
+  position absolute
+  top .5rem
+  right 1rem
+  z-index 1
+
+  &.cancel
+    right 4rem
+
+.custom-control-label
+  &::before
+    border-width 1px !important
+
+fieldset.form_c
+  border 1px solid $dark-gray !important
+  padding .75rem !important
+
+  legend
+    width auto !important
+
+.card-body
+  .form-control
+    box-shadow none
+
+  .input-group-append
+    .btn-secondary
+      padding 0.5rem 3rem

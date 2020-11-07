@@ -1,0 +1,100 @@
+.user_carousel
+  display flex
+  padding-top 3rem
+  margin-bottom 3rem
+
+  .owl-theme
+    .owl-nav
+      position absolute
+      top 0
+      right 0
+      margin-top -3rem
+      font-size 24px
+
+      [class*='owl-']
+        padding 0 .4rem !important
+
+        &:hover
+          background-color transparent
+          color $grayW
+
+        &:focus
+          outline none
+
+.user_card
+  border 1px solid $grayW
+  background-color $grayB
+  color #fff
+  position relative
+
+  .contact_info
+    font-size 14px
+    padding 0 .5rem
+
+  .interests
+    padding 1rem
+    font-size 12px
+    color $grayW
+    height 70px
+    display flex
+    flex-wrap wrap
+    justify-content space-between
+
+    img
+      width 20px !important
+      height 20px !important
+
+    i
+      &:hover
+        color $red
+
+  .friend_request,
+  .message_request
+    font-size 10px
+    color $grayW
+    text-transform uppercase
+    width 100%
+    background-color transparent
+    border none
+    border-top 1px solid $grayW
+    padding .5rem
+    text-align left
+    transition(all, .3s)
+
+    &:hover
+      color #fff
+
+    &:focus
+      outline none
+
+  .dropdown-menu
+    font-size 14px
+    background-color $grayW
+
+    .dropdown-item
+      &:active
+        background-color #fff
+        color $black
+
+.profile
+  .username
+    font-size 26px
+    color $red
+
+  .time_ago
+    font-size 12px
+    color $grayW
+    margin .5rem auto
+
+.table-profile-info
+  background-color transparent
+
+  td
+    border-bottom 1px solid alpha($grayW, .5)
+    border-top none
+
+    &:nth-child(even)
+      color #fff
+
+    &:nth-child(odd)
+      color $grayW
