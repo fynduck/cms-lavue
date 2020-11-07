@@ -1,4 +1,4 @@
-# Project Dealer 7
+# CMS Lavue
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 
@@ -11,7 +11,7 @@ require of server
 - ```nodeJs (v>=12)```
 
 #### clone repository in project directory
-SSH ```git clone git@bitbucket.org:Fynduck/dealer7.git .```
+SSH ```git@github.com:fynduck/cms-lavue.git .```
 
 #### Up project
 
@@ -34,4 +34,4 @@ SSH ```git clone git@bitbucket.org:Fynduck/dealer7.git .```
  - ```npm run prod```
 
 ## License
-The MIT License (MIT). Please see [License File](/LICENSE.md) for more information.
+The MIT License (MIT). Please see [License File](/LICENSE) for more information.
