@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Cache;
 use Modules\Article\Entities\Article;
+use Modules\Article\Entities\ArticleTrans;
 use Modules\Article\Transformers\ArticleResource;
 use Modules\Settings\Entities\Pagination;
 
@@ -56,7 +57,7 @@ class FrontController extends Controller
                 'show_more'       => trans('global.show_more'),
                 'further'         => trans('global.further'),
                 'before_end'      => trans('global.before_end'),
-                'indefinitely'      => trans('global.indefinitely'),
+                'indefinitely'    => trans('global.indefinitely'),
                 'finished'        => trans('global.finished'),
                 'show'            => trans('global.show'),
                 'actives'         => trans('global.actives'),
@@ -70,5 +71,12 @@ class FrontController extends Controller
         ];
 
         return ArticleResource::collection($articles)->additional($additional);
+    }
+
+    public function article($slug)
+    {
+        $articleTrans = ArticleTrans::whereSlug($slug)->active()->first();
+
+        return new ArticleResource($articleTrans);
     }
 }

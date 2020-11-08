@@ -7,7 +7,7 @@
         </a>
         <div class="promo_info">
             <div class="title">{{ item.title }}</div>
-            <div class="desc">{{ item.description }}</div>
+            <div class="desc">{{ item.desc }}</div>
             <div class="d-flex justify-content-between flex-wrap">
                 <div class="promo_time">
                     <div class="title">{{ trans.before_end }}</div>

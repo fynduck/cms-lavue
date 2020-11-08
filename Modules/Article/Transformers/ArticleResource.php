@@ -5,9 +5,21 @@ namespace Modules\Article\Transformers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\Article\Entities\Article;
+use Modules\Article\Entities\ArticleTrans;
 
 class ArticleResource extends JsonResource
 {
+    public function __construct($resource)
+    {
+        if ($resource instanceof ArticleTrans) {
+
+            $resource->date = $resource->getArticle->date;
+            $resource->date_to = $resource->getArticle->date_to;
+            $resource->image = $resource->getArticle->image;
+        }
+
+        parent::__construct($resource);
+    }
     /**
      * Transform the resource into an array.
      *
@@ -20,7 +32,8 @@ class ArticleResource extends JsonResource
         return [
             'id'                => $this->id,
             'title'             => $this->title,
-            'description'       => $this->generateDescription(),
+            'desc'              => $this->generateMiniDescription(),
+            'description'       => "<div>$this->description</div>",
             'imgObj'            => $this->imgObj(),
             'srcset'            => $this->srcset(),
             'link'              => $this->generateLink(),
@@ -66,16 +79,7 @@ class ArticleResource extends JsonResource
         return $srcset;
     }
 
-    private function getTz(Request $request)
-    {
-        $tz = config('app.timezone');
-        if ($request->get('tz'))
-            $tz = $request->get('tz');
-
-        return $tz;
-    }
-
-    private function generateDescription()
+    private function generateMiniDescription()
     {
         $description = null;
         if ($this->short_desc)
@@ -83,6 +87,6 @@ class ArticleResource extends JsonResource
         else
             $description = $this->description;
 
-        return html_entity_decode(\Str::limit(strip_tags($description), 160));
+        return '<div>' . html_entity_decode(\Str::limit(strip_tags($description), 160)) . '</div>';
     }
 }

@@ -3,14 +3,12 @@
 namespace Modules\Article\Http\Controllers;
 
 use App\Services\SetGlobal;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Cache;
 use Modules\Article\Entities\Article;
 use Modules\Article\Entities\ArticleTrans;
-use Modules\Article\Transformers\ArticleResource;
 use Modules\Settings\Entities\Pagination;
 
 class FrontController extends Controller
