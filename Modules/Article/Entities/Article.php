@@ -92,19 +92,4 @@ class Article extends Model
     {
         return $this->hasMany(ArticleViews::class, 'article_id')->where('type', $type);
     }
-
-    public function getTags()
-    {
-        return $this->belongsToMany(Tag::class, 'tag_joins', 'item_id')->where('type', '=', 'articles');
-    }
-
-    public function getProducts()
-    {
-        return $this->hasOne(Product::class, 'promotion_id');
-    }
-
-    public function comments()
-    {
-        return $this->morphMany(Comment::class, 'commentable');
-    }
 }

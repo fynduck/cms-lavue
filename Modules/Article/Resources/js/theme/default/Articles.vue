@@ -9,6 +9,7 @@
 <script>
 import VRuntimeTemplate from "v-runtime-template";
 import axios from "axios";
+import {mapGetters} from "vuex";
 
 export default {
     name: "Articles",
@@ -27,18 +28,15 @@ export default {
     async fetch() {
         if (this.$route.params.category) {
             const {data} = await axios.get(`/articles/${this.$route.params.category}`)
-
-            this.item = data.data
+            await this.$store.dispatch('page/setItem', data.data)
         }
     },
     computed: {
+        ...mapGetters({
+            item: 'page/item'
+        }),
         description() {
             return this.item.description.replace(/<p>\s*<\/p>/gi, "");
-        }
-    },
-    data() {
-        return {
-            item: null
         }
     }
 }

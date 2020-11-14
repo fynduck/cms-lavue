@@ -1,12 +1,14 @@
 <template>
     <div class="article">
-        <a :href="item.link">
+        <router-link :to="item.link">
             <figure>
                 <img v-lazy.container="item.imgObj" :data-srcset="item.srcset" :alt="item.title" class="lazy-img">
             </figure>
-        </a>
+        </router-link>
         <div class="info">
-            <a :href="item.link" class="title">{{ item.title }}</a>
+            <router-link :to="item.link" class="title">
+                {{ item.title }}1
+            </router-link>
 <!--            <div class="desc">{{ item.description }}</div>-->
         </div>
     </div>

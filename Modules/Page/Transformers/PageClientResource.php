@@ -24,7 +24,7 @@ class PageClientResource extends JsonResource
             'description_footer' => $this->description_footer,
             'meta_title'         => $this->generateMeta('meta_title', ['title']),
             'meta_description'   => $this->generateMeta('meta_description', ['description', 'description_footer']),
-            'meta_keywords'      => $this->generateMeta('meta_keywords'),
+            'meta_keywords'      => $this->generateMeta('meta_keywords')
         ];
     }
 

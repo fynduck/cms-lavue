@@ -1,5 +1,7 @@
 <template>
-    <component :is="componentInstance"/>
+    <div>
+        <component :is="componentInstance" v-if="!$fetchState.pending"/>
+    </div>
 </template>
 
 <script>
@@ -11,7 +13,6 @@ export default {
     name: "DetectPage",
     computed: {
         ...mapGetters({
-            page: 'page/page',
             module_name: 'page/module'
         }),
         componentInstance() {
@@ -36,12 +37,6 @@ export default {
         await this.$store.dispatch('page/setModule', module)
         await this.$store.dispatch('page/setPage', data.data)
 
-        // if (typeof this.$attrs.category !== "undefined" && page) {
-        //     // const res = await axios.get(`/find-page/${params.page}`)
-        //     // module_name = res.data.data.module
-        //     // page = res.data.data;
-        // }
-        //
         try {
             require(`../../Modules/${this.module_name}/Resources/js/theme/${process.env.appTheme}/Page`);
         } catch (e) {

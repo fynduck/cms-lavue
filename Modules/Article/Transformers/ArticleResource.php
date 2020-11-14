@@ -40,7 +40,10 @@ class ArticleResource extends JsonResource
             'date'              => $this->date,
             'show_date'         => $this->date->format('d.m.Y'),
             'date_to'           => $this->date_to,
-            'promo_finish_date' => $this->date_to && $this->date_to->isFuture() ? $this->date_to->timestamp : null
+            'promo_finish_date' => $this->date_to && $this->date_to->isFuture() ? $this->date_to->timestamp : null,
+            'meta_title'         => $this->generateMeta('meta_title', ['title']),
+            'meta_description'   => $this->generateMeta('meta_description', ['description', 'short_desc']),
+            'meta_keywords'      => $this->generateMeta('meta_keywords')
         ];
     }
 
@@ -88,5 +91,30 @@ class ArticleResource extends JsonResource
             $description = $this->description;
 
         return '<div>' . html_entity_decode(\Str::limit(strip_tags($description), 160)) . '</div>';
+    }
+
+    private function generateMeta(string $key, array $keys = [], int $length = 140)
+    {
+        $response = null;
+        if (!empty($this->{$key})) {
+            $response = $this->clearString($this->{$key}, $length);
+        } elseif ($keys) {
+            foreach ($keys as $keyName) {
+                if (!empty($this->{$keyName})) {
+                    $response = $this->clearString($this->{$keyName}, $length);
+                    break;
+                }
+            }
+        }
+
+        return $response;
+    }
+
+    private function clearString(string $string, int $limit)
+    {
+        $string = html_entity_decode(strip_tags($string));
+        $string = \Str::limit($string, $limit, '');
+
+        return preg_replace('!\s+!', ' ', trim($string));
     }
 }

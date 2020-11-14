@@ -13,7 +13,7 @@ module.exports = {
 
     env: {
         apiUrl: process.env.API_URL || process.env.APP_URL + '/api',
-        appName: process.env.APP_NAME || 'Admin',
+        appName: process.env.APP_NAME || 'CMS-lava',
         appLocale: process.env.APP_LOCALE || 'en',
         appTheme: process.env.THEME || 'default'
     },

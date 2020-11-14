@@ -150,4 +150,3 @@
         }
     }
 </script>
-<style lang="stylus" src="../../../stylus/theme/default/articles.styl"></style>
