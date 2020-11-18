@@ -146,6 +146,8 @@ export default {
             color #cccccc
             display flex
             align-items center
+            border-width 4px
+            border-style dotted
 
 .list_uploaded
     width 120px
