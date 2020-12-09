@@ -3,8 +3,6 @@
 namespace Modules\UserGroup\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Database\Eloquent\Factory;
-use Modules\Language\Entities\Language;
 
 class UserGroupServiceProvider extends ServiceProvider
 {
@@ -25,7 +23,6 @@ class UserGroupServiceProvider extends ServiceProvider
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
-        $this->registerFactories();
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
     }
 
@@ -87,18 +84,6 @@ class UserGroupServiceProvider extends ServiceProvider
             $this->loadTranslationsFrom($langPath, 'usergroup');
         } else {
             $this->loadTranslationsFrom(__DIR__ .'/../Resources/lang', 'usergroup');
-        }
-    }
-
-    /**
-     * Register an additional directory of factories.
-     *
-     * @return void
-     */
-    public function registerFactories()
-    {
-        if (! app()->environment('production')) {
-            app(Factory::class)->load(__DIR__ . '/../Database/factories');
         }
     }
 

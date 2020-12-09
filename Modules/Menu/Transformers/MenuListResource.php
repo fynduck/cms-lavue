@@ -19,18 +19,28 @@ class MenuListResource extends JsonResource
         $languages = Language::pluck('name', 'id');
 
         return [
-            'id'           => $this->id,
-            'title'        => $this->title,
-            'position'     => Menu::positions()[$this->position],
-            'show_img'     => $this->image ? asset('storage/' . Menu::FOLDER_IMG . '/' . key(Menu::getSizes()) . '/' . $this->image) : null,
-            'show_page'    => generateRoute($this),
-            'lang'         => $languages[$this->lang_id],
-            'active'       => $this->active,
-            'sort'         => $this->sort,
+            'id'          => $this->id,
+            'title'       => $this->title,
+            'position'    => Menu::positions()[$this->position],
+            'show_img'    => $this->image(),
+            'show_page'   => generateRoute($this),
+            'lang'        => $languages[$this->lang_id],
+            'active'      => $this->active,
+            'sort'        => $this->sort,
             'permissions' => [
                 'edit'    => checkModulePermission('menu', 'edit'),
                 'destroy' => checkModulePermission('menu', 'destroy')
             ]
         ];
+    }
+
+    private function image()
+    {
+        $image = 'https://via.placeholder.com/40?text=image';
+        if ($this->image) {
+            $image = asset('storage/' . Menu::FOLDER_IMG . '/' . key(Menu::getSizes()) . '/' . $this->image);
+        }
+
+        return $image;
     }
 }

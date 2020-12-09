@@ -14,21 +14,23 @@
                     <li :class="['nav-item', item.children.length ? 'dropdown' : '']" v-for="item in items">
                         <router-link :to="item.link" :data-toggle="[item.children.length ? 'dropdown' : '']"
                                      :class="['nav-link', item.children.length ? 'dropdown-toggle' : '']"
-                                     v-if="!checkPro(item.link)" :target="item.target" :style="item.color">
+                                     v-bind="parseCustomAttributes(item.attributes)"
+                                     v-if="!checkPro(item.link)" :target="item.target">
                             {{ item.title }}
                         </router-link>
                         <a :class="['nav-link', item.children.length ? 'dropdown-toggle' : '']" :href="item.link" v-else
-                           :target="item.target" :style="item.color"
+                           :target="item.target" v-bind="parseCustomAttributes(item.attributes)"
                            :data-toggle="[item.children.length ? 'dropdown' : null]">
                             {{ item.title }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="topNavChild" v-if="item.children.length">
-                            <a class="dropdown-item" :href="child.link" :target="child.target" :style="child.color"
+                            <a class="dropdown-item" :href="child.link" :target="child.target"
+                               v-bind="parseCustomAttributes(child.attributes)"
                                v-if="checkPro(child.link)" v-for="child in item.children">
                                 {{ child.title }}
                             </a>
-                            <router-link :to="child.link" class="dropdown-item" :target="item.target"
-                                         :style="child.color" v-else>
+                            <router-link :to="child.link" class="dropdown-item" :target="child.target"
+                                         v-bind="parseCustomAttributes(child.attributes)" v-else>
                                 {{ child.title }}
                             </router-link>
                         </div>
@@ -120,7 +122,26 @@ export default {
                     this.$fetch()
                 })
             }
-        }
+        },
+        parseCustomAttributes(attributes) {
+            if (attributes) {
+                let data = [];
+                const arrAttributes = attributes.split(',');
+                for (let item of arrAttributes) {
+                    const keyAndValue = item.split('=')
+
+                    if (keyAndValue.length > 1) {
+                        data.push({
+                            [keyAndValue[0]]: keyAndValue[1]
+                        })
+                    }
+                }
+
+                return data
+            }
+
+            return [];
+        },
     }
 }
 </script>

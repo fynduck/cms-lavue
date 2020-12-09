@@ -4,6 +4,7 @@ namespace Modules\Menu\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Modules\Menu\Traits\MenuTrait;
 
 /**
  * Modules\Menu\Entities\Menu
@@ -48,6 +49,8 @@ use Illuminate\Http\Request;
  */
 class Menu extends Model
 {
+    use MenuTrait;
+
     const FOLDER_IMG = 'menus';
 
     const TOP_MENU = 'top_menu';
@@ -69,125 +72,8 @@ class Menu extends Model
         'target',
         'sort',
         'nofollow',
-        'style'
+        'attributes'
     ];
-
-    public static function targets()
-    {
-        return [
-            '_self'   => '_self',
-            '_blank'  => '_blank',
-            '_parent' => '_parent',
-            '_top'    => '_top'
-        ];
-    }
-
-    public static function getSizes()
-    {
-        return [
-            'xs' => ['width' => 60, 'height' => 60],
-            'sm' => ['width' => 500, 'height' => 500],
-        ];
-    }
-
-    public static function positions()
-    {
-        return [
-            self::TOP_MENU      => trans('menu::admin.top_menu'),
-            self::CATALOG_MENU  => trans('menu::admin.catalog_menu'),
-            self::CATEGORY_MENU => trans('menu::admin.category_menu'),
-            //            self::MAIN_MENU => trans('menu::admin.main_menu'),
-            self::CUSTOM_MENU   => trans('menu::admin.custom_menu'),
-            self::FOOTER_LINKS  => trans('menu::admin.footer_menus')
-        ];
-    }
-
-    /**
-     * Get menu by id
-     * @param $id
-     * @param null $active
-     * @param null $lang_id
-     * @return mixed
-     */
-    static function menuById($id, $active = null, $lang_id = null)
-    {
-        $lang_id = is_null($lang_id) ? config('app.locale_id') : $lang_id;
-
-        $query = Menu::leftJoin('menu_trans', 'menus.id', '=', 'menu_trans.menu_id')
-            ->where('lang_id', $lang_id)
-            ->where('menus.id', $id);
-        if ($active)
-            $query->where('active', $active);
-
-        return $query->first();
-    }
-
-    /**
-     * Get menus by position
-     * @position $position
-     * @param $position
-     * @param null $active
-     * @param null $lang_id
-     * @return mixed
-     */
-    static function getMenuByPosition($position = null, $active = null, $lang_id = null)
-    {
-        $lang_id = is_null($lang_id) ? config('app.locale_id') : $lang_id;
-
-        $query = Menu::leftJoin('menu_trans', 'menus.id', '=', 'menu_trans.menu_id')
-            ->where('lang_id', $lang_id)
-            ->whereIn('position', (array)$position);
-        if ($active)
-            $query->where('active', $active);
-
-        return $query->whereNull('parent_id')->orderBy('sort')->orderBy('updated_at', 'DESC');
-    }
-
-    /**
-     * Get parents menus by position
-     * @position $position
-     * @param $position
-     * @param int $id
-     * @param null $active
-     * @param null $lang_id
-     * @return mixed
-     */
-    static function parentsByPosition($position, $id = null, $active = null, $lang_id = null)
-    {
-        $lang_id = is_null($lang_id) ? config('app.locale_id') : $lang_id;
-
-        $query = Menu::leftJoin('menu_trans', 'menus.id', '=', 'menu_trans.menu_id')
-            ->where('position', $position)
-            ->where('parent_id', null)
-            ->where('menus.id', '<>', $id)
-            ->where('lang_id', $lang_id);
-        if ($active)
-            $query->where('active', $active);
-
-        return $query->orderBy('sort', 'ASC')->orderBy('updated_at', 'DESC')->get();
-    }
-
-    public function scopeFilter($query, Request $request)
-    {
-        if ($request->get('q'))
-            $query->where(function ($q) use ($request) {
-                $q->where('title', 'LIKE', '%' . $request->get('q') . '%')
-                    ->orWhere('description', 'LIKE', '%' . $request->get('q') . '%');
-            });
-
-        if ($request->get('active'))
-            $query->where('active', 1);
-
-        if ($request->get('lang_id'))
-            $query->where('lang_id', config('app.locale_id'));
-
-        if ($request->get('sortBy')) {
-            $sort = 'ASC';
-            if ($request->get('sortDesc'))
-                $sort = 'DESC';
-            $query->orderBy($request->get('sortBy'), $sort);
-        }
-    }
 
     public function getTrans()
     {

@@ -11,19 +11,15 @@
                     </b-input-group>
                 </b-col>
                 <b-col sm="6" md="3" class="my-1 d-flex align-items-center">
-                    <b-form-checkbox id="checkbox_lang"
-                                     v-model="lang_id"
-                                     :value="1"
-                                     :unchecked-value="0">
-                        {{ lang_id ? $t('Page.default') : $t('Page.all_lang') }}
-                    </b-form-checkbox>
+                    <b-form-select v-model="lang_id" :options="langOptions"></b-form-select>
                 </b-col>
                 <b-col sm="6" md="3" class="my-1 d-flex align-items-center">
                     <b-form-checkbox id="checkbox_status"
+                                     switch
                                      v-model="active"
                                      :value="1"
                                      :unchecked-value="0">
-                        {{ active ? $t('Page.inactive') : $t('Page.active') }}
+                        {{ $t('Page.active_s') }}
                     </b-form-checkbox>
                 </b-col>
                 <b-col sm="6" md="3" lg="2" class="text-right" v-if="canCreate">
@@ -119,7 +115,8 @@
                     confirm: null,
                     openConfirm: false,
                     text: ''
-                }
+                },
+                languages: {}
             }
         },
         computed: {
@@ -152,6 +149,20 @@
                     {key: 'socials', label: this.$t('Page.socials_on_off'), 'class': 'text-center active'},
                     {key: 'actions', label: this.$t('Page.action'), 'class': 'text-right'}
                 ]
+            },
+            langOptions() {
+                let options = [{
+                    value: null,
+                    text: this.$t('Page.all_lang')
+                }];
+                for (let key of Object.keys(this.languages)) {
+                    options.push({
+                        value: key,
+                        text: this.languages[key]
+                    })
+                }
+
+                return options;
             }
         },
         watch: {
@@ -194,6 +205,7 @@
                     this.per_page = response.data.meta.per_page;
                     this.total = response.data.meta.total;
                     this.items = response.data.data;
+                    this.languages = response.data.languages;
                     this.loading = false;
                 }).catch((error) => {
                     console.log(error);

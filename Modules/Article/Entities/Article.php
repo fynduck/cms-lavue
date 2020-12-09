@@ -4,8 +4,6 @@ namespace Modules\Article\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Modules\Article\Traits\ArticleTrait;
-use Modules\Comment\Entities\Comment;
-use Modules\Product\Entities\Product;
 
 /**
  * Modules\Article\Entities\Article

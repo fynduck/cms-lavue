@@ -16,19 +16,19 @@ class MenuFormResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'        => $this->id,
-            'image'     => $this->oldImage(),
-            'to_page'   => $this->type_page ? $this->type_page . '_' . $this->page_id : '',
-            'show_page' => $this->pagesShow(),
-            'old_image' => $this->image,
-            'position'  => $this->position,
-            'target'    => $this->target ?? key(Menu::targets()),
-            'icon'      => $this->icon,
-            'parent_id' => $this->parent_id,
-            'style'     => $this->style,
-            'nofollow'  => $this->nofollow,
-            'sort'      => $this->sort ?? 0,
-            'items'     => $this->items()
+            'id'         => $this->id,
+            'image'      => $this->oldImage(),
+            'to_page'    => $this->type_page ? $this->type_page . '_' . $this->page_id : '',
+            'show_page'  => $this->pagesShow(),
+            'old_image'  => $this->image,
+            'position'   => $this->position,
+            'target'     => $this->target ?? key(Menu::targets()),
+            'icon'       => $this->icon,
+            'parent_id'  => $this->parent_id,
+            'attributes' => $this->attributes,
+            'nofollow'   => $this->nofollow,
+            'sort'       => $this->sort ?? 0,
+            'items'      => $this->items()
         ];
     }
 

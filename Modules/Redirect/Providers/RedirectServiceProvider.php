@@ -3,7 +3,6 @@
 namespace Modules\Redirect\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Database\Eloquent\Factory;
 
 class RedirectServiceProvider extends ServiceProvider
 {
@@ -24,7 +23,6 @@ class RedirectServiceProvider extends ServiceProvider
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
-        $this->registerFactories();
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
     }
 
@@ -86,18 +84,6 @@ class RedirectServiceProvider extends ServiceProvider
             $this->loadTranslationsFrom($langPath, 'redirect');
         } else {
             $this->loadTranslationsFrom(__DIR__ .'/../Resources/lang', 'redirect');
-        }
-    }
-
-    /**
-     * Register an additional directory of factories.
-     *
-     * @return void
-     */
-    public function registerFactories()
-    {
-        if (! app()->environment('production')) {
-            app(Factory::class)->load(__DIR__ . '/../Database/factories');
         }
     }
 

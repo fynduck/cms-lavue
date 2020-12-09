@@ -3,7 +3,6 @@
 namespace Modules\Page\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Database\Eloquent\Factory;
 use Modules\Page\Entities\Page;
 use Modules\Page\Observers\PageObserver;
 
@@ -26,7 +25,6 @@ class PageServiceProvider extends ServiceProvider
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
-        $this->registerFactories();
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
 
         Page::observe(PageObserver::class);
@@ -90,18 +88,6 @@ class PageServiceProvider extends ServiceProvider
             $this->loadTranslationsFrom($langPath, 'page');
         } else {
             $this->loadTranslationsFrom(__DIR__ . '/../Resources/lang', 'page');
-        }
-    }
-
-    /**
-     * Register an additional directory of factories.
-     *
-     * @return void
-     */
-    public function registerFactories()
-    {
-        if (!app()->environment('production')) {
-            app(Factory::class)->load(__DIR__ . '/../Database/factories');
         }
     }
 

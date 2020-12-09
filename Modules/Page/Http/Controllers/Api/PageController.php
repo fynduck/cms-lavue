@@ -4,6 +4,8 @@ namespace Modules\Page\Http\Controllers\Api;
 
 use App\Http\Controllers\AdminController;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Modules\Language\Entities\Language;
 use Modules\Menu\Entities\Menu;
 use Modules\Page\Entities\Page;
 use Modules\Page\Http\Requests\PageValidate;
@@ -21,9 +23,9 @@ class PageController extends AdminController
     /**
      * Display a listing of the resource.
      * @param Request $request
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
      */
-    public function index(Request $request)
+    public function index(Request $request): AnonymousResourceCollection
     {
         $sortBy = $request->get('sortBy', 'updated_at');
         $sort = $request->get('sortDesc') ? 'DESC' : 'ASC';
@@ -33,7 +35,9 @@ class PageController extends AdminController
             ->orderBy($sortBy, $sort)
             ->paginate(25);
 
-        return PageListResource::collection($pages);
+        $languages = Language::whereActive(1)->pluck('name', 'id');
+
+        return PageListResource::collection($pages)->additional(['languages' => $languages]);
     }
 
     /**
@@ -41,7 +45,7 @@ class PageController extends AdminController
      * @param PageValidate $request
      * @return bool
      */
-    public function store(PageValidate $request)
+    public function store(PageValidate $request): bool
     {
         \DB::beginTransaction();
         /**
@@ -63,7 +67,7 @@ class PageController extends AdminController
      * @param $id
      * @return PageFormResource
      */
-    public function show($id)
+    public function show($id): PageFormResource
     {
         $item = Page::find($id);
 
@@ -79,7 +83,7 @@ class PageController extends AdminController
      * @param $id
      * @return bool
      */
-    public function update(PageValidate $request, $id)
+    public function update(PageValidate $request, $id): bool
     {
         \DB::beginTransaction();
         /**
@@ -103,7 +107,7 @@ class PageController extends AdminController
      * @return bool
      * @throws \Exception
      */
-    public function destroy($id)
+    public function destroy($id): bool
     {
         $page = Page::find($id);
 

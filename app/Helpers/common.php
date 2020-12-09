@@ -167,7 +167,7 @@ function generateRoute($item, $urlsPages = null)
         }
     }
 
-    return $link;
+    return $link ?? '';
 }
 
 function placeholder($width = 150, $height = null, $text = null, $bg = null, $color = null)

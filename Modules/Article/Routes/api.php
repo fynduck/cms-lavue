@@ -12,10 +12,12 @@
 */
 
 use Illuminate\Support\Facades\Route;
+use Modules\Article\Http\Controllers\Api\ArticleController;
+use Modules\Article\Http\Controllers\Api\FrontController;
 
 Route::prefix('admin')->middleware('auth:api')->group(function () {
-    Route::apiResource('article', 'ArticleController');
+    Route::apiResource('article', ArticleController::class);
 });
 
-Route::get('get-articles', 'FrontController@getArticles')->name('get-articles');
-Route::get('articles/{slug}', 'FrontController@article')->name('article');
+Route::get('get-articles', [FrontController::class, 'getArticles'])->name('get-articles');
+Route::get('articles/{slug}', [FrontController::class, 'article'])->name('article');

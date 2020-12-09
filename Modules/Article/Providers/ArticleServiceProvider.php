@@ -4,7 +4,6 @@ namespace Modules\Article\Providers;
 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Database\Eloquent\Factory;
 use Modules\Article\Entities\Article;
 use Modules\Article\Observers\ArticleObserver;
 
@@ -27,7 +26,6 @@ class ArticleServiceProvider extends ServiceProvider
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
-        $this->registerFactories();
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
 
         Validator::extendImplicit('article_image', function ($attribute, $value, $parameters, $validator) {
@@ -99,18 +97,6 @@ class ArticleServiceProvider extends ServiceProvider
             $this->loadTranslationsFrom($langPath, 'article');
         } else {
             $this->loadTranslationsFrom(__DIR__ . '/../Resources/lang', 'article');
-        }
-    }
-
-    /**
-     * Register an additional directory of factories.
-     *
-     * @return void
-     */
-    public function registerFactories()
-    {
-        if (!app()->environment('production')) {
-            app(Factory::class)->load(__DIR__ . '/../Database/factories');
         }
     }
 

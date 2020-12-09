@@ -10,7 +10,9 @@ namespace Modules\Menu\Services;
 
 use Fynduck\FilesUpload\PrepareFile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Modules\Menu\Entities\Menu;
+use Modules\Menu\Entities\MenuSettings;
 use Modules\Menu\Entities\MenuShow;
 use Modules\Menu\Entities\MenuTrans;
 use Modules\Menu\Http\Requests\MenuValidate;
@@ -36,16 +38,16 @@ class MenuService
             'id' => $id
         ],
             [
-                'parent_id' => $request->get('parent_id'),
-                'target'    => $request->get('target'),
-                'style'     => $request->get('style') ?? '',
-                'type_page' => $type,
-                'page_id'   => $page_id,
-                'image'     => $imagesName['imageName'],
-                'icon'      => $request->get('icon'),
-                'position'  => $request->get('position'),
-                'nofollow'  => $request->has('nofollow') ? 1 : 0,
-                'sort'      => (int)$request->get('sort'),
+                'parent_id'  => $request->get('parent_id'),
+                'target'     => $request->get('target'),
+                'attributes' => $request->get('attributes'),
+                'type_page'  => $type,
+                'page_id'    => $page_id,
+                'image'      => $imagesName['imageName'],
+                'icon'       => $request->get('icon'),
+                'position'   => $request->get('position'),
+                'nofollow'   => $request->has('nofollow') ? 1 : 0,
+                'sort'       => (int)$request->get('sort'),
             ]
         );
     }
@@ -103,10 +105,14 @@ class MenuService
             $imgName = $request->get('items')[config('app.fallback_locale_id')]['title'];
 
         if ($request->get('image')) {
-            if (!\Str::contains($request->get('image'), Menu::FOLDER_IMG))
-                $nameImages['imageName'] = PrepareFile::uploadBase64(Menu::FOLDER_IMG, 'image', $request->get('image'), $imgName, $request->get('old_image'), Menu::getSizes());
-            else
+            if (!Str::contains($request->get('image'), Menu::FOLDER_IMG)) {
+                $menuSettings = MenuSettings::latest()->first();
+                $sizes = $menuSettings->sizes;
+                $resizeMethod = $menuSettings->resize;
+                $nameImages['imageName'] = PrepareFile::uploadBase64(Menu::FOLDER_IMG, 'image', $request->get('image'), $imgName, $request->get('old_image'), $sizes, $resizeMethod);
+            }else {
                 $nameImages['imageName'] = $request->get('old_image');
+            }
         }
 
         return $nameImages;

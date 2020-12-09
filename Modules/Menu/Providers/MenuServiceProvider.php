@@ -3,20 +3,11 @@
 namespace Modules\Menu\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Database\Eloquent\Factory;
-use Modules\Language\Entities\Language;
 use Modules\Menu\Entities\Menu;
 use Modules\Menu\Observers\MenuObserver;
 
 class MenuServiceProvider extends ServiceProvider
 {
-    /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
-
     /**
      * Boot the application events.
      *
@@ -27,8 +18,7 @@ class MenuServiceProvider extends ServiceProvider
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
-        $this->registerFactories();
-        $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
+        $this->loadMigrationsFrom(module_path('Menu', 'Database/Migrations'));
 
         Menu::observe(MenuObserver::class);
     }
@@ -51,10 +41,10 @@ class MenuServiceProvider extends ServiceProvider
     protected function registerConfig()
     {
         $this->publishes([
-            __DIR__.'/../Config/config.php' => config_path('menu.php'),
+            module_path('Menu', 'Config/config.php') => config_path('menu.php'),
         ], 'config');
         $this->mergeConfigFrom(
-            __DIR__.'/../Config/config.php', 'menu'
+            module_path('Menu', 'Config/config.php'), 'menu'
         );
     }
 
@@ -67,7 +57,7 @@ class MenuServiceProvider extends ServiceProvider
     {
         $viewPath = resource_path('views/modules/menu');
 
-        $sourcePath = __DIR__.'/../Resources/views';
+        $sourcePath = module_path('Menu', 'Resources/views');
 
         $this->publishes([
             $sourcePath => $viewPath
@@ -90,19 +80,7 @@ class MenuServiceProvider extends ServiceProvider
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, 'menu');
         } else {
-            $this->loadTranslationsFrom(__DIR__ .'/../Resources/lang', 'menu');
-        }
-    }
-
-    /**
-     * Register an additional directory of factories.
-     *
-     * @return void
-     */
-    public function registerFactories()
-    {
-        if (! app()->environment('production')) {
-            app(Factory::class)->load(__DIR__ . '/../Database/factories');
+            $this->loadTranslationsFrom(module_path('Menu', 'Resources/lang'), 'menu');
         }
     }
 

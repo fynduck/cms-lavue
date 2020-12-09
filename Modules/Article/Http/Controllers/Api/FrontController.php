@@ -3,6 +3,7 @@
 namespace Modules\Article\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Cache;
 use Modules\Article\Entities\Article;
@@ -12,7 +13,11 @@ use Modules\Settings\Entities\Pagination;
 
 class FrontController extends Controller
 {
-    public function getArticles(Request $request)
+    /**
+     * @param Request $request
+     * @return AnonymousResourceCollection
+     */
+    public function getArticles(Request $request): AnonymousResourceCollection
     {
         $type = $request->get('type', Article::ARTICLES);
         $query = Article::leftJoin('article_trans as t', 'articles.id', '=', 't.article_id')

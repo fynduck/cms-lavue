@@ -6,17 +6,21 @@ use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\Ajax;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\CheckForMaintenanceMode;
+use App\Http\Middleware\CorsMiddleware;
 use App\Http\Middleware\EncryptCookies;
 use App\Http\Middleware\HttpsProtocol;
+use App\Http\Middleware\PreventRequestsDuringMaintenance;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\SetLocale;
 use App\Http\Middleware\TrimStrings;
+use App\Http\Middleware\TrustHosts;
 use App\Http\Middleware\TrustProxies;
 use App\Http\Middleware\VerifyCsrfToken;
 use Fruitcake\Cors\HandleCors;
 use Illuminate\Auth\Middleware\AuthenticateWithBasicAuth;
 use Illuminate\Auth\Middleware\Authorize;
 use Illuminate\Auth\Middleware\EnsureEmailIsVerified;
+use Illuminate\Auth\Middleware\RequirePassword;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull;
@@ -39,12 +43,13 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
+        TrustHosts::class,
+        TrustProxies::class,
         HandleCors::class,
-        CheckForMaintenanceMode::class,
+        PreventRequestsDuringMaintenance::class,
         ValidatePostSize::class,
         TrimStrings::class,
         ConvertEmptyStringsToNull::class,
-        TrustProxies::class,
         SetLocale::class
     ];
 
@@ -66,8 +71,8 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            'throttle:60,1',
-            'bindings',
+            'throttle:api',
+            SubstituteBindings::class
         ],
     ];
 
@@ -79,17 +84,18 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth'          => Authenticate::class,
-        'admin'         => AdminMiddleware::class,
-        'auth.basic'    => AuthenticateWithBasicAuth::class,
-        'ajax'          => Ajax::class,
-        'bindings'      => SubstituteBindings::class,
-        'cache.headers' => SetCacheHeaders::class,
-        'can'           => Authorize::class,
-        'guest'         => RedirectIfAuthenticated::class,
-        'signed'        => ValidateSignature::class,
-        'throttle'      => ThrottleRequests::class,
-        'verified'      => EnsureEmailIsVerified::class,
+        'auth'             => Authenticate::class,
+        'admin'            => AdminMiddleware::class,
+        'auth.basic'       => AuthenticateWithBasicAuth::class,
+        'ajax'             => Ajax::class,
+        'cache.headers'    => SetCacheHeaders::class,
+        'can'              => Authorize::class,
+        'guest'            => RedirectIfAuthenticated::class,
+        'password.confirm' => RequirePassword::class,
+        'signed'           => ValidateSignature::class,
+        'throttle'         => ThrottleRequests::class,
+        'verified'         => EnsureEmailIsVerified::class,
+        'cors'             => CorsMiddleware::class,
     ];
 
     /**

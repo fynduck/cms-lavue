@@ -20,7 +20,7 @@ class CreateMenusTable extends Migration
             $table->enum('position', array_keys(Menu::positions()))->index();
             $table->string('type_page')->index();
             $table->unsignedInteger('page_id')->index();
-            $table->string('style')->nullable();
+            $table->string('attributes')->nullable();
             $table->string('target');
             $table->string('image')->nullable();
             $table->string('icon')->nullable();

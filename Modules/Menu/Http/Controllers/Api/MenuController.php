@@ -5,7 +5,10 @@ namespace Modules\Menu\Http\Controllers\Api;
 use App\Http\Controllers\AdminController;
 use Fynduck\FilesUpload\PrepareFile;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Modules\Language\Entities\Language;
 use Modules\Menu\Entities\Menu;
+use Modules\Menu\Entities\MenuSettings;
 use Modules\Menu\Http\Requests\MenuValidate;
 use Modules\Menu\Services\MenuService;
 use Modules\Menu\Transformers\MenuFormResource;
@@ -36,15 +39,19 @@ class MenuController extends AdminController
     /**
      * Lists menu for position
      * @param Request $request
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
      */
-    public function index(Request $request)
+    public function index(Request $request): AnonymousResourceCollection
     {
         $menu = Menu::leftJoin('menu_trans', 'menus.id', '=', 'menu_trans.menu_id')
-            ->select('menus.id', 'menus.position', 'menus.type_page', 'menus.page_id', 'menus.image', 'menus.sort', 'menu_trans.title', 'menu_trans.lang_id', 'menu_trans.active')
+            ->select('menus.*', 'menu_trans.title', 'menu_trans.lang_id', 'menu_trans.active')
             ->filter($request)->paginate(25);
 
-        return MenuListResource::collection($menu);
+        $languages = Language::whereActive(1)->pluck('name', 'id');
+
+        $settings = MenuSettings::latest()->first();
+
+        return MenuListResource::collection($menu)->additional(['languages' => $languages, 'settings' => $settings]);
     }
 
     /**
@@ -55,7 +62,7 @@ class MenuController extends AdminController
      * @return bool
      * @throws \Exception
      */
-    public function store(MenuValidate $request, MenuService $menuService)
+    public function store(MenuValidate $request, MenuService $menuService): bool
     {
         $nameImages = $menuService->saveImages($request);
 
@@ -75,14 +82,18 @@ class MenuController extends AdminController
         return true;
     }
 
-    public function show($id)
+    /**
+     * @param $id
+     * @return MenuFormResource
+     */
+    public function show($id): MenuFormResource
     {
         $item = Menu::find($id);
 
         $additional = [
-            'positions'          => $this->positions,
-            'parents'            => $this->parents,
-            'targets'            => $this->targets
+            'positions' => $this->positions,
+            'parents'   => $this->parents,
+            'targets'   => $this->targets
         ];
 
         if (!$item)
@@ -96,11 +107,10 @@ class MenuController extends AdminController
      *
      * @param MenuValidate $request
      * @param MenuService $menuService
-     * @param int $id
+     * @param Menu $menu
      * @return bool
-     * @throws \Exception
      */
-    public function update(MenuValidate $request, MenuService $menuService, $id)
+    public function update(MenuValidate $request, MenuService $menuService, Menu $menu): bool
     {
         $nameImages = $menuService->saveImages($request);
 
@@ -108,7 +118,7 @@ class MenuController extends AdminController
          * Update menu
          */
         \DB::beginTransaction();
-        $menu = $menuService->addUpdate($request, $nameImages, $id);
+        $menu = $menuService->addUpdate($request, $nameImages, $menu->id);
 
         $menuService->addUpdateTrans($menu, $request->get('items'));
 
@@ -121,14 +131,13 @@ class MenuController extends AdminController
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
+     * @param Menu $menu
      * @param Request $request
      * @return bool
      * @throws \Exception
      */
-    public function destroy($id, Request $request)
+    public function destroy(Menu $menu, Request $request): bool
     {
-        $menu = Menu::find($id);
         PrepareFile::deleteImages(Menu::FOLDER_IMG, $menu->image, Menu::getSizes());
         if ($request->get('image')) {
             $menu->image = '';
@@ -138,5 +147,21 @@ class MenuController extends AdminController
         }
 
         return true;
+    }
+
+    public function saveSize(Request $request)
+    {
+        $sizes = [];
+        foreach ($request->get('sizes') as $size) {
+            $sizes[$size['name']] = [
+                'name'   => $size['name'],
+                'width'  => $size['width'],
+                'height' => $size['height']
+            ];
+        }
+
+        MenuSettings::create(['sizes' => $sizes]);
+
+        return $sizes;
     }
 }

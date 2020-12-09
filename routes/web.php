@@ -14,8 +14,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use UniSharp\LaravelFilemanager\Lfm;
 
-//Auth::routes();
-
 //Route::get('login', 'Auth\LoginController@showLoginForm');
 Route::get('register', 'Auth\LoginController@showLoginForm');
 Route::get('password/reset', 'Auth\LoginController@showLoginForm');

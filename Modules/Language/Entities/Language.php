@@ -41,5 +41,13 @@ class Language extends Model
 
     const FOLDER_IMG = 'languages';
 
-    protected $fillable = ['slug', 'country_iso', 'name', 'active', 'default', 'sort', 'image'];
+    protected $fillable = [
+        'name',
+        'slug',
+        'image',
+        'country_iso',
+        'active',
+        'default',
+        'sort'
+    ];
 }
