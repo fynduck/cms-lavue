@@ -110,7 +110,7 @@ class MenuService
                 $sizes = $menuSettings->sizes;
                 $resizeMethod = $menuSettings->resize;
                 $nameImages['imageName'] = PrepareFile::uploadBase64(Menu::FOLDER_IMG, 'image', $request->get('image'), $imgName, $request->get('old_image'), $sizes, $resizeMethod);
-            }else {
+            } else {
                 $nameImages['imageName'] = $request->get('old_image');
             }
         }

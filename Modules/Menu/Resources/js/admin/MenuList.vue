@@ -74,8 +74,8 @@
                  @input="deleteItem"
                  v-if="confirmWindow.openConfirm"
         ></confirm>
-        <b-modal id="menu-settings" hide-footer centered>
-            <b-form-row class="mb-1" v-for="(size, key) in settings.sizes">
+        <b-modal id="menu-settings" hide-footer centered v-if="Object.keys(settings.sizes).length">
+            <b-form-row class="mb-1 size" v-for="(size, key) in settings.sizes" :key="key">
                 <b-col>
                     <b-form-group
                         :label="$t('Menu.size_name')"
@@ -100,7 +100,9 @@
                         <b-form-input :id="`height_${key}`" v-model.number="size.height" type="number"></b-form-input>
                     </b-form-group>
                 </b-col>
+                <fa :icon="['fas', 'trash-alt']" class="text-danger remove" @click="deleteSize(key)"/>
             </b-form-row>
+            <b-form-select v-model="settings.resize" :options="resizes" size="sm" class="my-3"></b-form-select>
             <b-row class="justify-content-between">
                 <b-col>
                     <b-button variant="info" @click.prevent="addSize" :title="$t('Menu.add_size')">
@@ -148,8 +150,19 @@ export default {
                 text: ''
             },
             languages: {},
+            resizes: [
+                {
+                    value: 'resize',
+                    text: this.$t('Menu.resize')
+                },
+                {
+                    value: 'crop',
+                    text: this.$t('Menu.crop')
+                }
+            ],
             settings: {
-                sizes: []
+                sizes: [],
+                resize: 'resize'
             }
         }
     },
@@ -291,9 +304,13 @@ export default {
         addSize() {
             this.settings.sizes.push(this.emptySize())
         },
+        deleteSize(index) {
+            this.settings.sizes.splice(index, 1)
+        },
         saveSettings() {
-            axios.post(this.source + '-size', this.settings).then(response => {
-                console.log(response)
+            axios.post(`${this.source}-settings`, this.settings).then(response => {
+                // console.log(response)
+                this.$bvModal.hide('menu-settings')
             }).catch(error => {
                 console.log(error)
             })
@@ -301,3 +318,18 @@ export default {
     }
 }
 </script>
+<style lang="stylus">
+.size
+    position relative
+
+    .remove
+        opacity 0
+        position absolute
+        top 0
+        right 0
+        cursor pointer
+
+    &:hover
+        .remove
+            opacity 1
+</style>

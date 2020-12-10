@@ -4,6 +4,7 @@ namespace Modules\Menu\Http\Controllers\Api;
 
 use App\Http\Controllers\AdminController;
 use Fynduck\FilesUpload\PrepareFile;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Modules\Language\Entities\Language;
@@ -50,6 +51,17 @@ class MenuController extends AdminController
         $languages = Language::whereActive(1)->pluck('name', 'id');
 
         $settings = MenuSettings::latest()->first();
+
+        $sizes = [];
+        foreach ($settings->sizes as $size) {
+            $sizes[] = [
+                'name'   => $size['name'],
+                'width'  => $size['width'],
+                'height' => $size['height']
+            ];
+        }
+
+        $settings->sizes = $sizes;
 
         return MenuListResource::collection($menu)->additional(['languages' => $languages, 'settings' => $settings]);
     }
@@ -149,7 +161,12 @@ class MenuController extends AdminController
         return true;
     }
 
-    public function saveSize(Request $request)
+    /**
+     * Save menus settings
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function saveSettings(Request $request): JsonResponse
     {
         $sizes = [];
         foreach ($request->get('sizes') as $size) {
@@ -160,8 +177,15 @@ class MenuController extends AdminController
             ];
         }
 
-        MenuSettings::create(['sizes' => $sizes]);
+        if ($request->get('id')) {
+            $settings = MenuSettings::find($request->get('id'));
+            $settings->sizes = $sizes;
+            $settings->resize = $request->get('resize');
+            $settings->save();
+        } else {
+            MenuSettings::create(['sizes' => $sizes, 'resize' => $request->get('resize')]);
+        }
 
-        return $sizes;
+        return response()->json('ok');
     }
 }
