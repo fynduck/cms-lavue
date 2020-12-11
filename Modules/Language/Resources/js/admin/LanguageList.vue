@@ -12,10 +12,11 @@
                 </b-col>
                 <b-col sm="6" md="3" class="my-1 d-flex align-items-center">
                     <b-form-checkbox id="checkbox_active"
+                                     switch
                                      v-model="active"
                                      :value="1"
                                      :unchecked-value="0">
-                        {{ active ? $t('Language.inactive') : $t('Language.active') }}
+                        {{ $t('Language.active_s') }}
                     </b-form-checkbox>
                 </b-col>
                 <b-col sm="6" md="3" class="text-right" v-if="canCreate">

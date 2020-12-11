@@ -13,6 +13,8 @@ CMS can use as REST API
 - VueJs
 - Vuex
 - NuxtJs
+- Bootstrap
+- BootstrapVue
 - Stylus
 
 ## Uses by step

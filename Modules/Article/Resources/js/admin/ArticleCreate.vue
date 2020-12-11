@@ -194,6 +194,13 @@
                 return `${action}/0`;
             }
         },
+        watch: {
+            'item.image'(newValue, oldValue) {
+                if (!newValue && oldValue) {
+                    this.deleteImage(oldValue)
+                }
+            }
+        },
         mounted() {
             this.getItem();
         },
@@ -238,6 +245,10 @@
                         this.submit = false;
                     }
                 })
+            },
+            deleteImage(image) {
+                const paths = image.split('/');
+                axios.delete(`${this.source}?image=${paths[paths.length - 1]}`)
             }
         }
     }

@@ -10,6 +10,8 @@
   "on_off": "On off",
   "new_language": "New language",
   "image": "Image",
+  "slug": "Slug",
+  "active_s": "Actives",
   "active": "Active",
   "inactive": "Inactive",
   "filters": "Filters",

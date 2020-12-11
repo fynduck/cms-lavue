@@ -57,7 +57,7 @@ export default {
         }
     },
     created() {
-        this.file = this.value
+        // this.file = this.value
         this.uploaded = Array.isArray(this.value) ? [] : null;
         this.multiple = Array.isArray(this.value);
         if (this.value)

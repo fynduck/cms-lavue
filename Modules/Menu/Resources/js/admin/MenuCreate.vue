@@ -110,7 +110,8 @@
                 </div>
                 <div class="col-md-3 form-group">
                     <label for=attributes>{{ $t('Menu.custom_attributes') }}</label>
-                    <input type="attributes" class="form-control" id="attributes" placeholder="style=color:red,margin:10px;data-info=10" v-model="item.attributes">
+                    <input type="attributes" class="form-control" id="attributes"
+                           placeholder="style=color:red,margin:10px;data-info=10" v-model="item.attributes">
                 </div>
                 <div class="col-md-4 col-lg-3 form-group d-flex align-items-end">
                     <div class="custom-control custom-switch my-1 mr-sm-2">
@@ -195,6 +196,13 @@ export default {
             return `${action}/0`;
         }
     },
+    watch: {
+        'item.image'(newValue, oldValue) {
+            if (!newValue && oldValue) {
+                this.deleteImage(oldValue)
+            }
+        }
+    },
     mounted() {
         this.getItem()
     },
@@ -234,6 +242,10 @@ export default {
                     this.submit = false;
                 }
             })
+        },
+        deleteImage(image) {
+            const paths = image.split('/');
+            axios.delete(`${this.source}?image=${paths[paths.length - 1]}`)
         }
     }
 }
