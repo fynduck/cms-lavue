@@ -106,9 +106,14 @@ class MenuService
 
         if ($request->get('image')) {
             if (!Str::contains($request->get('image'), Menu::FOLDER_IMG)) {
+                $sizes = null;
+                $resizeMethod = null;
+
                 $menuSettings = MenuSettings::latest()->first();
-                $sizes = $menuSettings->sizes;
-                $resizeMethod = $menuSettings->resize;
+                if ($menuSettings) {
+                    $sizes = $menuSettings->sizes;
+                    $resizeMethod = $menuSettings->resize;
+                }
                 $nameImages['imageName'] = PrepareFile::uploadBase64(Menu::FOLDER_IMG, 'image', $request->get('image'), $imgName, $request->get('old_image'), $sizes, $resizeMethod);
             } else {
                 $nameImages['imageName'] = $request->get('old_image');

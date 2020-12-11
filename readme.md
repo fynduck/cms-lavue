@@ -1,14 +1,26 @@
-# CMS Lavue
-
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
+
+# About CMS Lavue
+
+CMS-LAVUE is cms for eCommerce, blog, landing page
+
+CMS use modular system, which gives you the ability to disable or enable new modules
+
+CMS can use as REST API
+
+## CMS-LAVUE use
+- Laravel
+- VueJs
+- NuxtJs
+- Stylus
 
 ## Uses by step
 
 require of server
 
-- ```php (v>=7.2.5)```
-- ```composer (latest)```
-- ```nodeJs (v>=12)```
+- ```php >= 7.3```
+- ```composer```
+- ```nodeJs >= 12```
 
 #### clone repository in project directory
 SSH ```git@github.com:fynduck/cms-lavue.git .```
