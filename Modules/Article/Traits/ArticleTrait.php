@@ -74,7 +74,7 @@ trait ArticleTrait
         if ($type)
             $query->where('type', $type);
 
-        return $query->orderBy('sort')->orderBy('date', 'DESC');
+        return $query->orderBy('priority')->orderBy('date', 'DESC');
     }
 
     static function articles($type, $lang_id = null)

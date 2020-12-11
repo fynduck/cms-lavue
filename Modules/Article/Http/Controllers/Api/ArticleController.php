@@ -39,7 +39,7 @@ class ArticleController extends AdminController
     {
         $articles = Article::leftJoin('article_trans', 'articles.id', '=', 'article_trans.article_id')
             ->filter($request)
-            ->orderBy('sort')
+            ->orderBy('priority')
             ->orderBy('updated_at', 'DESC')->paginate(25);
 
         return ArticleListResource::collection($articles);

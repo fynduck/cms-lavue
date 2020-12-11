@@ -40,7 +40,7 @@ class ArticleService
     {
         $data = [
             'type'         => $request->get('type'),
-            'sort'         => (int)$request->get('sort'),
+            'priority'     => (int)$request->get('priority'),
             'discount'     => (float)$request->get('discount'),
             'socials'      => $request->get('socials') ? 1 : 0,
             'date'         => $request->get('date'),

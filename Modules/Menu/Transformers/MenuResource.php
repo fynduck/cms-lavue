@@ -23,7 +23,7 @@ class MenuResource extends JsonResource
             'nofollow'   => $this->nofollow ? 'nofollow' : false,
             'link'       => generateRoute($this),
             'title'      => $this->title ?? $this->getTrans()->lang()->value('title'),
-            'children'   => MenuResource::collection($this->activeChildren->sortBy('sort'))
+            'children'   => MenuResource::collection($this->activeChildren->sortBy('priority'))
         ];
     }
 }

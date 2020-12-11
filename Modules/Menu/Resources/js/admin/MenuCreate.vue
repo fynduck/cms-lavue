@@ -104,9 +104,9 @@
                     </select>
                 </div>
                 <div class="col-md-3 form-group">
-                    <label for="sort">{{ $t('Menu.sort') }}</label>
-                    <input type="number" class="form-control" min="0" v-model="item.sort" id="sort"
-                           :placeholder="$t('Menu.sort')">
+                    <label for="priority">{{ $t('Menu.priority') }}</label>
+                    <input type="number" class="form-control" min="0" v-model="item.priority" id="priority"
+                           :placeholder="$t('Menu.priority')">
                 </div>
                 <div class="col-md-3 form-group">
                     <label for=attributes>{{ $t('Menu.custom_attributes') }}</label>

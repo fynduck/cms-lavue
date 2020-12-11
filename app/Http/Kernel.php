@@ -3,7 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\AdminMiddleware;
-use App\Http\Middleware\Ajax;
+use App\Http\Middleware\AjaxMiddleware;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\EncryptCookies;
 use App\Http\Middleware\HttpsProtocol;
@@ -70,7 +70,7 @@ class Kernel extends HttpKernel
 
         'api' => [
             'throttle:api',
-            SubstituteBindings::class
+            SubstituteBindings::class,
         ],
     ];
 
@@ -85,7 +85,7 @@ class Kernel extends HttpKernel
         'auth'             => Authenticate::class,
         'admin'            => AdminMiddleware::class,
         'auth.basic'       => AuthenticateWithBasicAuth::class,
-        'ajax'             => Ajax::class,
+        'ajax'             => AjaxMiddleware::class,
         'cache.headers'    => SetCacheHeaders::class,
         'can'              => Authorize::class,
         'guest'            => RedirectIfAuthenticated::class,

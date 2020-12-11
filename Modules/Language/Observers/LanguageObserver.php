@@ -2,6 +2,7 @@
 
 namespace Modules\Language\Observers;
 
+use Illuminate\Support\Facades\Cache;
 use Modules\Language\Entities\Language;
 
 class LanguageObserver
@@ -22,7 +23,8 @@ class LanguageObserver
                 Language::first()->update(['default' => 1]);
         }
 
-        \Cache::forget('languages');
+
+        Cache::forget('languages');
     }
 
     /**
@@ -33,6 +35,6 @@ class LanguageObserver
      */
     public function deleted(Language $language)
     {
-        \Cache::forget('languages');
+        Cache::forget('languages');
     }
 }

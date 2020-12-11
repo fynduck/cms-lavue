@@ -145,7 +145,7 @@
                     {key: 'url', label: this.$t('Language.url')},
                     {key: 'default', label: this.$t('Language.default')},
                     {key: 'active', label: this.$t('Language.status'), sortable: true, 'class': 'text-center status'},
-                    {key: 'sort', label: this.$t('Language.sort'), sortable: true, 'class': 'text-center'},
+                    {key: 'priority', label: this.$t('Language.priority'), sortable: true, 'class': 'text-center'},
                     {key: 'actions', label: this.$t('Language.action'), 'class': 'text-right'}
                 ]
             }

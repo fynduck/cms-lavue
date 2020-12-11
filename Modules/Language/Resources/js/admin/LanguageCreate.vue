@@ -55,9 +55,9 @@
                         </b-form-checkbox>
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="input-sort">{{ $t('Language.sort') }}</label>
-                        <input type="number" v-model="item.sort" id="input-sort" class="form-control"
-                               :placeholder="$t('Language.sort')"
+                        <label for="input-priority">{{ $t('Language.priority') }}</label>
+                        <input type="number" v-model="item.priority" id="input-priority" class="form-control"
+                               :placeholder="$t('Language.priority')"
                                min="0">
                     </div>
                 </div>

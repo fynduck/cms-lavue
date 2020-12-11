@@ -21,7 +21,7 @@ class CreateLanguagesTable extends Migration
             $table->string('image')->nullable();
             $table->boolean('active')->nullable();
             $table->unsignedTinyInteger('default')->nullable()->index();
-            $table->unsignedTinyInteger('sort')->index();
+            $table->unsignedInteger('priority')->index();
             $table->timestamps();
 
             $table->index(['slug', 'active']);

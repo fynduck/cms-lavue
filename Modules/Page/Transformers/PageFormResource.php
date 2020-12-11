@@ -19,7 +19,7 @@ class PageFormResource extends JsonResource
             'parent_id' => $this->parent_id,
             'method'    => $this->method,
             'socials'   => $this->socials ?? 0,
-            'sort'      => $this->sort ?? 0,
+            'priority'  => $this->priority ?? 0,
             'items'     => $this->items()
         ];
     }

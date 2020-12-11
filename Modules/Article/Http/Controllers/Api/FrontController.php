@@ -50,7 +50,7 @@ class FrontController extends Controller
             $query->orderBy('date', 'desc');
         }
 
-        $query->orderBy('sort');
+        $query->orderBy('priority');
 
         $articles = $query->simplePaginate($perPage ?? 9);
 

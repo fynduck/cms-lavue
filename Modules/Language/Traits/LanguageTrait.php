@@ -75,4 +75,14 @@ trait LanguageTrait
 
         return $query->first();
     }
+
+    public function scopeActive($query)
+    {
+        return $query->where('active', 1);
+    }
+
+    public function scopeDefault($query)
+    {
+        return $query->where('default', 1);
+    }
 }

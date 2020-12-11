@@ -75,7 +75,7 @@
                  @input="deleteItem"
                  v-if="confirmWindow.openConfirm"
         ></confirm>
-        <b-modal id="menu-settings" hide-footer centered v-if="Object.keys(settings.sizes).length">
+        <b-modal id="menu-settings" hide-footer centered>
             <b-form-row class="mb-1 size" v-for="(size, key) in settings.sizes" :key="key">
                 <b-col>
                     <b-form-group
@@ -217,7 +217,7 @@ export default {
                 {key: 'show_page', label: this.$t('Menu.to_page'), sortable: false},
                 {key: 'position', label: this.$t('Menu.position'), sortable: true},
                 {key: 'lang', label: this.$t('Menu.lang')},
-                {key: 'sort', label: this.$t('Menu.sort'), sortable: true, 'class': 'text-center'},
+                {key: 'priority', label: this.$t('Menu.priority'), sortable: true, 'class': 'text-center'},
                 {key: 'active', label: this.$t('Menu.status'), sortable: true, 'class': 'text-center status'},
                 {key: 'actions', label: this.$t('Menu.action'), 'class': 'text-center'}
             ]
@@ -259,7 +259,9 @@ export default {
                 this.total = response.data.meta.total;
                 this.items = response.data.data;
                 this.languages = response.data.languages;
-                this.settings = response.data.settings;
+                if (response.data.settings) {
+                    this.settings = response.data.settings;
+                }
                 this.loading = false;
 
             }).catch((error) => {

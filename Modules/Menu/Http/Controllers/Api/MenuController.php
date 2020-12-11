@@ -52,16 +52,18 @@ class MenuController extends AdminController
 
         $settings = MenuSettings::latest()->first();
 
-        $sizes = [];
-        foreach ($settings->sizes as $size) {
-            $sizes[] = [
-                'name'   => $size['name'],
-                'width'  => $size['width'],
-                'height' => $size['height']
-            ];
-        }
+        if ($settings) {
+            $sizes = [];
+            foreach ($settings->sizes as $size) {
+                $sizes[] = [
+                    'name'   => $size['name'],
+                    'width'  => $size['width'],
+                    'height' => $size['height']
+                ];
+            }
 
-        $settings->sizes = $sizes;
+            $settings->sizes = $sizes;
+        }
 
         return MenuListResource::collection($menu)->additional(['languages' => $languages, 'settings' => $settings]);
     }

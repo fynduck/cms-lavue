@@ -132,7 +132,7 @@
                     {key: 'title', label: this.$t('Article.title'), sortable: true},
                     {key: 'type', label: this.$t('Article.type'), sortable: true},
                     {key: 'lang', label: this.$t('Article.lang'), sortable: false, 'class': 'text-center'},
-                    {key: 'sort', label: this.$t('Article.sort'), sortable: true, 'class': 'text-center'},
+                    {key: 'priority', label: this.$t('Article.priority'), sortable: true, 'class': 'text-center'},
                     {key: 'active', label: this.$t('Article.status'), sortable: true, 'class': 'text-center status'},
                     {key: 'actions', label: this.$t('Article.action'), 'class': 'text-center'}
                 ]

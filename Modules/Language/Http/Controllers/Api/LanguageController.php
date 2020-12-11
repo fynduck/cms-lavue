@@ -51,7 +51,7 @@ class LanguageController extends AdminController
             'slug'        => $request->get('slug'),
             'active'      => $request->get('active') ?? 0,
             'default'     => $request->get('default') ?? 0,
-            'sort'        => $request->get('sort') ?? 0,
+            'priority'    => $request->get('priority') ?? 0,
             'image'       => $image
         ]);
 
@@ -92,7 +92,7 @@ class LanguageController extends AdminController
         $language->slug = $request->get('slug');
         $language->active = $request->get('active');
         $language->default = $request->get('default');
-        $language->sort = $request->get('sort');
+        $language->priority = $request->get('priority');
         if ($image)
             $language->image = $image;
 
@@ -101,10 +101,8 @@ class LanguageController extends AdminController
         return true;
     }
 
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, Language $language)
     {
-        $language = Language::find($id);
-
         $language->image = null;
 
         if ($request->get('image')) {

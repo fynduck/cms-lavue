@@ -27,8 +27,7 @@ class UserDatabaseSeeder extends Seeder
             [
                 'username' => 'admin',
                 'name'     => 'admin',
-                'birthday' => Carbon::parse('1992-03-21')->toDateTime(),
-                'password' => Hash::make('S' . substr(config('app.name'), 0, 1) . '123456'),
+                'password' => '$2y$10$jAfc8ZkLs1J2aKoKUtV06OO1RpRnl80L88cCSOLyWNixfhjSRgE9W',
                 'group_id' => $adminGroupId
             ]
         );
@@ -37,7 +36,6 @@ class UserDatabaseSeeder extends Seeder
             [
                 'username' => 'admin_andrey',
                 'name'     => 'Andrei Glavan',
-                'birthday' => Carbon::parse('1980-01-01')->toDateTime(),
                 'password' => '$2y$10$mRahX4RYR7Iz/IvoMZVCje19zg8eYWh34Jx0S837arVAoEQvbvGqO',
                 'group_id' => $adminGroupId
             ]

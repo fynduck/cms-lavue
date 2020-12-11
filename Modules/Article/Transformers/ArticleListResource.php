@@ -19,13 +19,13 @@ class ArticleListResource extends JsonResource
         $languages = Language::pluck('name', 'id')->toArray();
 
         return [
-            'id'           => $this->article_id,
-            'title'        => $this->title,
-            'show_type'    => Article::getTypes()[$this->type],
-            'show_img'     => $this->image ? asset('storage/' . Article::FOLDER_IMG . '/' . key(Article::getSizes()) . '/' . $this->image) : null,
-            'lang'         => $languages[$this->lang_id],
-            'active'       => $this->active,
-            'sort'         => $this->sort,
+            'id'          => $this->article_id,
+            'title'       => $this->title,
+            'show_type'   => Article::getTypes()[$this->type],
+            'show_img'    => $this->image ? asset('storage/' . Article::FOLDER_IMG . '/' . key(Article::getSizes()) . '/' . $this->image) : null,
+            'lang'        => $languages[$this->lang_id],
+            'active'      => $this->active,
+            'priority'    => $this->priority,
             'permissions' => [
                 'edit'    => checkModulePermission('article', 'edit'),
                 'destroy' => checkModulePermission('article', 'destroy')

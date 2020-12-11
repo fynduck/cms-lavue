@@ -23,19 +23,14 @@ class PageDatabaseSeeder extends Seeder
         $pageNotFound = Page::firstOrCreate(['method' => 'not_found']);
         $pageContacts = Page::firstOrCreate(['method' => 'contacts', 'module' => 'Page']);
         $pageAbout = Page::firstOrCreate(['method' => 'about', 'module' => 'Page']);
-        $pageNews = Page::firstOrCreate(['method' => 'news', 'module' => 'Article']);
         $pageArticles = Page::firstOrCreate(['method' => 'articles', 'module' => 'Article']);
-        $pagePromotions = Page::firstOrCreate(['method' => 'promotions', 'module' => 'Article']);
-        $pageCategories = Page::firstOrCreate(['method' => 'catalog', 'module' => 'Category']);
-        $pageHits = Page::firstOrCreate(['method' => 'hits', 'module' => 'Page']);
-        $pageSales = Page::firstOrCreate(['method' => 'sales', 'module' => 'Page']);
 
         $languages = Language::all();
         foreach ($languages as $lang) {
             PageTrans::firstOrCreate(
                 [
                     'page_id' => $home->id,
-                    'title'   => 'Home',
+                    'title'   => 'Home ' . $lang->name,
                     'slug'    => '',
                     'lang_id' => $lang->id,
                     'active'  => 1
@@ -44,7 +39,7 @@ class PageDatabaseSeeder extends Seeder
             PageTrans::firstOrCreate(
                 [
                     'page_id' => $pageNotFound->id,
-                    'title'   => '404 Not Found',
+                    'title'   => '404 Not Found ' . $lang->name,
                     'slug'    => '',
                     'lang_id' => $lang->id,
                     'active'  => 1
@@ -53,7 +48,7 @@ class PageDatabaseSeeder extends Seeder
             PageTrans::firstOrCreate(
                 [
                     'page_id' => $pageContacts->id,
-                    'title'   => 'contacts',
+                    'title'   => 'Contacts ' . $lang->name,
                     'slug'    => 'contacts',
                     'lang_id' => $lang->id,
                     'active'  => 1
@@ -61,17 +56,8 @@ class PageDatabaseSeeder extends Seeder
             );
             PageTrans::firstOrCreate(
                 [
-                    'page_id' => $pageNews->id,
-                    'title'   => 'Новости',
-                    'slug'    => 'news',
-                    'lang_id' => $lang->id,
-                    'active'  => 1
-                ]
-            );
-            PageTrans::firstOrCreate(
-                [
                     'page_id' => $pageAbout->id,
-                    'title'   => 'О компании',
+                    'title'   => 'О компании ' . $lang->name,
                     'slug'    => 'about',
                     'lang_id' => $lang->id,
                     'active'  => 1
@@ -80,44 +66,8 @@ class PageDatabaseSeeder extends Seeder
             PageTrans::firstOrCreate(
                 [
                     'page_id' => $pageArticles->id,
-                    'title'   => 'Публикации',
+                    'title'   => 'Публикации ' . $lang->name,
                     'slug'    => 'articles',
-                    'lang_id' => $lang->id,
-                    'active'  => 1
-                ]
-            );
-            PageTrans::firstOrCreate(
-                [
-                    'page_id' => $pagePromotions->id,
-                    'title'   => 'Акции',
-                    'slug'    => 'promotions',
-                    'lang_id' => $lang->id,
-                    'active'  => 1
-                ]
-            );
-            PageTrans::firstOrCreate(
-                [
-                    'page_id' => $pageCategories->id,
-                    'title'   => 'Каталог',
-                    'slug'    => 'catalog',
-                    'lang_id' => $lang->id,
-                    'active'  => 1
-                ]
-            );
-            PageTrans::firstOrCreate(
-                [
-                    'page_id' => $pageHits->id,
-                    'title'   => 'Хиты',
-                    'slug'    => 'hits',
-                    'lang_id' => $lang->id,
-                    'active'  => 1
-                ]
-            );
-            PageTrans::firstOrCreate(
-                [
-                    'page_id' => $pageSales->id,
-                    'title'   => 'Скитки',
-                    'slug'    => 'sales',
                     'lang_id' => $lang->id,
                     'active'  => 1
                 ]

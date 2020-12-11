@@ -16,7 +16,7 @@ use Modules\Article\Traits\ArticleTrait;
  * @property string|null $image
  * @property string|null $icon
  * @property int $socials
- * @property int $sort
+ * @property int $priority
  * @property string $type
  * @property int|null $no_show_home
  * @property int $views
@@ -45,6 +45,7 @@ use Modules\Article\Traits\ArticleTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Article\Entities\Article whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Article\Entities\Article whereViews($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|Article wherePriority($value)
  */
 class Article extends Model
 {
@@ -66,7 +67,7 @@ class Article extends Model
         'image',
         'icon',
         'socials',
-        'sort',
+        'priority',
         'type',
         'no_show_home',
     ];

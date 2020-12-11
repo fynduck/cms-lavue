@@ -25,7 +25,7 @@ trait MenuTrait
         if ($active)
             $query->where('active', $active);
 
-        return $query->whereNull('parent_id')->orderBy('sort')->orderBy('updated_at', 'DESC');
+        return $query->whereNull('parent_id')->orderBy('priority')->orderBy('updated_at', 'DESC');
     }
 
     /**

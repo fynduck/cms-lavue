@@ -14,7 +14,7 @@ $factory->define(\Modules\Menu\Entities\Menu::class, function (Faker $faker) {
         'icon'      => null,
         'position'  => 'footer',
         'nofollow'  => false,
-        'sort'      => 0,
+        'priority'  => 0,
     ];
 });
 

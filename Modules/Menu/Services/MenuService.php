@@ -47,7 +47,7 @@ class MenuService
                 'icon'       => $request->get('icon'),
                 'position'   => $request->get('position'),
                 'nofollow'   => $request->has('nofollow') ? 1 : 0,
-                'sort'       => (int)$request->get('sort'),
+                'priority'   => (int)$request->get('priority'),
             ]
         );
     }

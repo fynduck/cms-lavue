@@ -22,7 +22,7 @@ class CreateArticlesTable extends Migration
             $table->string('image')->nullable();
             $table->string('icon')->nullable();
             $table->unsignedTinyInteger('socials');
-            $table->integer('sort')->unsigned();
+            $table->unsignedInteger('priority')->unsigned();
             $table->string('type');
             $table->unsignedTinyInteger('no_show_home')->nullable();
             $table->timestamps();

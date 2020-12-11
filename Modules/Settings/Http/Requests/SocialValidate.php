@@ -17,7 +17,7 @@ class SocialValidate extends FormRequest
             '*.name'       => 'required|string',
             '*.url'        => 'required|url',
             '*.class_icon' => 'required|string',
-            '*.sort'       => 'required'
+            '*.priority'   => 'required'
         ];
     }
 

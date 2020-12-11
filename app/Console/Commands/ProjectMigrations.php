@@ -41,26 +41,29 @@ class ProjectMigrations extends Command
         Artisan::call('module:migrate Language');
         $this->info("Language migrate finish!");
 
-        Artisan::call('module:migrate Page');
-        $this->info("Page migrate finish!");
-
         Artisan::call('module:migrate UserGroup');
         $this->info("UserGroup migrate finish!");
 
         Artisan::call('module:migrate User');
         $this->info("User migrate finish!");
 
+        Artisan::call('module:migrate Settings');
+        $this->info("Settings migrate finish!");
+
         Artisan::call('module:migrate Menu');
         $this->info("Menu migrate finish!");
 
-        Artisan::call('module:migrate CustomForm');
-        $this->info("CustomForm migrate finish!");
+        Artisan::call('module:migrate Page');
+        $this->info("Page migrate finish!");
 
         Artisan::call('module:migrate Article');
         $this->info("Article migrate finish!");
 
-        Artisan::call('module:migrate Settings');
-        $this->info("Settings migrate finish!");
+        Artisan::call('module:migrate CustomForm');
+        $this->info("CustomForm migrate finish!");
+
+        Artisan::call('module:migrate Redirect');
+        $this->info("Redirect migrate finish!");
 
         Artisan::call('storage:link');
         $this->info('link finish!');

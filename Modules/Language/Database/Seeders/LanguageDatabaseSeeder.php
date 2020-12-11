@@ -25,7 +25,7 @@ class LanguageDatabaseSeeder extends Seeder
             'name'        => 'Русский',
             'active'      => 1,
             'default'     => 1,
-            'sort'        => 1,
+            'priority'        => 1,
         ]);
     }
 }

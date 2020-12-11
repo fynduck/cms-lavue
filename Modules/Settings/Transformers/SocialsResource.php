@@ -19,7 +19,7 @@ class SocialsResource extends JsonResource
             'name'       => $this->name,
             'url'        => $this->url,
             'class_icon' => $this->class_icon,
-            'sort'       => $this->sort
+            'priority'   => $this->priority
         ];
     }
 }

@@ -16,7 +16,7 @@ use Modules\Language\Traits\LanguageTrait;
  * @property string|null $image
  * @property int $active
  * @property int $default
- * @property int $sort
+ * @property int $priority
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Language\Entities\Language filter(\Illuminate\Http\Request $request)
@@ -34,6 +34,7 @@ use Modules\Language\Traits\LanguageTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Language\Entities\Language whereSort($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Language\Entities\Language whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|Language wherePriority($value)
  */
 class Language extends Model
 {
@@ -48,6 +49,6 @@ class Language extends Model
         'country_iso',
         'active',
         'default',
-        'sort'
+        'priority'
     ];
 }

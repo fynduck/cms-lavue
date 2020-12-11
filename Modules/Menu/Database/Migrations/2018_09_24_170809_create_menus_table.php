@@ -24,7 +24,7 @@ class CreateMenusTable extends Migration
             $table->string('target');
             $table->string('image')->nullable();
             $table->string('icon')->nullable();
-            $table->unsignedTinyInteger('sort');
+            $table->unsignedInteger('priority');
             $table->unsignedTinyInteger('nofollow');
             $table->timestamps();
 

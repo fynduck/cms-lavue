@@ -18,7 +18,7 @@ class CreateSocialsTable extends Migration
             $table->string('name');
             $table->string('url');
             $table->string('class_icon');
-            $table->tinyInteger('sort');
+            $table->tinyInteger('priority');
             $table->timestamps();
         });
     }

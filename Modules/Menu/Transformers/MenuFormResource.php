@@ -27,7 +27,7 @@ class MenuFormResource extends JsonResource
             'parent_id'  => $this->parent_id,
             'attributes' => $this->attributes,
             'nofollow'   => $this->nofollow,
-            'sort'       => $this->sort ?? 0,
+            'priority'   => $this->priority ?? 0,
             'items'      => $this->items()
         ];
     }

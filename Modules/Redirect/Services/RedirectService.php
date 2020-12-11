@@ -40,6 +40,6 @@ class RedirectService
 
     private function requestHasRedirect($from)
     {
-        return Redirect::where('from', $from)->where('status', 1)->first();
+        return Redirect::where('from', $from)->where('active', 1)->first();
     }
 }

@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $name
  * @property string $url
  * @property string $class_icon
- * @property int $sort
+ * @property int $priority
  * @property string|null $created_at
  * @property string|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Settings\Entities\Social newModelQuery()
@@ -25,11 +25,12 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Settings\Entities\Social whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Settings\Entities\Social whereUrl($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|Social wherePriority($value)
  */
 class Social extends Model
 {
     protected $fillable = [
-        'name', 'url', 'class_icon', 'sort'
+        'name', 'url', 'class_icon', 'priority'
     ];
 
     public $timestamps = false;

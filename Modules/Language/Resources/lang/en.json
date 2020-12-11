@@ -20,6 +20,7 @@
   "insert_query": "Insert query",
   "status": "Status",
   "action": "Action",
-  "sort": "Sort",
-  "data_save": "Data save"
+  "priority": "Priority",
+  "data_save": "Data save",
+  "save": "Save"
 }

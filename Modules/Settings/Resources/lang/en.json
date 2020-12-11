@@ -94,7 +94,7 @@
   "SMS_SENDER": "SMS_SENDER",
   "SMS_MESSAGE": "SMS_MESSAGE",
   "alert_info": "Alert info",
-  "sort": "Sort",
+  "priority": "Priority",
   "title": "Title",
   "url": "Url",
   "delete": "Delete",

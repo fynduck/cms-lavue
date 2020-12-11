@@ -26,7 +26,7 @@ class MenuListResource extends JsonResource
             'show_page'   => generateRoute($this),
             'lang'        => $languages[$this->lang_id],
             'active'      => $this->active,
-            'sort'        => $this->sort,
+            'priority'    => $this->priority,
             'permissions' => [
                 'edit'    => checkModulePermission('menu', 'edit'),
                 'destroy' => checkModulePermission('menu', 'destroy')

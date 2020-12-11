@@ -94,9 +94,9 @@
                     <date-time-picker v-model="item.date" :locale="locale"></date-time-picker>
                 </div>
                 <div class="col-md-4 col-xl-3 form-group">
-                    <label for="sort">{{ $t('Article.sort') }}</label>
-                    <input type="number" min="0" class="form-control" id="sort" v-model="item.sort"
-                           :placeholder="$t('Article.sort')">
+                    <label for="priority">{{ $t('Article.priority') }}</label>
+                    <input type="number" min="0" class="form-control" id="priority" v-model="item.priority"
+                           :placeholder="$t('Article.priority')">
                 </div>
                 <div class="col-md-4 col-xl-3 form-group d-flex align-items-center">
                     <div class="custom-control custom-checkbox my-1 mr-sm-2">

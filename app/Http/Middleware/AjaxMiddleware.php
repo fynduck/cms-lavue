@@ -3,8 +3,9 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\Request;
 
-class Ajax
+class AjaxMiddleware
 {
     /**
      * Handle an incoming request.
@@ -13,7 +14,7 @@ class Ajax
      * @param  \Closure $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
         if ($request->ajax())
             return $next($request);

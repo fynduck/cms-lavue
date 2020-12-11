@@ -25,7 +25,7 @@ class SettingsService
             ], [
                     'url'        => $item['url'],
                     'class_icon' => $item['class_icon'],
-                    'sort'       => $item['sort'],
+                    'priority'   => $item['priority'],
                 ]
             );
 

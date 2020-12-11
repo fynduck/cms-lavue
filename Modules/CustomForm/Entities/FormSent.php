@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\CustomForm\Entities\FormSent whereFormId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\CustomForm\Entities\FormSent whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\CustomForm\Entities\FormSent whereUpdatedAt($value)
+ * @property-read \Modules\CustomForm\Entities\Form|null $form
  */
 class FormSent extends Model
 {

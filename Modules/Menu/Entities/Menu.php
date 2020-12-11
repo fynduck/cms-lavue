@@ -18,7 +18,7 @@ use Modules\Menu\Traits\MenuTrait;
  * @property string $target
  * @property string|null $image
  * @property string|null $icon
- * @property int $sort
+ * @property int $priority
  * @property int $nofollow
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -46,6 +46,10 @@ use Modules\Menu\Traits\MenuTrait;
  * @mixin \Eloquent
  * @property-read \Illuminate\Database\Eloquent\Collection|\Modules\Menu\Entities\Menu[] $activeChildren
  * @property-read int|null $active_children_count
+ * @property string|null $attributes
+ * @method static \Illuminate\Database\Eloquent\Builder|Menu priority()
+ * @method static \Illuminate\Database\Eloquent\Builder|Menu whereAttributes($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Menu wherePriority($value)
  */
 class Menu extends Model
 {
@@ -70,7 +74,7 @@ class Menu extends Model
         'type_page',
         'page_id',
         'target',
-        'sort',
+        'priority',
         'nofollow',
         'attributes'
     ];
@@ -106,8 +110,8 @@ class Menu extends Model
             });
     }
 
-    public function scopeSort($query)
+    public function scopePriority($query)
     {
-        return $query->orderBy('sort');
+        return $query->orderBy('priority');
     }
 }

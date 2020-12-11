@@ -42,10 +42,6 @@ class ProjectSeeds extends Command
         Artisan::call('module:seed Language');
         $this->info("Language seed finish!");
 
-        $this->comment("Page seed start!");
-        Artisan::call('module:seed Page');
-        $this->info("Page seed finish!");
-
         $this->comment("UserGroup seed start!");
         Artisan::call('module:seed UserGroup');
         $this->info("UserGroup seed finish!");
@@ -57,5 +53,9 @@ class ProjectSeeds extends Command
         $this->comment("Settings seed start!");
         Artisan::call('module:seed Settings');
         $this->info("Settings seed finish!");
+
+        $this->comment("Page seed start!");
+        Artisan::call('module:seed Page');
+        $this->info("Page seed finish!");
     }
 }

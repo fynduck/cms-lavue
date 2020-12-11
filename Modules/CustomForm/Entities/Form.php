@@ -32,6 +32,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\CustomForm\Entities\Form whereMethod($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\CustomForm\Entities\Form whereSendEmails($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\CustomForm\Entities\Form whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Modules\CustomForm\Entities\FormSent[] $completed
+ * @property-read int|null $completed_count
  */
 class Form extends Model
 {

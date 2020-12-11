@@ -53,8 +53,6 @@ class UserController extends Controller
             'username' => $request->get('username'),
             'name'     => $request->get('name'),
             'email'    => $request->get('email'),
-            'phone'    => $request->get('phone'),
-            'birthday' => $request->get('birthday'),
             'group_id' => (int)$request->get('group_id') !== 1 ? $request->get('group_id') : 2,
             'password' => bcrypt($request->get('password') ?? Str::random(15)),
             'token'    => Str::random(64)
@@ -85,16 +83,13 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      * @param UpdateUserRequest $request
-     * @param $id
+     * @param User $user
      * @return bool
      */
-    public function update(UpdateUserRequest $request, $id)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        $user = User::findOrFail($id);
         $user->username = $request->get('username');
         $user->name = $request->get('name');
-        $user->birthday = $request->get('birthday');
-        $user->phone = $request->get('phone');
         $user->group_id = (int)$request->get('group_id') !== 1 ? $request->get('group_id') : 2;
         $user->phone = $request->get('phone');
 
@@ -103,14 +98,12 @@ class UserController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     * @param $id
+     * @param User $user
      * @return bool
      * @throws \Exception
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        $item = User::find($id);
-
-        return $item->delete();
+        return $user->delete();
     }
 }
