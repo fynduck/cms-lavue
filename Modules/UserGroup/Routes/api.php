@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Modules\UserGroup\Http\Controllers\UserGroupController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,5 +14,5 @@ use Illuminate\Http\Request;
 |
 */
 Route::middleware(['auth:api'])->prefix('admin')->group(function () {
-    Route::apiResource('user-group', 'UserGroupController');
+    Route::apiResource('user-group', UserGroupController::class);
 });

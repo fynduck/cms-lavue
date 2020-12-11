@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Modules\Translate\Http\Controllers\Api\TranslateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,5 +15,5 @@ use Illuminate\Http\Request;
 */
 
 Route::prefix('admin')->middleware(['auth:api'])->group(function () {
-    Route::apiResource('translate', 'TranslateController')->only(['index', 'store']);
+    Route::apiResource('translate', TranslateController::class)->only(['index', 'store']);
 });

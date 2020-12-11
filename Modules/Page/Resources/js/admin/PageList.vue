@@ -2,7 +2,7 @@
     <div class="position-relative">
         <b-card class="mb-4">
             <b-row>
-                <b-col md="5" lg="4" class="my-1">
+                <b-col sm="6" lg="4" class="my-1">
                     <b-input-group>
                         <b-form-input v-model="filter" :placeholder="$t('Page.insert_query')"/>
                         <b-input-group-append>
@@ -10,10 +10,10 @@
                         </b-input-group-append>
                     </b-input-group>
                 </b-col>
-                <b-col sm="6" md="3" class="my-1 d-flex align-items-center">
+                <b-col sm="6" lg="3" class="my-1 d-flex align-items-center">
                     <b-form-select v-model="lang_id" :options="langOptions"></b-form-select>
                 </b-col>
-                <b-col sm="6" md="3" class="my-1 d-flex align-items-center">
+                <b-col sm="6" lg="3" class="my-1 d-flex align-items-center">
                     <b-form-checkbox id="checkbox_status"
                                      switch
                                      v-model="active"
@@ -22,7 +22,7 @@
                         {{ $t('Page.active_s') }}
                     </b-form-checkbox>
                 </b-col>
-                <b-col sm="6" md="3" lg="2" class="text-right" v-if="canCreate">
+                <b-col sm="6" lg="2" class="text-right" v-if="canCreate">
                     <router-link class="btn btn-primary" :to="{name: `${routeName}.create`}" :title="$t('Page.add_page')">
                         <fa :icon="['fas', 'plus']"/>
                     </router-link>
@@ -42,7 +42,7 @@
                  :busy="loading"
                  striped
                  hover
-                 responsive
+                 stacked="lg"
                  :items="items"
                  :fields="fields"
                  :sort-by.sync="sortBy"

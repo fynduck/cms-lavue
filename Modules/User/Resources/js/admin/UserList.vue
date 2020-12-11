@@ -33,7 +33,7 @@
                  :busy="loading"
                  striped
                  hover
-                 responsive
+                 stacked="sm"
                  :items="items"
                  :fields="fields">
             <template v-slot:cell(actions)="row">

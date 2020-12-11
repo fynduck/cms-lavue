@@ -44,7 +44,7 @@
                                      striped
                                      hover
                                      v-loading="loading"
-                                     :stacked="true"
+                                     stacked="sm"
                                      :items="items"
                                      :fields="fields"
                                      :current-page="currentPage"

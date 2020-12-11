@@ -32,7 +32,7 @@
                  :busy="loading"
                  striped
                  hover
-                 responsive
+                 stacked="md"
                  :items="items"
                  :fields="fields"
                  :sort-by.sync="sortBy"
@@ -145,7 +145,7 @@
                     {key: 'default', label: this.$t('Language.default')},
                     {key: 'active', label: this.$t('Language.status'), sortable: true, 'class': 'text-center status'},
                     {key: 'sort', label: this.$t('Language.sort'), sortable: true, 'class': 'text-center'},
-                    {key: 'actions', label: this.$t('Language.action'), 'class': 'text-right w-20'}
+                    {key: 'actions', label: this.$t('Language.action'), 'class': 'text-right'}
                 ]
             }
         },

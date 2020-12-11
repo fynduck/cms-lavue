@@ -37,6 +37,7 @@
                  :busy="loading"
                  striped
                  hover
+                 stacked="lg"
                  :responsive="true"
                  :items="items"
                  :fields="fields"

@@ -12,8 +12,7 @@
 */
 
 use Illuminate\Support\Facades\Route;
+use Modules\Page\Http\Controllers\FrontController;
 
-Route::get('get-media', 'FrontController@getMedia')->name('get-media');
-
-Route::get('/', 'FrontController@pages')->name('home');
-Route::get('{page?}/{category?}/{url?}', 'FrontController@pages')->name('pages');
+Route::get('/', [FrontController::class, 'pages'])->name('home');
+Route::get('{page?}/{category?}/{url?}', [FrontController::class, 'pages'])->name('pages');

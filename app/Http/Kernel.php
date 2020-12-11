@@ -5,8 +5,6 @@ namespace App\Http;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\Ajax;
 use App\Http\Middleware\Authenticate;
-use App\Http\Middleware\CheckForMaintenanceMode;
-use App\Http\Middleware\CorsMiddleware;
 use App\Http\Middleware\EncryptCookies;
 use App\Http\Middleware\HttpsProtocol;
 use App\Http\Middleware\PreventRequestsDuringMaintenance;
@@ -94,23 +92,6 @@ class Kernel extends HttpKernel
         'password.confirm' => RequirePassword::class,
         'signed'           => ValidateSignature::class,
         'throttle'         => ThrottleRequests::class,
-        'verified'         => EnsureEmailIsVerified::class,
-        'cors'             => CorsMiddleware::class,
-    ];
-
-    /**
-     * The priority-sorted list of middleware.
-     *
-     * This forces non-global middleware to always be in the given order.
-     *
-     * @var array
-     */
-    protected $middlewarePriority = [
-        StartSession::class,
-        ShareErrorsFromSession::class,
-        Authenticate::class,
-        AuthenticateSession::class,
-        SubstituteBindings::class,
-        Authorize::class,
+        'verified'         => EnsureEmailIsVerified::class
     ];
 }

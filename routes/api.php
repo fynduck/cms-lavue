@@ -19,7 +19,7 @@ use UniSharp\LaravelFilemanager\Lfm;
  * | Route for settings
  * |---------------------
  **/
-Route::middleware('cors')->prefix('admin')->group(function () {
+Route::prefix('admin')->group(function () {
     Route::get('get-app-data', 'Api\DashboardController@getAppData')->name('app-data');
 
     Route::middleware('auth:api')->group(function () {

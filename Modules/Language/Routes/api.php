@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Modules\Language\Http\Controllers\Api\LanguageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,5 +15,5 @@ use Illuminate\Http\Request;
 */
 
 Route::prefix('admin')->middleware(['auth:api'])->group(function () {
-    Route::apiResource('language', 'LanguageController');
+    Route::apiResource('language', LanguageController::class);
 });
