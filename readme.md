@@ -11,6 +11,7 @@ CMS can use as REST API
 ## CMS-LAVUE use
 - Laravel
 - VueJs
+- Vuex
 - NuxtJs
 - Stylus
 
