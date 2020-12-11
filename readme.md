@@ -2,7 +2,7 @@
 
 # About CMS Lavue
 
-CMS-LAVUE is cms for eCommerce, blog, landing page
+CMS-LAVUE is cms for eCommerce, Blog, Landing Page, etc.
 
 CMS use modular system, which gives you the ability to disable or enable new modules
 
