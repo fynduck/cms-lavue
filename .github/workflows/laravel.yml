@@ -25,12 +25,12 @@ jobs:
       run: |
         mkdir -p database
         touch database/database.sqlite
-      env:
-        DB_CONNECTION: sqlite
-        DB_DATABASE: database/database.sqlite
     - name: Enable modules
       run: php artisan project:modules
     - name: Run migrations
+      env:
+        DB_CONNECTION: sqlite
+        DB_DATABASE: database/database.sqlite
       run: php artisan project:migrations
     - name: Run seeds
       run: php artisan project:seeds
