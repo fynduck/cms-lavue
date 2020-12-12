@@ -34,5 +34,3 @@ jobs:
       run: php artisan project:migrations
     - name: Run seeds
       run: php artisan project:seeds
-    - name: Execute tests (Unit and Feature tests) via PHPUnit
-      run: vendor/bin/phpunit
