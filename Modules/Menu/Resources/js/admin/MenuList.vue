@@ -76,7 +76,7 @@
                  v-if="confirmWindow.openConfirm"
         ></confirm>
         <b-modal id="menu-settings" hide-footer centered>
-            <b-form-row class="mb-1 size" v-for="(size, key) in settings.sizes" :key="key">
+            <b-row class="mb-1 size" v-for="(size, key) in settings.sizes" :key="key">
                 <b-col>
                     <b-form-group
                         :label="$t('Menu.size_name')"
@@ -102,7 +102,7 @@
                     </b-form-group>
                 </b-col>
                 <fa :icon="['fas', 'trash-alt']" class="text-danger remove" @click="deleteSize(key)"/>
-            </b-form-row>
+            </b-row>
             <b-form-select v-model="settings.resize" :options="resizes" size="sm" class="my-3"></b-form-select>
             <b-row class="justify-content-between">
                 <b-col>

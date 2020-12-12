@@ -4,7 +4,7 @@
             {{ $t('Settings.socials_on_off') }}
         </p>
         <form @submit.prevent="onSubmit">
-            <div class="form-row" v-for="(item, index) in items">
+            <div class="row" v-for="(item, index) in items">
                 <div class="col-sm-6 col-lg-3 form-group">
                     <label for="name">{{ $t('Settings.title') }}</label>
                     <input type="text" v-model="item.name" :class="['form-control', errors[index + '.name'] ? ' is-invalid' : '']"

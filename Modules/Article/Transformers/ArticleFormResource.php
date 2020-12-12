@@ -26,7 +26,7 @@ class ArticleFormResource extends JsonResource
             'old_icon'     => $this->oldIcon(),
             'icon'         => $this->icon,
             'socials'      => $this->socials,
-            'priority'     => $this->priority,
+            'priority'     => $this->priority ?? 0,
             'type'         => $this->type,
             'no_show_home' => $this->no_show_home,
             'items'        => $this->emptyItems()

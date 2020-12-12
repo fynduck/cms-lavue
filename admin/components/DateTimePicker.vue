@@ -1,5 +1,5 @@
 <template>
-    <b-input-group class="mb-3">
+    <b-input-group>
         <b-form-input
             v-model="date_time"
             type="text"

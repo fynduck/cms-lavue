@@ -12,6 +12,7 @@ use Modules\Article\Services\ArticleService;
 use Modules\Article\Http\Requests\ArticleValidate;
 use Modules\Article\Transformers\ArticleFormResource;
 use Modules\Article\Transformers\ArticleListResource;
+use Modules\Language\Entities\Language;
 
 class ArticleController extends AdminController
 {
@@ -42,7 +43,9 @@ class ArticleController extends AdminController
             ->orderBy('priority')
             ->orderBy('updated_at', 'DESC')->paginate(25);
 
-        return ArticleListResource::collection($articles);
+        $languages = Language::whereActive(1)->pluck('name', 'id');
+
+        return ArticleListResource::collection($articles)->additional(['languages' => $languages]);
     }
 
     /**

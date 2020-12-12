@@ -16,7 +16,7 @@
             <b-tabs>
                 <b-tab :title="language.name" v-for="(language, locale_id) in locales" :key="locale_id" class="mt-4">
                     <b-card-text>
-                        <div class="form-row">
+                        <div class="row">
                             <div class="form-group col-md-6">
                                 <label :for="`title_${locale_id}`">{{ $t('Menu.title') }}</label>
                                 <input type="text"
@@ -31,7 +31,7 @@
                                        :placeholder="$t('Menu.link')">
                             </div>
                         </div>
-                        <div class="form-row">
+                        <div class="row">
                             <div class="form-group col-md-6">
                                 <label :for="`additional_${locale_id}`">{{ $t('Menu.additional_title') }}</label>
                                 <input type="text" :placeholder="$t('Menu.additional_title')"
@@ -53,7 +53,7 @@
                 </b-tab>
             </b-tabs>
             <hr>
-            <div class="form-row">
+            <div class="row">
                 <div class="form-group col">
                     <upload v-model="item.image"></upload>
                 </div>
@@ -76,8 +76,8 @@
                     </select>
                 </div>
             </div>
-            <div class="form-row">
-                <div class="form-group col-lg-3">
+            <div class="row">
+                <div class="form-group col-md-4 col-lg-3">
                     <label for="icon">{{ $t('Menu.fa_icon') }}</label>
                     <input type="text" class="form-control" id="icon" placeholder="fas fa-question" v-model="item.icon">
                 </div>
@@ -96,14 +96,14 @@
                     ></custom-select>
                 </div>
             </div>
-            <div class="form-row">
+            <div class="row">
                 <div class="col-md-4 col-lg-3 form-group">
                     <label for="target">{{ $t('Menu.target') }}</label>
                     <select name="target" id="target" class="form-control" required v-model="item.target">
                         <option v-for="target in targets" :value="target">{{ target }}</option>
                     </select>
                 </div>
-                <div class="col-md-3 form-group">
+                <div class="col-md-3 col-lg-2 form-group">
                     <label for="priority">{{ $t('Menu.priority') }}</label>
                     <input type="number" class="form-control" min="0" v-model="item.priority" id="priority"
                            :placeholder="$t('Menu.priority')">
@@ -115,8 +115,7 @@
                 </div>
                 <div class="col-md-4 col-lg-3 form-group d-flex align-items-end">
                     <div class="custom-control custom-switch my-1 mr-sm-2">
-                        <input type="checkbox" class="custom-control-input" id="nofollow" v-model="item.nofollow"
-                               :value="1">
+                        <input type="checkbox" class="custom-control-input" id="nofollow" v-model="item.nofollow" :value="1">
                         <label class="custom-control-label" for="nofollow">{{ $t('Menu.nofollow') }}</label>
                     </div>
                 </div>

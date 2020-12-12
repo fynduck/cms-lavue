@@ -13,7 +13,7 @@
                     :disabled="submit">
                 <fa :icon="['fas', 'save']"/>
             </button>
-            <div class="form-row">
+            <div class="row">
                 <div class="form-group col-md-6">
                     <label for="from">{{ $t('Redirect.from') }}</label>
                     <input type="text" :class="['form-control', errors['from'] ? ' is-invalid' : '']"
@@ -26,7 +26,7 @@
                            id="to">
                 </div>
             </div>
-            <div class="form-row">
+            <div class="row">
                 <div class="form-group col-md-6">
                     <label for="status_code">{{ $t('Redirect.status_code') }}</label>
                     <input type="number" :class="['form-control', errors['status_code'] ? ' is-invalid' : '']"

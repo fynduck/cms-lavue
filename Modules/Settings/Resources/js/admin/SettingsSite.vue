@@ -12,7 +12,7 @@
             <b-tabs>
                 <b-tab :title="language.name" v-for="(language, locale_id) in locales" :key="locale_id" class="mt-4">
                     <b-card-text>
-                        <div class="form-row">
+                        <div class="row">
                             <div class="form-group col-md-4">
                                 <label :for="`name_site_${locale_id}`">{{ $t('Settings.name_site') }}</label>
                                 <input type="text" v-model="items[locale_id].name_site" :id="`name_site_${locale_id}`"
@@ -33,7 +33,7 @@
                 </b-tab>
             </b-tabs>
             <hr class="my-4">
-            <div class="form-row">
+            <div class="row">
                 <div class="form-group col-lg-3">
                     <label for="post_code">{{ $t('Settings.post_code') }}</label>
                     <input type="text" class="form-control" id="post_code" v-model="items[0].post_code">

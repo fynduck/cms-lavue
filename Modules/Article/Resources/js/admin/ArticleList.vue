@@ -10,13 +10,8 @@
                         </b-input-group-append>
                     </b-input-group>
                 </b-col>
-                <b-col sm="6" lg="3" class="my-1 d-flex align-items-center">
-                    <b-form-checkbox id="checkbox_lang"
-                                     v-model="lang_id"
-                                     :value="1"
-                                     :unchecked-value="0">
-                        {{ lang_id ? $t('Article.default') : $t('Article.all_lang') }}
-                    </b-form-checkbox>
+                <b-col sm="6" lg="3" class="my-1">
+                    <b-form-select v-model="lang_id" :options="langOptions"></b-form-select>
                 </b-col>
                 <b-col sm="6" lg="3" class="my-1 d-flex align-items-center">
                     <b-form-checkbox id="checkbox_status"
@@ -100,6 +95,7 @@
                 sortDesc: false,
                 filter: null,
                 loading: false,
+                languages: {},
                 timeout: null,
                 confirmWindow: {
                     confirm: null,
@@ -137,6 +133,20 @@
                     {key: 'active', label: this.$t('Article.status'), sortable: true, 'class': 'text-center status'},
                     {key: 'actions', label: this.$t('Article.action'), 'class': 'text-center'}
                 ]
+            },
+            langOptions() {
+                let options = [{
+                    value: null,
+                    text: this.$t('Article.all_lang')
+                }];
+                for (let key of Object.keys(this.languages)) {
+                    options.push({
+                        value: key,
+                        text: this.languages[key]
+                    })
+                }
+
+                return options;
             }
         },
         watch: {
@@ -179,6 +189,7 @@
                     this.per_page = response.data.meta.per_page;
                     this.total = response.data.meta.total;
                     this.items = response.data.data;
+                    this.languages = response.data.languages;
                     this.loading = false;
                 }).catch((error) => {
                     console.log(error);
