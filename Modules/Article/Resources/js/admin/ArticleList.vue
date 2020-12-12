@@ -23,6 +23,7 @@
                     </b-form-checkbox>
                 </b-col>
                 <b-col sm="6" lg="2" class="text-right" v-if="canCreate">
+                    <b-button v-b-modal.article-settings variant="info">{{ $t('Article.settings') }}</b-button>
                     <router-link class="btn btn-primary" :to="{name: `${routeName}.create`}"
                                  :title="$t('Article.add_article')">
                         <fa :icon="['fas', 'plus']"/>
@@ -43,7 +44,7 @@
                  :sort-desc.sync="sortDesc"
                  @sort-changed="changeSort"
         >
-            <template v-slot:cell(image)="row"><img :src="row.item.show_img" alt=""></template>
+            <template v-slot:cell(image)="row"><img :src="row.item.show_img" alt="" width="40"></template>
             <template v-slot:cell(type)="row">{{row.item.show_type}}</template>
             <template v-slot:cell(active)="row">
                 <fa :icon="['far', 'check-circle']" class="text-success" v-if="row.item.active"/>
@@ -69,6 +70,48 @@
                  @input="deleteItem"
                  v-if="confirmWindow.openConfirm"
         ></confirm>
+        <b-modal id="article-settings" hide-footer centered>
+            <b-row class="mb-1 size" v-for="(size, key) in settings.sizes" :key="key">
+                <b-col>
+                    <b-form-group
+                        :label="$t('Article.size_name')"
+                        :label-for="`name_${key}`"
+                    >
+                        <b-form-input :id="`name_${key}`" v-model="size.name"></b-form-input>
+                    </b-form-group>
+                </b-col>
+                <b-col>
+                    <b-form-group
+                        :label="$t('Article.width')"
+                        :label-for="`width_${key}`"
+                    >
+                        <b-form-input :id="`width_${key}`" v-model.number="size.width" type="number"></b-form-input>
+                    </b-form-group>
+                </b-col>
+                <b-col>
+                    <b-form-group
+                        :label="$t('Article.height')"
+                        :label-for="`height_${key}`"
+                    >
+                        <b-form-input :id="`height_${key}`" v-model.number="size.height" type="number"></b-form-input>
+                    </b-form-group>
+                </b-col>
+                <fa :icon="['fas', 'trash-alt']" class="text-danger remove" @click="deleteSize(key)"/>
+            </b-row>
+            <b-form-select v-model="settings.resize" :options="resizes" size="sm" class="my-3"></b-form-select>
+            <b-row class="justify-content-between">
+                <b-col>
+                    <b-button variant="info" @click.prevent="addSize" :title="$t('Article.add_size')">
+                        <fa :icon="['fas', 'plus']"/>
+                    </b-button>
+                </b-col>
+                <b-col class="text-right">
+                    <b-button variant="primary" :title="$t('Article.save')" @click="saveSettings">
+                        <fa :icon="['fas', 'save']"/>
+                    </b-button>
+                </b-col>
+            </b-row>
+        </b-modal>
         <b-pagination align="center" v-if="total > per_page" size="md" :total-rows="total" v-model="current_page"
                       :per-page="per_page"/>
     </div>
@@ -96,6 +139,20 @@
                 filter: null,
                 loading: false,
                 languages: {},
+                resizes: [
+                    {
+                        value: 'resize',
+                        text: this.$t('Menu.resize')
+                    },
+                    {
+                        value: 'crop',
+                        text: this.$t('Menu.crop')
+                    }
+                ],
+                settings: {
+                    sizes: [],
+                    resize: 'resize'
+                },
                 timeout: null,
                 confirmWindow: {
                     confirm: null,
@@ -190,6 +247,9 @@
                     this.total = response.data.meta.total;
                     this.items = response.data.data;
                     this.languages = response.data.languages;
+                    if (response.data.settings) {
+                        this.settings = response.data.settings;
+                    }
                     this.loading = false;
                 }).catch((error) => {
                     console.log(error);
@@ -224,6 +284,35 @@
                         })
                     });
                 }
+            },
+            emptySize() {
+                return {
+                    name: '',
+                    width: 0,
+                    height: 0,
+                }
+            },
+            addSize() {
+                this.settings.sizes.push(this.emptySize())
+            },
+            deleteSize(index) {
+                this.settings.sizes.splice(index, 1)
+            },
+            saveSettings() {
+                axios.post(`${this.source}-settings`, this.settings).then(response => {
+                    this.$bvModal.hide('article-settings')
+                    this.$bvToast.toast(this.$t('Article.settings_saved'), {
+                        title: this.$t('Article.status'),
+                        variant: 'info',
+                        solid: true
+                    })
+                }).catch(error => {
+                    this.$bvToast.toast(error, {
+                        title: this.$t('Article.status'),
+                        variant: 'danger',
+                        solid: true
+                    })
+                })
             }
         }
     }

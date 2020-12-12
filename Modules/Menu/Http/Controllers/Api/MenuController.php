@@ -23,7 +23,9 @@ class MenuController extends AdminController
 
     protected $parents = [];
 
-    public function __construct()
+    protected $menuService;
+
+    public function __construct(MenuService $menuService)
     {
         $this->middleware('admin:view');
 
@@ -35,6 +37,8 @@ class MenuController extends AdminController
             ->groupBy('position');
 
         $this->targets = Menu::targets();
+
+        $this->menuService = $menuService;
     }
 
     /**
@@ -48,48 +52,35 @@ class MenuController extends AdminController
             ->select('menus.*', 'menu_trans.title', 'menu_trans.lang_id', 'menu_trans.active')
             ->filter($request)->paginate(25);
 
-        $languages = Language::whereActive(1)->pluck('name', 'id');
+        $additional = [
+            'languages' => Language::whereActive(1)->pluck('name', 'id'),
+            'settings'  => $this->menuService->settings()
+        ];
 
-        $settings = MenuSettings::latest()->first();
-
-        if ($settings) {
-            $sizes = [];
-            foreach ($settings->sizes as $size) {
-                $sizes[] = [
-                    'name'   => $size['name'],
-                    'width'  => $size['width'],
-                    'height' => $size['height']
-                ];
-            }
-
-            $settings->sizes = $sizes;
-        }
-
-        return MenuListResource::collection($menu)->additional(['languages' => $languages, 'settings' => $settings]);
+        return MenuListResource::collection($menu)->additional($additional);
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param MenuValidate $request
-     * @param MenuService $menuService
      * @return bool
      * @throws \Exception
      */
-    public function store(MenuValidate $request, MenuService $menuService): bool
+    public function store(MenuValidate $request): bool
     {
-        $nameImages = $menuService->saveImages($request);
+        $nameImages = $this->menuService->saveImages($request);
 
         /**
          * Create menu
          */
         \DB::beginTransaction();
-        $menu = $menuService->addUpdate($request, $nameImages);
+        $menu = $this->menuService->addUpdate($request, $nameImages);
 
-        $menuService->addUpdateTrans($menu, $request->get('items'));
+        $this->menuService->addUpdateTrans($menu, $request->get('items'));
 
         if ($request->get('show_page'))
-            $menuService->showOn($menu->id, $request->get('show_page'));
+            $this->menuService->showOn($menu->id, $request->get('show_page'));
 
         \DB::commit();
 
@@ -120,23 +111,22 @@ class MenuController extends AdminController
      * Update the specified resource in storage.
      *
      * @param MenuValidate $request
-     * @param MenuService $menuService
      * @param Menu $menu
      * @return bool
      */
-    public function update(MenuValidate $request, MenuService $menuService, Menu $menu): bool
+    public function update(MenuValidate $request, Menu $menu): bool
     {
-        $nameImages = $menuService->saveImages($request);
+        $nameImages = $this->menuService->saveImages($request);
 
         /**
          * Update menu
          */
         \DB::beginTransaction();
-        $menu = $menuService->addUpdate($request, $nameImages, $menu->id);
+        $menu = $this->menuService->addUpdate($request, $nameImages, $menu->id);
 
-        $menuService->addUpdateTrans($menu, $request->get('items'));
+        $this->menuService->addUpdateTrans($menu, $request->get('items'));
 
-        $menuService->showOn($menu->id, $request->get('show_page'));
+        $this->menuService->showOn($menu->id, $request->get('show_page'));
         \DB::commit();
 
         return true;

@@ -5,9 +5,9 @@ namespace Modules\Article\Http\Controllers\Api;
 use App\Http\Controllers\AdminController;
 use Fynduck\FilesUpload\PrepareFile;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Cache;
 use Modules\Article\Entities\Article;
+use Modules\Article\Entities\ArticleSettings;
 use Modules\Article\Services\ArticleService;
 use Modules\Article\Http\Requests\ArticleValidate;
 use Modules\Article\Transformers\ArticleFormResource;
@@ -19,9 +19,13 @@ class ArticleController extends AdminController
 
     protected $types;
 
-    public function __construct()
+    protected $articleService;
+
+    public function __construct(ArticleService $articleService)
     {
         $this->middleware('admin');
+
+        $this->articleService = $articleService;
 
         foreach (Article::getTypes() as $key => $type) {
             $this->types[] = [
@@ -43,31 +47,33 @@ class ArticleController extends AdminController
             ->orderBy('priority')
             ->orderBy('updated_at', 'DESC')->paginate(25);
 
-        $languages = Language::whereActive(1)->pluck('name', 'id');
+        $additional = [
+            'languages' => Language::whereActive(1)->pluck('name', 'id'),
+            'settings'  => $this->articleService->settings()
+        ];
 
-        return ArticleListResource::collection($articles)->additional(['languages' => $languages]);
+        return ArticleListResource::collection($articles)->additional($additional);
     }
 
     /**
      * Store a newly created resource in storage.
      * @param ArticleValidate $request
-     * @param ArticleService $articleService
      * @return bool
      * @throws \Exception
      */
-    public function store(ArticleValidate $request, ArticleService $articleService)
+    public function store(ArticleValidate $request)
     {
         /**
          * Save image(s)
          */
-        $nameImages = $articleService->saveImages($request);
+        $nameImages = $this->articleService->saveImages($request);
         /**
          * Save article
          */
         \DB::beginTransaction();
-        $article = $articleService->addUpdate($request, $nameImages);
+        $article = $this->articleService->addUpdate($request, $nameImages);
 
-        $articleService->addUpdateTrans($article->id, $request->get('items'));
+        $this->articleService->addUpdateTrans($article->id, $request->get('items'));
         \DB::commit();
 
         return true;
@@ -95,25 +101,24 @@ class ArticleController extends AdminController
      * Update the specified resource in storage.
      *
      * @param ArticleValidate $request
-     * @param ArticleService $articleService
      * @param $id
      * @return bool
      * @throws \Exception
      */
-    public function update(ArticleValidate $request, ArticleService $articleService, $id)
+    public function update(ArticleValidate $request, $id)
     {
         /**
          * Save image(s)
          */
-        $nameImages = $articleService->saveImages($request);
+        $nameImages = $this->articleService->saveImages($request);
 
         /**
          * Save article
          */
         \DB::beginTransaction();
-        $article = $articleService->addUpdate($request, $nameImages, $id);
+        $article = $this->articleService->addUpdate($request, $nameImages, $id);
 
-        $articleService->addUpdateTrans($article->id, $request->get('items'));
+        $this->articleService->addUpdateTrans($article->id, $request->get('items'));
         \DB::commit();
 
         return true;
@@ -122,25 +127,53 @@ class ArticleController extends AdminController
     /**
      * Remove the specified resource from storage.
      * @param Request $request
-     * @param $id
+     * @param Article $article
      * @return bool
      * @throws \Exception
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, Article $article)
     {
-        $article = Article::find($id);
+        $settings = Cache::remember('article_settings', now()->addDay(), function () {
+            return ArticleSettings::latest()->first();
+        });
+
+        if($settings) {
+            PrepareFile::deleteImages(Article::FOLDER_IMG, $article->image, $settings->sizes);
+        }
+
         if ($request->get('image')) {
-            $checkIcon = explode('_', $request->get('image'))[0];
-            if ($checkIcon == 'icon') {
-                PrepareFile::deleteImages(Article::FOLDER_IMG, $article->icon, Article::getSizes());
-                $article->icon = null;
-            } else {
-                PrepareFile::deleteImages(Article::FOLDER_IMG, $article->image, Article::getSizes());
-                $article->image = null;
-            }
+            $article->image = null;
             $article->save();
         } else {
             return $article->delete();
+        }
+
+        return true;
+    }
+
+    /**
+     * Save menus settings
+     * @param Request $request
+     * @return bool
+     */
+    public function saveSettings(Request $request): bool
+    {
+        $sizes = [];
+        foreach ($request->get('sizes') as $size) {
+            $sizes[$size['name']] = [
+                'name'   => $size['name'],
+                'width'  => $size['width'] > 0 ? $size['width'] : null,
+                'height' => $size['height'] > 0 ? $size['height'] : null
+            ];
+        }
+
+        if ($request->get('id')) {
+            $settings = ArticleSettings::find($request->get('id'));
+            $settings->sizes = $sizes;
+            $settings->resize = $request->get('resize');
+            $settings->save();
+        } else {
+            ArticleSettings::create(['sizes' => $sizes, 'resize' => $request->get('resize')]);
         }
 
         return true;

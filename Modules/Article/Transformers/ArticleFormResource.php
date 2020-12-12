@@ -4,6 +4,8 @@ namespace Modules\Article\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\Article\Entities\Article;
+use Modules\Article\Entities\ArticleSettings;
+use Modules\Article\Services\ArticleService;
 
 class ArticleFormResource extends JsonResource
 {
@@ -23,7 +25,6 @@ class ArticleFormResource extends JsonResource
             'discount'     => $this->discount,
             'old_image'    => $this->image,
             'image'        => $this->oldImage(),
-            'old_icon'     => $this->oldIcon(),
             'icon'         => $this->icon,
             'socials'      => $this->socials,
             'priority'     => $this->priority ?? 0,
@@ -36,21 +37,10 @@ class ArticleFormResource extends JsonResource
     private function oldImage()
     {
         $old_image = null;
-
         if ($this->image)
-            $old_image = asset('storage/' . Article::FOLDER_IMG . '/' . key(Article::getSizes()) . '/' . $this->image);
+            $old_image = (new ArticleService())->linkImage($this->image, null, 'first');
 
         return $old_image;
-    }
-
-    private function oldIcon()
-    {
-        $old_icon = null;
-
-        if ($this->icon)
-            $old_icon = asset('storage/' . Article::FOLDER_IMG . '/' . key(Article::getSizes()) . '/' . $this->icon);
-
-        return $old_icon;
     }
 
     private function emptyItems()

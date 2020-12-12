@@ -10,6 +10,7 @@ namespace Modules\Menu\Services;
 
 use Fynduck\FilesUpload\PrepareFile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Modules\Menu\Entities\Menu;
 use Modules\Menu\Entities\MenuSettings;
@@ -89,7 +90,6 @@ class MenuService
         }
     }
 
-
     /**
      * Save all images for articles
      * @param Request $request
@@ -109,10 +109,12 @@ class MenuService
                 $sizes = null;
                 $resizeMethod = null;
 
-                $menuSettings = MenuSettings::latest()->first();
-                if ($menuSettings) {
-                    $sizes = $menuSettings->sizes;
-                    $resizeMethod = $menuSettings->resize;
+                $settings = Cache::remember('menu_settings', now()->addDay(), function () {
+                    return MenuSettings::latest()->first();
+                });
+                if ($settings) {
+                    $sizes = $settings->sizes;
+                    $resizeMethod = $settings->resize;
                 }
                 $nameImages['imageName'] = PrepareFile::uploadBase64(Menu::FOLDER_IMG, 'image', $request->get('image'), $imgName, $request->get('old_image'), $sizes, $resizeMethod);
             } else {
@@ -121,5 +123,64 @@ class MenuService
         }
 
         return $nameImages;
+    }
+
+    public function settings()
+    {
+        $settings = Cache::remember('menu_settings', now()->addDay(), function () {
+            return MenuSettings::latest()->first();
+        });
+
+        if ($settings) {
+            $sizes = [];
+            foreach ($settings->sizes as $size) {
+                $sizes[] = [
+                    'name'   => $size['name'],
+                    'width'  => $size['width'],
+                    'height' => $size['height']
+                ];
+            }
+
+            $settings->sizes = $sizes;
+        }
+
+        return $settings;
+    }
+
+    /**
+     * Get image link by size
+     * @param $image
+     * @param null $size
+     * @param null $key
+     * @return string
+     */
+    public function linkImage($image, $size = null, $key = null): string
+    {
+        if (!$image)
+            return asset('img/placeholder.jpg');
+
+        if (!$size && !$key)
+            return asset('storage/' . Menu::FOLDER_IMG . '/' . $image);
+
+        $settings = Cache::remember('menu_settings', now()->addDay(), function () {
+            return MenuSettings::latest()->first();
+        });
+
+        if ($settings && $settings->sizes) {
+            if ($key) {
+                if ($key == 'first') {
+                    return asset('storage/' . Menu::FOLDER_IMG . '/' . key($settings->sizes) . '/' . $image);
+                } else {
+                    $division =  is_numeric($key) ? $key : 2;
+                    $keySize = round(count($settings->sizes) / $division);
+                    $valueSizes = array_values($settings->sizes);
+                    return asset('storage/' . Menu::FOLDER_IMG . '/' . $valueSizes[$keySize]['name'] . '/' . $image);
+                }
+            } elseif (array_key_exists($size, $settings->sizes)) {
+                return asset('storage/' . Menu::FOLDER_IMG . '/' . $size . '/' . $image);
+            }
+        }
+
+        return asset('storage/' . Menu::FOLDER_IMG . '/' . $image);
     }
 }

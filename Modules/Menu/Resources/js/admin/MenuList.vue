@@ -312,27 +312,20 @@ export default {
         },
         saveSettings() {
             axios.post(`${this.source}-settings`, this.settings).then(response => {
-                // console.log(response)
                 this.$bvModal.hide('menu-settings')
+                this.$bvToast.toast(this.$t('Menu.settings_saved'), {
+                    title: this.$t('Menu.status'),
+                    variant: 'info',
+                    solid: true
+                })
             }).catch(error => {
-                console.log(error)
+                this.$bvToast.toast(error, {
+                    title: this.$t('Menu.status'),
+                    variant: 'danger',
+                    solid: true
+                })
             })
         }
     }
 }
 </script>
-<style lang="stylus">
-.size
-    position relative
-
-    .remove
-        opacity 0
-        position absolute
-        top 0
-        right 0
-        cursor pointer
-
-    &:hover
-        .remove
-            opacity 1
-</style>

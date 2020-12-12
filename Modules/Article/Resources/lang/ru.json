@@ -53,5 +53,13 @@
   "meta_keywords": "Мета ключевые слова",
   "description": "Описание",
   "socials_on_off": "Социальные сети",
-  "placeholder": "Заполнитель"
+  "placeholder": "Заполнитель",
+  "settings": "Настройки",
+  "settings_saved": "Настройки сохранены",
+  "size_name": "Имя",
+  "width": "Ширина",
+  "height": "Высота",
+  "add_size": "Добавить раз.",
+  "resize": "Из. размер",
+  "crop": "Обрезать"
 }

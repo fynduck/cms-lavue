@@ -62,5 +62,13 @@
   "are_you_sure": "Are you sure?",
   "yes": "Yes",
   "selected": "Selected",
-  "no_results": "No results"
+  "no_results": "No results",
+  "settings": "Settings",
+  "settings_saved": "Settings saved",
+  "size_name": "Size_name",
+  "width": "Width",
+  "height": "Height",
+  "add_size": "Add size",
+  "resize": "Resize",
+  "crop": "Crop"
 }

@@ -20,7 +20,6 @@ class CreateArticlesTable extends Migration
             $table->timestamp('date_to')->nullable();
             $table->double('discount', 4, 2)->nullable();
             $table->string('image')->nullable();
-            $table->string('icon')->nullable();
             $table->unsignedTinyInteger('socials');
             $table->unsignedInteger('priority')->unsigned();
             $table->string('type');

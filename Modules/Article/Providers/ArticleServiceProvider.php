@@ -5,7 +5,9 @@ namespace Modules\Article\Providers;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 use Modules\Article\Entities\Article;
+use Modules\Article\Entities\ArticleSettings;
 use Modules\Article\Observers\ArticleObserver;
+use Modules\Article\Observers\ArticleSettingsObserver;
 
 class ArticleServiceProvider extends ServiceProvider
 {
@@ -37,6 +39,7 @@ class ArticleServiceProvider extends ServiceProvider
         }, 'Поле :attribute обязательно для заполнения.');
 
         Article::observe(ArticleObserver::class);
+        ArticleSettings::observe(ArticleSettingsObserver::class);
     }
 
     /**

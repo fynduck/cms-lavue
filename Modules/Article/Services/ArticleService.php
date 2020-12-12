@@ -10,11 +10,12 @@ namespace Modules\Article\Services;
 
 use Fynduck\FilesUpload\PrepareFile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Modules\Article\Entities\Article;
+use Modules\Article\Entities\ArticleSettings;
 use Modules\Article\Entities\ArticleTrans;
 use Modules\Article\Entities\ArticleViews;
-use Modules\Statistics\Entities\Ip;
 
 class ArticleService
 {
@@ -51,8 +52,6 @@ class ArticleService
 
         if (!empty($imagesName['imageName']))
             $data['image'] = $imagesName['imageName'];
-        if (!empty($imagesName['iconName']))
-            $data['icon'] = $imagesName['iconName'];
 
         return Article::updateOrCreate(
             [
@@ -107,7 +106,6 @@ class ArticleService
     {
         $current = Article::leftJoin('article_trans', 'articles.id', '=', 'article_trans.article_id')
             ->where('lang_id', config('app.locale_id'))
-//            ->where('type', $type)
             ->selectRaw('article_id AS id, title, ' . $typeName);
 
         if ($selected && array_key_exists($value, $selected)) {
@@ -120,40 +118,119 @@ class ArticleService
         return $current;
     }
 
-    public function syncTags(Request $request, Article $article)
-    {
-        $tags = [];
-        foreach (explode(',', $request->get('tag_ids')) as $tag) {
-            if ($tag)
-                $tags[$tag] = ['type' => 'articles'];
-        }
-
-        $article->getTags()->sync($tags);
-    }
-
-    public function saveImages(Request $request)
+    public function saveImages(Request $request): array
     {
         $nameImages = [
-            'imageName' => null,
-            'iconName'  => null
+            'imageName' => null
         ];
         $imgName = null;
         if ($request->get('items')[config('app.fallback_locale_id')]['title'])
             $imgName = $request->get('items')[config('app.fallback_locale_id')]['title'];
 
         if ($request->get('image')) {
-            if (!\Str::contains($request->get('image'), Article::FOLDER_IMG))
-                $nameImages['imageName'] = PrepareFile::uploadBase64(Article::FOLDER_IMG, 'image', $request->get('image'), $imgName, $request->get('old_image'), Article::getSizes());
-            else
+            if (!Str::contains($request->get('image'), Article::FOLDER_IMG)) {
+                $sizes = null;
+                $resizeMethod = null;
+
+                $settings = Cache::remember('article_settings', now()->addDay(), function () {
+                    return ArticleSettings::latest()->first();
+                });
+                if ($settings) {
+                    $sizes = $settings->sizes;
+                    $resizeMethod = $settings->resize;
+                }
+                $nameImages['imageName'] = PrepareFile::uploadBase64(Article::FOLDER_IMG, 'image', $request->get('image'), $imgName, $request->get('old_image'), $sizes, $resizeMethod);
+            } else {
                 $nameImages['imageName'] = $request->get('old_image');
-        }
-        if ($request->get('icon')) {
-            if (!\Str::contains($request->get('icon'), Article::FOLDER_IMG))
-                $nameImages['iconName'] = PrepareFile::uploadBase64(Article::FOLDER_IMG, 'image', $request->get('icon'), $imgName, $request->get('old_icon'), Article::getSizes());
-            else
-                $nameImages['iconName'] = $request->get('old_icon');
+            }
         }
 
         return $nameImages;
+    }
+
+    public function settings()
+    {
+        $settings = Cache::remember('article_settings', now()->addDay(), function () {
+            return ArticleSettings::latest()->first();
+        });
+
+        if ($settings) {
+            $sizes = [];
+            foreach ($settings->sizes as $size) {
+                $sizes[] = [
+                    'name'   => $size['name'],
+                    'width'  => $size['width'],
+                    'height' => $size['height']
+                ];
+            }
+
+            $settings->sizes = $sizes;
+        }
+
+        return $settings;
+    }
+
+    /**
+     * Get image link by size
+     * @param $image
+     * @param null $size
+     * @param null $key
+     * @return string
+     */
+    public function linkImage($image, $size = null, $key = null): string
+    {
+        if (!$image)
+            return asset('img/placeholder.jpg');
+
+        if (!$size && !$key)
+            return asset('storage/' . Article::FOLDER_IMG . '/' . $image);
+
+        $settings = Cache::remember('article_settings', now()->addDay(), function () {
+            return ArticleSettings::latest()->first();
+        });
+
+        if ($settings && $settings->sizes) {
+            if ($key) {
+                if ($key == 'first') {
+                    return asset('storage/' . Article::FOLDER_IMG . '/' . key($settings->sizes) . '/' . $image);
+                } else {
+                    $division =  is_numeric($key) ? $key : 2;
+                    $keySize = round(count($settings->sizes) / $division);
+                    $valueSizes = array_values($settings->sizes);
+                    return asset('storage/' . Article::FOLDER_IMG . '/' . $valueSizes[$keySize]['name'] . '/' . $image);
+                }
+            } elseif (array_key_exists($size, $settings->sizes)) {
+                return asset('storage/' . Article::FOLDER_IMG . '/' . $size . '/' . $image);
+            }
+        }
+
+        return asset('storage/' . Article::FOLDER_IMG . '/' . $image);
+    }
+
+    /**
+     * Get all links with image size
+     * @param $image
+     * @param bool $srcset
+     * @return array
+     */
+    public function linkImages($image, $srcset = true): array
+    {
+        $images = [];
+
+        $settings = Cache::remember('article_settings', now()->addDay(), function () {
+            return ArticleSettings::latest()->first();
+        });
+
+        if ($image && $settings && $settings->sizes) {
+            foreach ($settings->sizes as $size => $sizes) {
+                $src = asset('storage/' . Article::FOLDER_IMG . '/' . $size . '/' . $image);
+                if ($srcset)
+                    $src .= ' ' . $sizes['width'] . 'w';
+
+                $images[] = $src;
+            }
+        }
+
+        return $images;
     }
 }
