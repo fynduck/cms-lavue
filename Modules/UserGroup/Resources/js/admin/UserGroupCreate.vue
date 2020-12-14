@@ -20,7 +20,7 @@
             </div>
             <div class="form-group" v-for="(item, route_name) in routes">
                 <label :for="route_name"><strong>{{ $t(`UserGroup.${route_name}`) }}</strong></label>
-                <div class="form-row">
+                <div class="row">
                     <div class="form-group col" v-for="(rights, right) in item">
                         <div class="custom-control custom-checkbox my-1 mr-sm-2">
                             <input type="checkbox" class="custom-control-input" :id="`param-value-${ route_name }-${ right }`"

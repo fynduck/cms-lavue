@@ -10,7 +10,7 @@
                         </b-input-group-append>
                     </b-input-group>
                 </b-col>
-                <b-col sm="6" lg="3" class="my-1 d-flex align-items-center">
+                <b-col sm="6" lg="3" class="my-1">
                     <b-form-select v-model="lang_id" :options="langOptions"></b-form-select>
                 </b-col>
                 <b-col sm="6" lg="3" class="my-1 d-flex align-items-center">

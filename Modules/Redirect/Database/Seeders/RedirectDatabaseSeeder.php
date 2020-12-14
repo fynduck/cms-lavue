@@ -16,7 +16,5 @@ class RedirectDatabaseSeeder extends Seeder
     public function run()
     {
         Model::unguard();
-
-        factory(Redirect::class, 1)->create();
     }
 }

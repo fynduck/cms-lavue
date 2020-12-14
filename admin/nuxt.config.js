@@ -37,7 +37,7 @@ module.exports = {
 
     css: [
         {src: '~assets/sass/app.scss', lang: 'scss', mode: 'client'},
-        {src: '~assets/stylus/admin/admin.styl', lang: 'stylus', mode: 'client'},
+        {src: '~assets/stylus/admin.styl', lang: 'stylus', mode: 'client'},
         {src: '~static/fontawesome/css/all.min.css', mode: 'client'}
     ],
 

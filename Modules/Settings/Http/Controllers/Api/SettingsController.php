@@ -3,6 +3,7 @@
 namespace Modules\Settings\Http\Controllers\Api;
 
 use App\Services\SiteMapService;
+use Fynduck\FilesUpload\PrepareFile;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Cache;
@@ -185,5 +186,11 @@ class SettingsController extends Controller
         $siteMap->generateMap();
 
         return back()->with('success', 'Generate success');
+    }
+
+    public function settings(Request $request)
+    {
+        if ($request->get('key'))
+            return response()->json(Settings::where('key', $request->get('key'))->value('value'));
     }
 }

@@ -5,6 +5,7 @@ namespace Modules\Menu\Transformers;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\Language\Entities\Language;
 use Modules\Menu\Entities\Menu;
+use Modules\Menu\Services\MenuService;
 
 class MenuListResource extends JsonResource
 {
@@ -34,13 +35,8 @@ class MenuListResource extends JsonResource
         ];
     }
 
-    private function image()
+    private function image(): string
     {
-        $image = 'https://via.placeholder.com/40?text=image';
-        if ($this->image) {
-            $image = asset('storage/' . Menu::FOLDER_IMG . '/' . key(Menu::getSizes()) . '/' . $this->image);
-        }
-
-        return $image;
+        return (new MenuService())->linkImage($this->image, null, 'first');
     }
 }

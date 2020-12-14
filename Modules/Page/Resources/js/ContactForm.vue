@@ -1,7 +1,7 @@
 <template>
     <div>
         <form @submit.prevent="onClickSubmit">
-            <div class="form-row">
+            <div class="row">
                 <div class="form-group col-md-12">
                     <input name="name" v-model="name" v-validate="'required'"
                            :class="{'form-control': true, 'is-invalid': errors.has('name') }" type="text"

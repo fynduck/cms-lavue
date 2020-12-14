@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
+use Nwidart\Modules\Facades\Module;
 
 class ProjectSeeds extends Command
 {
@@ -38,24 +39,10 @@ class ProjectSeeds extends Command
      */
     public function handle()
     {
-        $this->comment("Language seed start!");
-        Artisan::call('module:seed Language');
-        $this->info("Language seed finish!");
-
-        $this->comment("UserGroup seed start!");
-        Artisan::call('module:seed UserGroup');
-        $this->info("UserGroup seed finish!");
-
-        $this->comment("User seed start!");
-        Artisan::call('module:seed User');
-        $this->info("User seed finish!");
-
-        $this->comment("Settings seed start!");
-        Artisan::call('module:seed Settings');
-        $this->info("Settings seed finish!");
-
-        $this->comment("Page seed start!");
-        Artisan::call('module:seed Page');
-        $this->info("Page seed finish!");
+        foreach (Module::getOrdered() as $moduleName => $module) {
+            $this->comment("$moduleName seed start!");
+            Artisan::call("module:seed $moduleName");
+            $this->info("$moduleName seed finish!");
+        }
     }
 }

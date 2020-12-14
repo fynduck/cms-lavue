@@ -27,6 +27,7 @@ export default {
     },
     async fetch() {
         if (this.$route.params.category) {
+            await this.$store.dispatch('page/setItem', null)
             const {data} = await axios.get(`/articles/${this.$route.params.category}`)
             await this.$store.dispatch('page/setItem', data.data)
         }

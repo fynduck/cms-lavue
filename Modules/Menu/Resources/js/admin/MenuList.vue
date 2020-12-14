@@ -46,7 +46,7 @@
                  @sort-changed="changeSort"
         >
             <template v-slot:cell(image)="row">
-                <img :src="row.item.show_img" alt="">
+                <img :src="row.item.show_img" alt="" width="40">
             </template>
             <template v-slot:cell(show_page)="row">
                 <a :href="row.item.show_page" target="_blank">{{ row.item.show_page }}</a>
@@ -76,7 +76,7 @@
                  v-if="confirmWindow.openConfirm"
         ></confirm>
         <b-modal id="menu-settings" hide-footer centered>
-            <b-form-row class="mb-1 size" v-for="(size, key) in settings.sizes" :key="key">
+            <b-row class="mb-1 size" v-for="(size, key) in settings.sizes" :key="key">
                 <b-col>
                     <b-form-group
                         :label="$t('Menu.size_name')"
@@ -102,7 +102,7 @@
                     </b-form-group>
                 </b-col>
                 <fa :icon="['fas', 'trash-alt']" class="text-danger remove" @click="deleteSize(key)"/>
-            </b-form-row>
+            </b-row>
             <b-form-select v-model="settings.resize" :options="resizes" size="sm" class="my-3"></b-form-select>
             <b-row class="justify-content-between">
                 <b-col>
@@ -312,27 +312,20 @@ export default {
         },
         saveSettings() {
             axios.post(`${this.source}-settings`, this.settings).then(response => {
-                // console.log(response)
                 this.$bvModal.hide('menu-settings')
+                this.$bvToast.toast(this.$t('Menu.settings_saved'), {
+                    title: this.$t('Menu.status'),
+                    variant: 'info',
+                    solid: true
+                })
             }).catch(error => {
-                console.log(error)
+                this.$bvToast.toast(error, {
+                    title: this.$t('Menu.status'),
+                    variant: 'danger',
+                    solid: true
+                })
             })
         }
     }
 }
 </script>
-<style lang="stylus">
-.size
-    position relative
-
-    .remove
-        opacity 0
-        position absolute
-        top 0
-        right 0
-        cursor pointer
-
-    &:hover
-        .remove
-            opacity 1
-</style>

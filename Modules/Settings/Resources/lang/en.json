@@ -50,6 +50,14 @@
   "data_not_save": "Data not save",
   "data_delete": "Data_delete",
   "data_not_deletes": "Data_not_deletes",
+  "alert_info": "Alert info",
+  "priority": "Priority",
+  "title": "Title",
+  "url": "Url",
+  "delete": "Delete",
+  "add": "Add",
+  "logo": "Logo",
+  "logo_svg": "Logo svg",
   "config_server": "Config_server",
   "APP_NAME": "APP_NAME",
   "DOMAIN": "DOMAIN",
@@ -92,11 +100,5 @@
   "SMS_LOGIN": "SMS_LOGIN",
   "SMS_PASSWORD": "SMS_PASSWORD",
   "SMS_SENDER": "SMS_SENDER",
-  "SMS_MESSAGE": "SMS_MESSAGE",
-  "alert_info": "Alert info",
-  "priority": "Priority",
-  "title": "Title",
-  "url": "Url",
-  "delete": "Delete",
-  "add": "Add"
+  "SMS_MESSAGE": "SMS_MESSAGE"
 }

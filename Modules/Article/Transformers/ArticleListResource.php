@@ -4,6 +4,8 @@ namespace Modules\Article\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\Article\Entities\Article;
+use Modules\Article\Entities\ArticleSettings;
+use Modules\Article\Services\ArticleService;
 use Modules\Language\Entities\Language;
 
 class ArticleListResource extends JsonResource
@@ -22,7 +24,7 @@ class ArticleListResource extends JsonResource
             'id'          => $this->article_id,
             'title'       => $this->title,
             'show_type'   => Article::getTypes()[$this->type],
-            'show_img'    => $this->image ? asset('storage/' . Article::FOLDER_IMG . '/' . key(Article::getSizes()) . '/' . $this->image) : null,
+            'show_img'    => $this->image(),
             'lang'        => $languages[$this->lang_id],
             'active'      => $this->active,
             'priority'    => $this->priority,
@@ -31,5 +33,10 @@ class ArticleListResource extends JsonResource
                 'destroy' => checkModulePermission('article', 'destroy')
             ]
         ];
+    }
+
+    private function image(): string
+    {
+        return (new ArticleService())->linkImage($this->image, null, 'first');
     }
 }

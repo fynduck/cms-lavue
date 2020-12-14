@@ -26,3 +26,5 @@ Route::middleware(['auth:api'])->prefix('admin')->group(function () {
     Route::get('settings-paginate', [SettingsController::class, 'pagination'])->name('settings-paginate.index');
     Route::post('settings-paginate', [SettingsController::class, 'savePagination'])->name('settings-paginate.create');
 });
+
+Route::get('get-settings', [SettingsController::class, 'settings'])->name('settings');

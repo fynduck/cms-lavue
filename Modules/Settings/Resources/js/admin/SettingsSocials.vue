@@ -4,7 +4,7 @@
             {{ $t('Settings.socials_on_off') }}
         </p>
         <form @submit.prevent="onSubmit">
-            <div class="form-row" v-for="(item, index) in items">
+            <div class="row" v-for="(item, index) in items">
                 <div class="col-sm-6 col-lg-3 form-group">
                     <label for="name">{{ $t('Settings.title') }}</label>
                     <input type="text" v-model="item.name" :class="['form-control', errors[index + '.name'] ? ' is-invalid' : '']"
@@ -24,9 +24,9 @@
                            :class="['form-control', errors[index + '.class_icon'] ? ' is-invalid' : '']" id="class_icon">
                 </div>
                 <div class="col-sm-5 col-lg-1 form-group">
-                    <label for="sort">{{ $t('Settings.sort') }}</label>
-                    <input type="text" v-model="item.sort" :class="['form-control', errors[index + '.sort'] ? ' is-invalid' : '']"
-                           id="sort">
+                    <label for="priority">{{ $t('Settings.priority') }}</label>
+                    <input type="text" v-model="item.priority" :class="['form-control', errors[index + '.priority'] ? ' is-invalid' : '']"
+                           id="priority">
                 </div>
                 <div class="col d-flex align-items-center justify-content-center" :title="$t('Settings.delete')"
                      @click.prevent="deleteSocial(index)" v-if="canCreate">
@@ -41,7 +41,6 @@
                 </button>
                 <button :class="{'btn btn-primary': true, 'btn-loading': submit}" type="submit" :title="$t('Settings.save')"
                         :disabled="submit">
-                    <i class="fas fa-save"></i>
                     <fa :icon="['fas', 'save']"/>
                 </button>
             </p>
@@ -97,7 +96,7 @@
                     name: '',
                     url: '',
                     class_icon: '',
-                    sort: '',
+                    priority: '',
                 })
             },
             deleteSocial(index) {

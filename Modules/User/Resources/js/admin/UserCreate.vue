@@ -11,7 +11,7 @@
                     :disabled="submit">
                 <fa :icon="['fas', 'save']"/>
             </button>
-            <div class="form-row">
+            <div class="row">
                 <div class="form-group col-md-6 col-lg-4">
                     <label for="username">{{ $t('User.username') }}</label>
                     <input type="text" :class="['form-control', errors['username'] ? ' is-invalid' : '']"

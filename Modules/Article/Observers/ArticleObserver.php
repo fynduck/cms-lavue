@@ -2,7 +2,7 @@
 
 namespace Modules\Article\Observers;
 
-use Fynduck\FilesUpload\PrepareFile;
+use Illuminate\Support\Facades\Cache;
 use Modules\Article\Entities\Article;
 
 class ArticleObserver
@@ -15,8 +15,8 @@ class ArticleObserver
      */
     public function saved(Article $article)
     {
-        \Cache::forget('home_article');
-        \Cache::forget('pluck_promotions');
+        Cache::forget('home_article');
+        Cache::forget('pluck_promotions');
     }
 
     /**
@@ -27,11 +27,8 @@ class ArticleObserver
      */
     public function deleted(Article $article)
     {
-
-        PrepareFile::deleteImages(Article::FOLDER_IMG, $article->icon, Article::getSizes());
-        PrepareFile::deleteImages(Article::FOLDER_IMG, $article->image, Article::getSizes());
-        \Cache::forget('home_article');
-        \Cache::forget('pluck_promotions');
+        Cache::forget('home_article');
+        Cache::forget('pluck_promotions');
     }
 
     /**
