@@ -2,10 +2,10 @@
 
 namespace Modules\Article\Transformers;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Modules\Article\Entities\Article;
+use Illuminate\Support\Str;
 use Modules\Article\Entities\ArticleTrans;
+use Modules\Article\Services\ArticleService;
 
 class ArticleResource extends JsonResource
 {
@@ -20,6 +20,7 @@ class ArticleResource extends JsonResource
 
         parent::__construct($resource);
     }
+
     /**
      * Transform the resource into an array.
      *
@@ -41,23 +42,18 @@ class ArticleResource extends JsonResource
             'show_date'         => $this->date->format('d.m.Y'),
             'date_to'           => $this->date_to,
             'promo_finish_date' => $this->date_to && $this->date_to->isFuture() ? $this->date_to->timestamp : null,
-            'meta_title'         => $this->generateMeta('meta_title', ['title']),
-            'meta_description'   => $this->generateMeta('meta_description', ['description', 'short_desc']),
-            'meta_keywords'      => $this->generateMeta('meta_keywords')
+            'meta_title'        => $this->generateMeta('meta_title', ['title']),
+            'meta_description'  => $this->generateMeta('meta_description', ['description', 'short_desc']),
+            'meta_keywords'     => $this->generateMeta('meta_keywords')
         ];
     }
 
-    private function imgObj($size = 'xs')
+    private function imgObj(): array
     {
-        $data = [];
-        if ($this->image) {
-            $data = [
-                'src'     => asset('storage/' . Article::FOLDER_IMG . '/' . $size . '/' . $this->image),
-                'loading' => asset('storage/' . Article::FOLDER_IMG . '/50/' . $this->image)
-            ];
-        }
-
-        return $data;
+        return [
+            'src'     => (new ArticleService())->linkImage($this->image, null, 2),
+            'loading' => (new ArticleService())->linkImage($this->image, null, 'first')
+        ];
     }
 
     private function generateLink()
@@ -67,19 +63,12 @@ class ArticleResource extends JsonResource
             array_key_exists($this->type, cache('urls_pages_' . config('app.locale_id'))) ? cache('urls_pages_' . config('app.locale_id'))[$this->type] : '',
             $this->slug
         ];
-        return route('pages', $params, false);
+        return implode('/', $params);
     }
 
     private function srcset()
     {
-        $srcset = [];
-        if ($this->image) {
-            foreach (Article::getSizes() as $size => $sizes) {
-                if ($size != 50)
-                    $srcset[] = asset('storage/' . Article::FOLDER_IMG . '/' . $size . '/' . $this->image) . ' ' . $sizes['width'] . 'w';
-            }
-        }
-        return $srcset;
+        return (new ArticleService())->linkImages($this->image);
     }
 
     private function generateMiniDescription()
@@ -90,7 +79,7 @@ class ArticleResource extends JsonResource
         else
             $description = $this->description;
 
-        return '<div>' . html_entity_decode(\Str::limit(strip_tags($description), 160)) . '</div>';
+        return '<div>' . html_entity_decode(Str::limit(strip_tags($description), 160)) . '</div>';
     }
 
     private function generateMeta(string $key, array $keys = [], int $length = 140)
@@ -113,7 +102,7 @@ class ArticleResource extends JsonResource
     private function clearString(string $string, int $limit)
     {
         $string = html_entity_decode(strip_tags($string));
-        $string = \Str::limit($string, $limit, '');
+        $string = Str::limit($string, $limit, '');
 
         return preg_replace('!\s+!', ' ', trim($string));
     }

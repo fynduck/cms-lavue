@@ -4,7 +4,7 @@
             {{ $t('Settings.pagination') }}
         </p>
         <form @submit.prevent="onSubmit">
-            <div class="form-row" v-for="(item, index) in items">
+            <div class="row" v-for="(item, index) in items">
                 <div class="col-sm-6 col-lg-3 form-group">
                     <input type="text" :readonly="item.readonly" v-model="item.on"
                            :class="['form-control', errors[index + '.on'] ? ' is-invalid' : '']">

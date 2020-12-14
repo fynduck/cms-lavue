@@ -13,7 +13,7 @@
                     :disabled="loading">
                 <fa :icon="['fas', 'save']"/>
             </button>
-            <div class="form-row">
+            <div class="row">
                 <div class="form-group col-md-7">
                     <label for="title">{{ $t('CustomForm.title') }}</label>
                     <input type="text" :class="{'form-control': true, 'is-invalid': errors.form_name}"
@@ -27,7 +27,7 @@
                     </div>
                 </div>
             </div>
-            <div class="form-row">
+            <div class="row">
                 <div class="form-group col-md-6">
                     <label for="form_class">{{ $t('CustomForm.form_class') }}</label>
                     <input type="text" class="form-control" v-model="form.form_class" name="form_class" id="form_class"
@@ -39,7 +39,7 @@
                            :placeholder="$t('CustomForm.form_id')">
                 </div>
             </div>
-            <div class="form-row">
+            <div class="row">
                 <div class="form-group col-md-7">
                     <label for="action">{{ $t('CustomForm.action') }}</label>
                     <select name="action" id="action" :class="['form-control', errors.action ? 'is-invalid' : '']"
@@ -55,7 +55,7 @@
                     </select>
                 </div>
             </div>
-            <div class="form-row">
+            <div class="row">
                 <div class="form-group col-md-6">
                     <custom-select v-model="form.show_on"
                                    :source="admin_search"
@@ -79,7 +79,7 @@
                 <legend>
                     {{ $t('CustomForm.field') }} ({{ key + 1 }}) <fa :icon="['fas', 'trash-alt']" class="trash"  @click="confirmDelete(key)"/>
                 </legend>
-                <div class="form-row">
+                <div class="row">
                     <div class="form-group col-md-3">
                         <label :for="`block_class_${key}`">{{ $t('CustomForm.block_class') }}</label>
                         <input type="text" class="form-control" v-model="field.block_class" name="block_class"
@@ -105,7 +105,7 @@
                                :placeholder="$t('CustomForm.field_label')">
                     </div>
                 </div>
-                <div class="form-row">
+                <div class="row">
                     <div class="form-group col-md-3">
                         <label :for="`placeholder_${key}`">{{ $t('CustomForm.placeholder') }}</label>
                         <input type="text" class="form-control" name="placeholder" :id="`placeholder_${key}`"
@@ -145,7 +145,7 @@
                         {{ $t('CustomForm.option') }} ({{ option_key + 1 }})
                         <fa :icon="['fas', 'trash-alt']" class="trash" @click="confirmDelete(key, option_key)"/>
                     </legend>
-                    <div class="form-row">
+                    <div class="row">
                         <div class="form-group col-md-6">
                             <label :for="`option_title_${option_key}`">{{ $t('CustomForm.text') }}</label>
                             <input type="text"
@@ -161,7 +161,7 @@
                                    :placeholder="$t('CustomForm.value')">
                         </div>
                     </div>
-                    <div class="form-row">
+                    <div class="row">
                         <div class="form-group col-md-6">
                             <label :for="`option_class_${option_key}`">{{ $t('CustomForm.option_class') }}</label>
                             <input type="text" class="form-control" v-model="option.option_class" name="option_class"

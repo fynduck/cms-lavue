@@ -5,20 +5,10 @@ namespace Modules\Article\Traits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Modules\Article\Entities\Article;
+use Modules\Article\Entities\ArticleSettings;
 
 trait ArticleTrait
 {
-    public static function getSizes()
-    {
-        return [
-            '50' => ['width' => 50, 'height' => null],
-            'xs' => ['width' => 450, 'height' => 236],
-            'md' => ['width' => 600, 'height' => 315],
-            'lg' => ['width' => 800, 'height' => 420],
-            'xl' => ['width' => 1000, 'height' => 525],
-        ];
-    }
-
     public static function getTypes()
     {
         return [
@@ -119,5 +109,4 @@ trait ArticleTrait
     {
         return $query->where('discount', '>', 0);
     }
-
 }

@@ -14,7 +14,7 @@
                 <fa :icon="['fas', 'save']"/>
             </button>
             <div class="tab-content pt-4">
-                <div class="form-row">
+                <div class="row">
                     <div class="form-group col-md-4">
                         <label for="name">{{ $t('Language.title') }}</label>
                         <input type="text" :class="['form-control', errors['name'] ? ' is-invalid' : '']"
@@ -32,7 +32,7 @@
                                :placeholder="$t('Language.slug')" id="slug" v-model="item.slug">
                     </div>
                 </div>
-                <div class="form-row align-items-center">
+                <div class="row align-items-center">
                     <div class="form-group col-md-3 my-4">
                         <upload v-model="item.image"></upload>
                     </div>

@@ -2,7 +2,6 @@
     <section v-if="page">
         <h1 class="text-center my-4 title_page">{{ page.title }}</h1>
         <v-runtime-template :template="description" v-if="page.description"/>
-
         <items type="articles" v-if="page.method === 'home'"/>
     </section>
 </template>

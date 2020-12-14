@@ -14,5 +14,5 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Page\Http\Controllers\FrontController;
 
-Route::get('/', [FrontController::class, 'pages'])->name('home');
-Route::get('{page?}/{category?}/{url?}', [FrontController::class, 'pages'])->name('pages');
+//Route::get('/', [FrontController::class, 'pages'])->name('home');
+//Route::get('{page?}/{category?}/{url?}', [FrontController::class, 'pages'])->name('pages');

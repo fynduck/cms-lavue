@@ -17,6 +17,7 @@ use Modules\Article\Http\Controllers\Api\FrontController;
 
 Route::prefix('admin')->middleware('auth:api')->group(function () {
     Route::apiResource('article', ArticleController::class);
+    Route::post('article-settings', [ArticleController::class, 'saveSettings'])->name('article.settings.store');
 });
 
 Route::get('get-articles', [FrontController::class, 'getArticles'])->name('get-articles');

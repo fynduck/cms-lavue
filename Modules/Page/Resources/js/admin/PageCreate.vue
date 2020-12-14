@@ -14,7 +14,7 @@
             <b-tabs>
                 <b-tab :title="language.name" v-for="(language, locale_id) in locales" :key="locale_id" class="mt-4">
                     <b-card-text>
-                        <div class="form-row">
+                        <div class="row">
                             <div class="form-group col-md-4">
                                 <label :for="`title_${locale_id}`">{{ $t('Page.title') }}</label>
                                 <input type="text" @change="changeTitle(locale_id)"

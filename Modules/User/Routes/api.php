@@ -26,22 +26,18 @@ Route::middleware(['auth:api'])->group(function () {
     Route::prefix('admin')->group(function () {
         Route::apiResource('user', UserController::class);
     });
+
+    Route::post('refresh', [LoginController::class, 'refresh']);
+    Route::post('logout', [LoginController::class, 'logout']);
 });
 
-Route::namespace('Auth')->group(function () {
-    Route::middleware(['auth:api'])->group(function () {
-        Route::post('refresh', [LoginController::class, 'refresh']);
-        Route::post('logout', [LoginController::class, 'logout']);
-    });
+Route::middleware(['guest:api'])->group(function () {
+    Route::post('login', [LoginController::class, 'login']);
+    Route::post('register', [RegisterController::class, 'register']);
 
-    Route::middleware(['guest:api'])->group(function () {
-        Route::post('login', [LoginController::class, 'login']);
-        Route::post('register', [RegisterController::class, 'register']);
+    Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail']);
+    Route::post('password/reset', [ResetPasswordController::class, 'reset']);
 
-        Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail']);
-        Route::post('password/reset', [ResetPasswordController::class, 'reset']);
-
-        Route::post('email/verify/{user}', [VerificationController::class, 'verify'])->name('verification.verify');
-        Route::post('email/resend', [VerificationController::class, 'resend']);
-    });
+    Route::post('email/verify/{user}', [VerificationController::class, 'verify'])->name('verification.verify');
+    Route::post('email/resend', [VerificationController::class, 'resend']);
 });

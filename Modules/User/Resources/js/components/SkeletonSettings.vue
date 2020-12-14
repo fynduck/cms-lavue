@@ -1,5 +1,5 @@
 <template>
-	<div class="form-row" v-if="loading">
+	<div class="row" v-if="loading">
 		<div class="col-md-5 col-lg-4 mb-3">
 			<figure></figure>
 			<div class="sk_time_on_site">

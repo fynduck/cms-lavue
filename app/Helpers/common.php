@@ -115,7 +115,7 @@ function convertIntMinSecToString(int $number)
 function generateRoute($item, $urlsPages = null)
 {
     if (!$urlsPages) {
-        $urlsPages = Cache::remember('urls_pages_' . config('app.locale_id'), now()->addHours(5), function () {
+        $urlsPages = \Cache::remember('urls_pages_' . config('app.locale_id'), now()->addHours(5), function () {
             return Page::getSlugAllStaticPages()->toArray();
         });
     }
@@ -133,36 +133,20 @@ function generateRoute($item, $urlsPages = null)
             case 'page':
                 $pageSlug = PageTrans::getByPageId($item->page_id)->value('slug');
                 $params = [
-                    count(config('app.locales')) > 1 ? config('app.locale') : null,
+                    count(config('app.locales')) > 1 ? ($item->lang_id ? config('app.locales.' . $item->lang_id . '.slug') : config('app.locale')) : null,
                     $pageSlug
                 ];
-                $link = route('pages', $params, false);
+                $link = '/' . implode('/', $params);
                 break;
             case 'article':
             case 'articles':
-            case 'news':
-            case 'promotions':
                 $articlesTrans = ArticleTrans::where('article_id', $item->page_id)->lang()->first(['article_id', 'slug']);
                 $params = [
                     count(config('app.locales')) > 1 ? config('app.locale') : null,
                     $urlsPages[$articlesTrans->getArticle->type],
                     $articlesTrans->slug
                 ];
-                $link = route('pages',$params, false);
-                break;
-            case 'categories':
-            case 'category':
-                if (checkModule('Category')) {
-                    $categorySlug = CategoryTrans::where('category_id', $item->page_id)->where('active', 1)->lang()->value('slug');
-                    $link = route('pages', [$urlsPages['catalog'], $categorySlug], false);
-                }
-                break;
-            case 'products':
-            case 'product':
-                if (checkModule('Category') && checkModule('Product')) {
-                    $productSlug = ProductTrans::where('product_id', $item->page_id)->where('active', 1)->lang()->value('slug');
-                    $link = route('pages', [$urlsPages['catalog'], $productSlug], false);
-                }
+                $link = '/' . implode('/', $params);
                 break;
         }
     }

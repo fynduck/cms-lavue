@@ -65,7 +65,6 @@ class Article extends Model
         'date_to',
         'discount',
         'image',
-        'icon',
         'socials',
         'priority',
         'type',

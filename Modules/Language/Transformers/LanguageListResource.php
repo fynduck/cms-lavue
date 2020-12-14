@@ -22,7 +22,7 @@ class LanguageListResource extends JsonResource
             'slug'        => $this->slug,
             'active'      => $this->active,
             'default'     => $this->default,
-            'priority'    => $this->priority,
+            'priority'    => $this->priority ?? 0,
             'show_img'    => $this->image ? asset('storage/' . Language::FOLDER_IMG . '/' . $this->image) : null,
             'image'       => $this->oldImage(),
             'permissions' => [

@@ -4,6 +4,7 @@ namespace Modules\Menu\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Modules\Menu\Entities\Menu;
+use Modules\Menu\Services\MenuService;
 
 class MenuFormResource extends JsonResource
 {
@@ -32,12 +33,11 @@ class MenuFormResource extends JsonResource
         ];
     }
 
-    private function oldImage()
+    private function oldImage(): ?string
     {
         $old_image = null;
-
         if ($this->image)
-            $old_image = asset('storage/' . Menu::FOLDER_IMG . '/' . key(Menu::getSizes()) . '/' . $this->image);
+            $old_image = (new MenuService())->linkImage($this->image, null, 'first');
 
         return $old_image;
     }

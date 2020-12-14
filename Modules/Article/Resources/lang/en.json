@@ -54,5 +54,13 @@
   "meta_keywords": "Meta keywords",
   "description": "Description",
   "socials_on_off": "Socials on off",
-  "placeholder": "Placeholder"
+  "placeholder": "Placeholder",
+  "settings": "Settings",
+  "settings_saved": "Settings saved",
+  "size_name": "Size_name",
+  "width": "Width",
+  "height": "Height",
+  "add_size": "Add size",
+  "resize": "Resize",
+  "crop": "Crop"
 }
