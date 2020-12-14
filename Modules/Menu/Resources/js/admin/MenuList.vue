@@ -46,7 +46,7 @@
                  @sort-changed="changeSort"
         >
             <template v-slot:cell(image)="row">
-                <img :src="row.item.show_img" alt="">
+                <img :src="row.item.show_img" alt="" width="40">
             </template>
             <template v-slot:cell(show_page)="row">
                 <a :href="row.item.show_page" target="_blank">{{ row.item.show_page }}</a>

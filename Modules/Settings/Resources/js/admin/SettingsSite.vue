@@ -13,20 +13,24 @@
                 <b-tab :title="language.name" v-for="(language, locale_id) in locales" :key="locale_id" class="mt-4">
                     <b-card-text>
                         <div class="row">
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-sm-6 col-md-3">
                                 <label :for="`name_site_${locale_id}`">{{ $t('Settings.name_site') }}</label>
                                 <input type="text" v-model="items[locale_id].name_site" :id="`name_site_${locale_id}`"
                                        :class="['form-control', errors['items.' + locale_id + '.name_site'] ? ' is-invalid' : '']">
                             </div>
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-sm-6 col-md-3">
                                 <label :for="`city_${locale_id}`">{{ $t('Settings.city') }}</label>
                                 <input type="text" v-model="items[locale_id].city" :id="`city_${locale_id}`"
                                        :class="['form-control', errors['items.' + locale_id + '.city'] ? ' is-invalid' : '']">
                             </div>
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-sm-8 col-md-4">
                                 <label :for="`street_${locale_id}`">{{ $t('Settings.street') }}</label>
                                 <input type="text" v-model="items[locale_id].street" :id="`street_${locale_id}`"
                                        :class="['form-control', errors['items.' + locale_id + '.street'] ? ' is-invalid' : '']">
+                            </div>
+                            <div class="form-group col-sm-4 col-md-2">
+                                <label for="post_code">{{ $t('Settings.post_code') }}</label>
+                                <input type="text" class="form-control" id="post_code" v-model="items[0].post_code">
                             </div>
                         </div>
                     </b-card-text>
@@ -34,20 +38,25 @@
             </b-tabs>
             <hr class="my-4">
             <div class="row">
-                <div class="form-group col-lg-3">
-                    <label for="post_code">{{ $t('Settings.post_code') }}</label>
-                    <input type="text" class="form-control" id="post_code" v-model="items[0].post_code">
-                </div>
-                <div class="form-group col-lg-3">
+                <div class="form-group col-sm-6 col-lg-3">
                     <label for="contact_phone">{{ $t('Settings.contact_phone') }}</label>
                     <input type="text" class="form-control" id="contact_phone" v-model="items[0].contact_phone">
                 </div>
-                <div class="form-group col-lg-3">
+                <div class="form-group col-sm-6 col-lg-3">
                     <label for="contact_email">{{ $t('Settings.contact_email') }}</label>
                     <input type="text" class="form-control" id="contact_email" v-model="items[0].contact_email">
                 </div>
             </div>
-            <hr class="my-4">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label>{{ $t('Settings.logo') }}</label>
+                    <upload v-model="items[0].logo"></upload>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="svg_logo">{{ $t('Settings.logo_svg') }}</label>
+                    <textarea v-model="items[0].svg_logo" id="svg_logo" cols="30" rows="4" class="form-control"></textarea>
+                </div>
+            </div>
             <div class="form-group">
                 <label for="analytics_top">{{ $t('Settings.arbitrary_code') }}</label>
                 <textarea class="form-control" rows="3" id="analytics_top" v-model="items[0].analytics_top"
@@ -71,10 +80,14 @@
 <script>
     import axios from 'axios'
     import {mapGetters} from 'vuex'
+    import Upload from "../../../../../admin/components/Upload";
 
     export default {
         middleware: 'auth',
         name: "SettingsSite",
+        components: {
+          Upload
+        },
         data() {
             return {
                 items: [],

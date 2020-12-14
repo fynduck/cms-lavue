@@ -3,6 +3,7 @@
 namespace Modules\Page\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Str;
 
 class PageClientResource extends JsonResource
 {
@@ -48,7 +49,7 @@ class PageClientResource extends JsonResource
     private function clearString(string $string, int $limit)
     {
         $string = html_entity_decode(strip_tags($string));
-        $string = \Str::limit($string, $limit, '');
+        $string = Str::limit($string, $limit, '');
 
         return preg_replace('!\s+!', ' ', trim($string));
     }

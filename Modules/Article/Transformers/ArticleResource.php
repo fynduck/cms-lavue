@@ -2,11 +2,8 @@
 
 namespace Modules\Article\Transformers;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Str;
-use Modules\Article\Entities\Article;
-use Modules\Article\Entities\ArticleSettings;
 use Modules\Article\Entities\ArticleTrans;
 use Modules\Article\Services\ArticleService;
 
@@ -66,7 +63,7 @@ class ArticleResource extends JsonResource
             array_key_exists($this->type, cache('urls_pages_' . config('app.locale_id'))) ? cache('urls_pages_' . config('app.locale_id'))[$this->type] : '',
             $this->slug
         ];
-        return route('pages', $params, false);
+        return implode('/', $params);
     }
 
     private function srcset()
