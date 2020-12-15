@@ -62,5 +62,9 @@
   "height": "Height",
   "add_size": "Add size",
   "resize": "Resize",
-  "crop": "Crop"
+  "crop": "Crop",
+  "greyscale": "Greyscale",
+  "blur": "Blur",
+  "brightness": "Brightness",
+  "background": "Background"
 }

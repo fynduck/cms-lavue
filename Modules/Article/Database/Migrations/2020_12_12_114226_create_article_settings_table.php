@@ -15,8 +15,8 @@ class CreateArticleSettingsTable extends Migration
     {
         Schema::create('article_settings', function (Blueprint $table) {
             $table->increments('id');
-            $table->json('sizes');
-            $table->enum('resize', ['crop', 'resize'])->default('resize');
+            $table->string('name');
+            $table->json('data');
             $table->timestamps();
         });
     }
