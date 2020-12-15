@@ -3,9 +3,9 @@
 namespace Modules\Article\Http\Controllers\Api;
 
 use App\Http\Controllers\AdminController;
-use Fynduck\FilesUpload\PrepareFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 use Modules\Article\Entities\Article;
 use Modules\Article\Entities\ArticleSettings;
 use Modules\Article\Services\ArticleService;
@@ -137,9 +137,13 @@ class ArticleController extends AdminController
             return ArticleSettings::latest()->first();
         });
 
-        if($settings) {
-            PrepareFile::deleteImages(Article::FOLDER_IMG, $article->image, $settings->sizes);
+        if ($settings) {
+            foreach ($settings->sizes as $size) {
+                Storage::disk('public')->delete(Article::FOLDER_IMG . '/' . $size['name'] . '/' . $article->image);
+            }
         }
+
+        Storage::disk('public')->delete(Article::FOLDER_IMG . '/' . $article->image);
 
         if ($request->get('image')) {
             $article->image = null;

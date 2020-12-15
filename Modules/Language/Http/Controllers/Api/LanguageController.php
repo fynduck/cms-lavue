@@ -3,9 +3,11 @@
 namespace Modules\Language\Http\Controllers\Api;
 
 use App\Http\Controllers\AdminController;
-use Fynduck\FilesUpload\PrepareFile;
+use Fynduck\FilesUpload\UploadFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Modules\Language\Entities\Language;
 use Modules\Language\Http\Requests\StoreLanguageRequest;
 use Modules\Language\Transformers\LanguageListResource;
@@ -36,8 +38,10 @@ class LanguageController extends AdminController
     {
         $image = null;
         if ($request->get('image')) {
-            $imgName = $request->get('name');
-            $image = PrepareFile::uploadBase64(Language::FOLDER_IMG, 'image', $request->get('image'), $imgName);
+            $image = UploadFile::file($request->get('image'))
+                ->setFolder(Language::FOLDER_IMG)
+                ->setName($request->get('name'))
+                ->save();
         }
 
         $defaultLang = Language::where('default', 1)->where('active', 1)->value('slug');
@@ -78,10 +82,14 @@ class LanguageController extends AdminController
 
         $image = null;
         if ($request->get('image')) {
-            $imgName = $request->get('name');
 
-            if (!\Str::contains($request->get('image'), Language::FOLDER_IMG))
-                $image = PrepareFile::uploadBase64(Language::FOLDER_IMG, 'image', $request->get('image'), $imgName, $language->image);
+            if (!Str::contains($request->get('image'), Language::FOLDER_IMG)) {
+                $image = UploadFile::file($request->get('image'))
+                    ->setFolder(Language::FOLDER_IMG)
+                    ->setName($request->get('name'))
+                    ->setOverwrite($language->image)
+                    ->save();
+            }
         }
 
         if ($language->slug != $request->get('slug') && !File::exists(resource_path('lang/' . $request->get('slug'))))
@@ -103,14 +111,15 @@ class LanguageController extends AdminController
 
     public function destroy(Request $request, Language $language)
     {
+        Storage::disk('public')->delete(Language::FOLDER_IMG . '/' . $language->image);
+
         $language->image = null;
 
-        if ($request->get('image')) {
-            $language->save();
-        } else {
+        if (!$request->get('image')) {
             $language->active = false;
-            $language->save();
         }
+
+        $language->save();
 
         return true;
     }

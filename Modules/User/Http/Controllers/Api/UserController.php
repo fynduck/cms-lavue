@@ -3,7 +3,6 @@
 namespace Modules\User\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
 use Modules\User\Entities\User;
@@ -91,7 +90,6 @@ class UserController extends Controller
         $user->username = $request->get('username');
         $user->name = $request->get('name');
         $user->group_id = (int)$request->get('group_id') !== 1 ? $request->get('group_id') : 2;
-        $user->phone = $request->get('phone');
 
         return $user->save();
     }
