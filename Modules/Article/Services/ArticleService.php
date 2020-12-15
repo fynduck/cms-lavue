@@ -113,7 +113,7 @@ class ArticleService
                 $resizeMethod = null;
                 $greyscale = false;
                 $blur = 1;
-                $brightness = null;
+                $brightness = 0;
                 $background = null;
 
                 $settings = Cache::remember('article_sizes', now()->addDay(), function () {
