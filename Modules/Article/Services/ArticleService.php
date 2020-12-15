@@ -199,8 +199,11 @@ class ArticleService
                 if ($key == 'first') {
                     return asset('storage/' . Article::FOLDER_IMG . '/' . key($settings->sizes) . '/' . $image);
                 } else {
-                    $division = is_numeric($key) ? $key : 2;
-                    $keySize = round(count($settings->sizes) / $division);
+                    $keySize = 0;
+                    if (count($settings->sizes) > 1) {
+                        $division = is_numeric($key) ? $key : 2;
+                        $keySize = round(count($settings->sizes) / $division);
+                    }
                     $valueSizes = array_values($settings->sizes);
                     return asset('storage/' . Article::FOLDER_IMG . '/' . $valueSizes[$keySize]['name'] . '/' . $image);
                 }
