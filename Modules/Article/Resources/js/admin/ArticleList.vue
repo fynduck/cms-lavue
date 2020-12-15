@@ -269,7 +269,7 @@ export default {
                 this.total = response.data.meta.total;
                 this.items = response.data.data;
                 this.languages = response.data.languages;
-                if (response.data.settings) {
+                if (response.data.settings.sizes) {
                     this.settings = response.data.settings;
                 }
                 this.loading = false;
@@ -332,7 +332,7 @@ export default {
                     solid: true
                 })
             }).catch(error => {
-                this.$bvToast.toast(error, {
+                this.$bvToast.toast(error.message, {
                     title: this.$t('Article.status'),
                     variant: 'danger',
                     solid: true
