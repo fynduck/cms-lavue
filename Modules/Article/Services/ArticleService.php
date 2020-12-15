@@ -15,7 +15,6 @@ use Illuminate\Support\Str;
 use Modules\Article\Entities\Article;
 use Modules\Article\Entities\ArticleSettings;
 use Modules\Article\Entities\ArticleTrans;
-use Modules\Article\Entities\ArticleViews;
 
 class ArticleService
 {
@@ -34,7 +33,7 @@ class ArticleService
     /**
      * @param Request $request
      * @param array $imagesName
-     * @param int $id
+     * @param int|null $id
      * @return mixed
      */
     public function addUpdate(Request $request, array $imagesName = [], int $id = null)
@@ -83,25 +82,6 @@ class ArticleService
         }
     }
 
-    public function checkView(Request $request, string $type, int $id)
-    {
-        //        $oldView = AnalyticsViews::where('session_id', $event->session_id)->value('id');
-        $ip = Ip::firstOrCreate(['ip' => $request->ip()]);
-        $view = ArticleViews::firstOrCreate([
-            'session_id' => session()->getId(),
-            'type'       => $type,
-            'article_id' => $id,
-        ],
-            [
-                'ip_id'      => $ip->id,
-                'user_agent' => $request->header('user-agent'),
-                'views'      => 0,
-            ]
-        );
-        //        if (!$oldView)
-        $view->increment('views');
-    }
-
     public function searchArticles(&$limit, $typeName, $value, $q, $selected)
     {
         $current = Article::leftJoin('article_trans', 'articles.id', '=', 'article_trans.article_id')
@@ -131,19 +111,31 @@ class ArticleService
             if (!Str::contains($request->get('image'), Article::FOLDER_IMG)) {
                 $sizes = null;
                 $resizeMethod = null;
+                $greyscale = false;
+                $blur = 1;
+                $brightness = null;
+                $background = null;
 
-                $settings = Cache::remember('article_settings', now()->addDay(), function () {
-                    return ArticleSettings::latest()->first();
+                $settings = Cache::remember('article_sizes', now()->addDay(), function () {
+                    return ArticleSettings::where('name', 'sizes')->first();
                 });
                 if ($settings) {
-                    $sizes = $settings->sizes;
-                    $resizeMethod = $settings->resize;
+                    $sizes = $settings->data['sizes'];
+                    $resizeMethod = $settings->data['action'];
+                    $greyscale = !empty($settings->data['greyscale']) ? $settings->data['greyscale'] : $greyscale;
+                    $blur = !empty($settings->data['blur']) ? $settings->data['blur'] : $blur;
+                    $brightness = !empty($settings->data['brightness']) ? $settings->data['brightness'] : $brightness;
+                    $background = !empty($settings->data['background']) ? $settings->data['background'] : $background;
                 }
                 $nameImages['imageName'] = UploadFile::file($request->get('image'))
                     ->setFolder(Article::FOLDER_IMG)
                     ->setName($imgName)
                     ->setOverwrite($request->get('old_image'))
                     ->setSizes($sizes)
+                    ->setGreyscale($greyscale)
+                    ->setBlur($blur)
+                    ->setBrightness($brightness)
+                    ->setBackground($background)
                     ->save($resizeMethod);
             } else {
                 $nameImages['imageName'] = $request->get('old_image');
@@ -155,13 +147,15 @@ class ArticleService
 
     public function settings()
     {
-        $settings = Cache::remember('article_settings', now()->addDay(), function () {
-            return ArticleSettings::latest()->first();
+        $settings = Cache::remember('article_sizes', now()->addDay(), function () {
+            return ArticleSettings::where('name', 'sizes')->first();
         });
 
+        $data = [];
         if ($settings) {
+            $data = $settings->data;
             $sizes = [];
-            foreach ($settings->sizes as $size) {
+            foreach ($settings->data['sizes'] as $size) {
                 $sizes[] = [
                     'name'   => $size['name'],
                     'width'  => $size['width'],
@@ -169,10 +163,10 @@ class ArticleService
                 ];
             }
 
-            $settings->sizes = $sizes;
+            $data['sizes'] = $sizes;
         }
 
-        return $settings;
+        return $data;
     }
 
     /**
@@ -190,25 +184,29 @@ class ArticleService
         if (!$size && !$key)
             return asset('storage/' . Article::FOLDER_IMG . '/' . $image);
 
-        $settings = Cache::remember('article_settings', now()->addDay(), function () {
-            return ArticleSettings::latest()->first();
+        $settings = Cache::remember('article_sizes', now()->addDay(), function () {
+            return ArticleSettings::where('name', 'sizes')->first();
         });
 
-        if ($settings && $settings->sizes) {
-            if ($key) {
-                if ($key == 'first') {
-                    return asset('storage/' . Article::FOLDER_IMG . '/' . key($settings->sizes) . '/' . $image);
+        if ($settings && $settings->data['sizes']) {
+            if (!$key) {
+                if (array_key_exists($size, $settings->data['sizes'])) {
+                    return asset('storage/' . Article::FOLDER_IMG . '/' . $size . '/' . $image);
                 } else {
-                    $keySize = 0;
-                    if (count($settings->sizes) > 1) {
-                        $division = is_numeric($key) ? $key : 2;
-                        $keySize = round(count($settings->sizes) / $division);
-                    }
-                    $valueSizes = array_values($settings->sizes);
-                    return asset('storage/' . Article::FOLDER_IMG . '/' . $valueSizes[$keySize]['name'] . '/' . $image);
+                    return asset('img/placeholder.jpg');
                 }
-            } elseif (array_key_exists($size, $settings->sizes)) {
-                return asset('storage/' . Article::FOLDER_IMG . '/' . $size . '/' . $image);
+            }
+
+            if ($key == 'first') {
+                return asset('storage/' . Article::FOLDER_IMG . '/' . key($settings->data['sizes']) . '/' . $image);
+            } else {
+                $keySize = 0;
+                if (count($settings->data['sizes']) > 1) {
+                    $division = is_numeric($key) ? $key : 2;
+                    $keySize = round(count($settings->data['sizes']) / $division);
+                }
+                $valueSizes = array_values($settings->data['sizes']);
+                return asset('storage/' . Article::FOLDER_IMG . '/' . $valueSizes[$keySize]['name'] . '/' . $image);
             }
         }
 
@@ -225,12 +223,12 @@ class ArticleService
     {
         $images = [];
 
-        $settings = Cache::remember('article_settings', now()->addDay(), function () {
-            return ArticleSettings::latest()->first();
+        $settings = Cache::remember('article_sizes', now()->addDay(), function () {
+            return ArticleSettings::where('name', 'sizes')->first();
         });
 
-        if ($image && $settings && $settings->sizes) {
-            foreach ($settings->sizes as $size => $sizes) {
+        if ($image && $settings && $settings->data['sizes']) {
+            foreach ($settings->data['sizes'] as $size => $sizes) {
                 $src = asset('storage/' . Article::FOLDER_IMG . '/' . $size . '/' . $image);
                 if ($srcset)
                     $src .= ' ' . $sizes['width'] . 'w';
