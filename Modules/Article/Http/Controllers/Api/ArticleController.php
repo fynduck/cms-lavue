@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Modules\Article\Entities\Article;
 use Modules\Article\Entities\ArticleSettings;
+use Modules\Article\Http\Requests\SizeValidate;
 use Modules\Article\Services\ArticleService;
 use Modules\Article\Http\Requests\ArticleValidate;
 use Modules\Article\Transformers\ArticleFormResource;
@@ -157,10 +158,10 @@ class ArticleController extends AdminController
 
     /**
      * Save menus settings
-     * @param Request $request
+     * @param SizeValidate $request
      * @return bool
      */
-    public function saveSettings(Request $request)
+    public function saveSettings(SizeValidate $request)
     {
         $defaultAction = ArticleSettings::RESIZE;
         $action = $request->get('resize', $defaultAction);

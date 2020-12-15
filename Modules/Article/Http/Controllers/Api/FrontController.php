@@ -80,7 +80,7 @@ class FrontController extends Controller
 
     public function article($slug)
     {
-        $articleTrans = ArticleTrans::whereSlug($slug)->active()->first();
+        $articleTrans = ArticleTrans::whereSlug($slug)->active()->firstOrFail();
 
         return new ArticleResource($articleTrans);
     }
