@@ -3,7 +3,6 @@
 namespace Modules\Settings\Http\Controllers\Api;
 
 use App\Services\SiteMapService;
-use Fynduck\FilesUpload\PrepareFile;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Cache;

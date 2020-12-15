@@ -8,7 +8,7 @@
 
 namespace Modules\Article\Services;
 
-use Fynduck\FilesUpload\PrepareFile;
+use Fynduck\FilesUpload\UploadFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
@@ -139,7 +139,12 @@ class ArticleService
                     $sizes = $settings->sizes;
                     $resizeMethod = $settings->resize;
                 }
-                $nameImages['imageName'] = PrepareFile::uploadBase64(Article::FOLDER_IMG, 'image', $request->get('image'), $imgName, $request->get('old_image'), $sizes, $resizeMethod);
+                $nameImages['imageName'] = UploadFile::file($request->get('image'))
+                    ->setFolder(Article::FOLDER_IMG)
+                    ->setName($imgName)
+                    ->setOverwrite($request->get('old_image'))
+                    ->setSizes($sizes)
+                    ->save($resizeMethod);
             } else {
                 $nameImages['imageName'] = $request->get('old_image');
             }
@@ -194,7 +199,7 @@ class ArticleService
                 if ($key == 'first') {
                     return asset('storage/' . Article::FOLDER_IMG . '/' . key($settings->sizes) . '/' . $image);
                 } else {
-                    $division =  is_numeric($key) ? $key : 2;
+                    $division = is_numeric($key) ? $key : 2;
                     $keySize = round(count($settings->sizes) / $division);
                     $valueSizes = array_values($settings->sizes);
                     return asset('storage/' . Article::FOLDER_IMG . '/' . $valueSizes[$keySize]['name'] . '/' . $image);

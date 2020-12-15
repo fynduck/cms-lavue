@@ -8,7 +8,7 @@
 
 namespace Modules\Menu\Services;
 
-use Fynduck\FilesUpload\PrepareFile;
+use Fynduck\FilesUpload\UploadFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
@@ -116,7 +116,12 @@ class MenuService
                     $sizes = $settings->sizes;
                     $resizeMethod = $settings->resize;
                 }
-                $nameImages['imageName'] = PrepareFile::uploadBase64(Menu::FOLDER_IMG, 'image', $request->get('image'), $imgName, $request->get('old_image'), $sizes, $resizeMethod);
+                $nameImages['imageName'] = UploadFile::file($request->get('image'))
+                    ->setFolder(Menu::FOLDER_IMG)
+                    ->setName($imgName)
+                    ->setOverwrite($request->get('old_image'))
+                    ->setSizes($sizes)
+                    ->save($resizeMethod);
             } else {
                 $nameImages['imageName'] = $request->get('old_image');
             }

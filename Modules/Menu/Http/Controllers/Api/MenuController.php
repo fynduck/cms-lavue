@@ -3,10 +3,11 @@
 namespace Modules\Menu\Http\Controllers\Api;
 
 use App\Http\Controllers\AdminController;
-use Fynduck\FilesUpload\PrepareFile;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 use Modules\Language\Entities\Language;
 use Modules\Menu\Entities\Menu;
 use Modules\Menu\Entities\MenuSettings;
@@ -142,7 +143,18 @@ class MenuController extends AdminController
      */
     public function destroy(Menu $menu, Request $request): bool
     {
-        PrepareFile::deleteImages(Menu::FOLDER_IMG, $menu->image, Menu::getSizes());
+        $settings = Cache::remember('menu_settings', now()->addDay(), function () {
+            return MenuSettings::latest()->first();
+        });
+
+        if ($settings) {
+            foreach ($settings->sizes as $size) {
+                Storage::disk('public')->delete(Menu::FOLDER_IMG . '/' . $size['name'] . '/' . $menu->image);
+            }
+        }
+
+        Storage::disk('public')->delete(Menu::FOLDER_IMG . '/' . $menu->image);
+
         if ($request->get('image')) {
             $menu->image = '';
             $menu->save();
