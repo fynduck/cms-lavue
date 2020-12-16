@@ -59,8 +59,6 @@ class Menu extends Model
 
     const TOP_MENU = 'top_menu';
     const MAIN_MENU = 'home_menu';
-    const CATALOG_MENU = 'catalog_menu';
-    const CATEGORY_MENU = 'category_menu';
     const CUSTOM_MENU = 'custom_menu';
     const FOOTER_LINKS = 'footer_links';
 

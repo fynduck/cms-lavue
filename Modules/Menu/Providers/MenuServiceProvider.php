@@ -4,7 +4,9 @@ namespace Modules\Menu\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Modules\Menu\Entities\Menu;
+use Modules\Menu\Entities\MenuSettings;
 use Modules\Menu\Observers\MenuObserver;
+use Modules\Menu\Observers\MenuSettingsObserver;
 
 class MenuServiceProvider extends ServiceProvider
 {
@@ -21,6 +23,7 @@ class MenuServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(module_path('Menu', 'Database/Migrations'));
 
         Menu::observe(MenuObserver::class);
+        MenuSettings::observe(MenuSettingsObserver::class);
     }
 
     /**

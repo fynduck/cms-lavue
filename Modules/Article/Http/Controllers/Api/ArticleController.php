@@ -4,11 +4,10 @@ namespace Modules\Article\Http\Controllers\Api;
 
 use App\Http\Controllers\AdminController;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Storage;
 use Modules\Article\Entities\Article;
 use Modules\Article\Entities\ArticleSettings;
 use Modules\Article\Http\Requests\SizeValidate;
+use Modules\Article\Jobs\DeleteImages;
 use Modules\Article\Services\ArticleService;
 use Modules\Article\Http\Requests\ArticleValidate;
 use Modules\Article\Transformers\ArticleFormResource;
@@ -134,17 +133,7 @@ class ArticleController extends AdminController
      */
     public function destroy(Request $request, Article $article)
     {
-        $settings = Cache::remember('article_sizes', now()->addDay(), function () {
-            return ArticleSettings::where('name', 'sizes')->first();
-        });
-
-        if ($settings) {
-            foreach ($settings->data['sizes'] as $size) {
-                Storage::disk('public')->delete(Article::FOLDER_IMG . '/' . $size['name'] . '/' . $article->image);
-            }
-        }
-
-        Storage::disk('public')->delete(Article::FOLDER_IMG . '/' . $article->image);
+        DeleteImages::dispatch($article);
 
         if ($request->get('image')) {
             $article->image = null;

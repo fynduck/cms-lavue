@@ -173,15 +173,15 @@ class ArticleService
      * Get image link by size
      * @param $image
      * @param null $size
-     * @param null $key
+     * @param bool $first
      * @return string
      */
-    public function linkImage($image, $size = null, $key = null): string
+    public function linkImage($image, $size = null, $first = false): string
     {
         if (!$image)
             return asset('img/placeholder.jpg');
 
-        if (!$size && !$key)
+        if (!$size && !$first)
             return asset('storage/' . Article::FOLDER_IMG . '/' . $image);
 
         $settings = Cache::remember('article_sizes', now()->addDay(), function () {
@@ -189,24 +189,14 @@ class ArticleService
         });
 
         if ($settings && $settings->data['sizes']) {
-            if (!$key) {
-                if (array_key_exists($size, $settings->data['sizes'])) {
-                    return asset('storage/' . Article::FOLDER_IMG . '/' . $size . '/' . $image);
-                } else {
-                    return asset('img/placeholder.jpg');
-                }
+            if ($first) {
+                return asset('storage/' . Article::FOLDER_IMG . '/' . key($settings->data['sizes']) . '/' . $image);
             }
 
-            if ($key == 'first') {
-                return asset('storage/' . Article::FOLDER_IMG . '/' . key($settings->data['sizes']) . '/' . $image);
+            if (array_key_exists($size, $settings->data['sizes'])) {
+                return asset('storage/' . Article::FOLDER_IMG . '/' . $size . '/' . $image);
             } else {
-                $keySize = 0;
-                if (count($settings->data['sizes']) > 1) {
-                    $division = is_numeric($key) ? $key : 2;
-                    $keySize = round(count($settings->data['sizes']) / $division);
-                }
-                $valueSizes = array_values($settings->data['sizes']);
-                return asset('storage/' . Article::FOLDER_IMG . '/' . $valueSizes[$keySize]['name'] . '/' . $image);
+                return asset('storage/' . Article::FOLDER_IMG . '/' . key(end($settings->data['sizes'])) . '/' . $image);
             }
         }
 

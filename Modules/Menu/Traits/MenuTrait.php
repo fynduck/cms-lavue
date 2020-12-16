@@ -68,8 +68,6 @@ trait MenuTrait
     {
         return [
             self::TOP_MENU      => trans('menu::admin.top_menu'),
-            self::CATALOG_MENU  => trans('menu::admin.catalog_menu'),
-            self::CATEGORY_MENU => trans('menu::admin.category_menu'),
             //            self::MAIN_MENU => trans('menu::admin.main_menu'),
             self::CUSTOM_MENU   => trans('menu::admin.custom_menu'),
             self::FOOTER_LINKS  => trans('menu::admin.footer_menus')
