@@ -12,7 +12,7 @@ class FrontController extends Controller
 {
     public function getMenu(Request $request)
     {
-        $position = $request->get('position', Menu::CATALOG_MENU);
+        $position = $request->get('position', Menu::TOP_MENU);
         if (!array_key_exists($position, Menu::positions()))
             $position = 'none';
 
@@ -20,9 +20,9 @@ class FrontController extends Controller
 
             $query = Menu::getMenuByPosition($position, 1);
 
-            if ($request->get('page_id') && !in_array($position, [Menu::CATALOG_MENU, Menu::TOP_MENU])) {
+            if ($request->get('page_id')) {
                 $query->whereHas('getShow', function ($query) use ($request) {
-                    $query->where('show_type', $request->get('type'))
+                    $query->where('show_type', $request->get('type', 'page'))
                         ->where('show_on', $request->get('page_id'));
                 });
             }

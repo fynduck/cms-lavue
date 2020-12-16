@@ -77,33 +77,48 @@
         ></confirm>
         <b-modal id="menu-settings" hide-footer centered>
             <b-row class="mb-1 size" v-for="(size, key) in settings.sizes" :key="key">
-                <b-col>
-                    <b-form-group
-                        :label="$t('Menu.size_name')"
-                        :label-for="`name_${key}`"
-                    >
-                        <b-form-input :id="`name_${key}`" v-model="size.name"></b-form-input>
-                    </b-form-group>
+                <b-col class="mb-3">
+                    <label :for="`name_${key}`">{{ $t('Menu.size_name') }}</label>
+                    <b-form-input :id="`name_${key}`" v-model="size.name"></b-form-input>
                 </b-col>
-                <b-col>
-                    <b-form-group
-                        :label="$t('Menu.width')"
-                        :label-for="`width_${key}`"
-                    >
-                        <b-form-input :id="`width_${key}`" v-model.number="size.width" type="number"></b-form-input>
-                    </b-form-group>
+                <b-col class="mb-3">
+                    <label :for="`width_${key}`">{{ $t('Menu.width') }}</label>
+                    <b-form-input :id="`width_${key}`" v-model.number="size.width" type="number"></b-form-input>
                 </b-col>
-                <b-col>
-                    <b-form-group
-                        :label="$t('Menu.height')"
-                        :label-for="`height_${key}`"
-                    >
-                        <b-form-input :id="`height_${key}`" v-model.number="size.height" type="number"></b-form-input>
-                    </b-form-group>
+                <b-col class="mb-3">
+                    <label :for="`height_${key}`">{{ $t('Menu.height') }}</label>
+                    <b-form-input :id="`height_${key}`" v-model.number="size.height" type="number"></b-form-input>
                 </b-col>
                 <fa :icon="['fas', 'trash-alt']" class="text-danger remove" @click="deleteSize(key)"/>
             </b-row>
-            <b-form-select v-model="settings.resize" :options="resizes" size="sm" class="my-3"></b-form-select>
+            <b-row class="align-items-center">
+                <b-col sm="6" class="mb-3">
+                    <b-form-select v-model="settings.action" :options="resizes" size="sm" class="my-3"></b-form-select>
+                </b-col>
+                <b-col sm="6" class="mb-3">
+                    <b-form-checkbox v-model="settings.greyscale" switch>
+                        {{ $t('Menu.greyscale') }}
+                    </b-form-checkbox>
+                </b-col>
+            </b-row>
+            <b-row>
+                <b-col md="4" class="mb-3">
+                    <label for="blur">{{ $t('Menu.blur') }}</label>
+                    <b-form-input v-model.number="settings.blur" id="blur" type="number" min="0" max="100"></b-form-input>
+                </b-col>
+                <b-col md="4" class="mb-3">
+                    <label for="brightness">{{ $t('Menu.brightness') }}</label>
+                    <b-form-input v-model.number="settings.brightness" id="brightness" type="number" min="-100"
+                                  max="100"></b-form-input>
+                </b-col>
+                <b-col md="4" class="mb-3">
+                    <label for="background">{{ $t('Menu.background') }}</label>
+                    <div class="d-flex">
+                        <b-form-input v-model="settings.background" id="background" type="color"></b-form-input>
+                        <b-button @click="removeBg"><fa :icon="['fas', 'trash-alt']"/></b-button>
+                    </div>
+                </b-col>
+            </b-row>
             <b-row class="justify-content-between">
                 <b-col>
                     <b-button variant="info" @click.prevent="addSize" :title="$t('Menu.add_size')">
@@ -162,8 +177,12 @@ export default {
                 }
             ],
             settings: {
-                sizes: [],
-                resize: 'resize'
+                action: 'resize',
+                greyscale: null,
+                blur: null,
+                brightness: null,
+                background: null,
+                sizes: []
             }
         }
     },
@@ -259,7 +278,7 @@ export default {
                 this.total = response.data.meta.total;
                 this.items = response.data.data;
                 this.languages = response.data.languages;
-                if (response.data.settings) {
+                if (response.data.settings.sizes) {
                     this.settings = response.data.settings;
                 }
                 this.loading = false;
@@ -309,6 +328,9 @@ export default {
         },
         deleteSize(index) {
             this.settings.sizes.splice(index, 1)
+        },
+        removeBg() {
+            this.settings.background = null
         },
         saveSettings() {
             axios.post(`${this.source}-settings`, this.settings).then(response => {

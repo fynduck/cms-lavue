@@ -37,7 +37,7 @@ class MenuFormResource extends JsonResource
     {
         $old_image = null;
         if ($this->image)
-            $old_image = (new MenuService())->linkImage($this->image, null, 'first');
+            $old_image = (new MenuService())->linkImage($this->image, null, true);
 
         return $old_image;
     }

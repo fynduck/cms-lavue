@@ -24,12 +24,24 @@ use Illuminate\Database\Eloquent\Model;
  */
 class MenuSettings extends Model
 {
+    const RESIZE = 'resize';
+
+    const CROP = 'crop';
+
     protected $fillable = [
-        'sizes',
-        'resize'
+        'name',
+        'data'
     ];
 
     protected $casts = [
-        'sizes' => 'array'
+        'data' => 'array'
     ];
+
+    public static function resizeMethods()
+    {
+        return [
+            self::RESIZE,
+            self::CROP
+        ];
+    }
 }

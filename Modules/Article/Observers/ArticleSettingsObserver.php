@@ -18,8 +18,8 @@ class ArticleSettingsObserver
     public function saved(ArticleSettings $articleSettings)
     {
         DeleteImages::dispatch();
-        Cache::forget('article_sizes');
         GenerateImages::dispatch();
+        Cache::forget('article_sizes');
     }
 
     /**
