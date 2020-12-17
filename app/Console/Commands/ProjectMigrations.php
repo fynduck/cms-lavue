@@ -39,9 +39,16 @@ class ProjectMigrations extends Command
      */
     public function handle()
     {
-        foreach (Module::getOrdered() as $moduleName => $module) {
-            Artisan::call("module:migrate $moduleName");
-            $this->info("$moduleName migrate finish!");
+        $modules = [];
+
+        foreach (Module::getCached() as $module) {
+            $modules[$module['order']] = $module['name'];
+        }
+
+        ksort($modules);
+        foreach ($modules as $module) {
+            Artisan::call("module:migrate $module");
+            $this->info("$module migrate finish!");
         }
 
         Artisan::call('storage:link');

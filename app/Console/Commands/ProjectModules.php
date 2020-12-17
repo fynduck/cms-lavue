@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
+use Nwidart\Modules\Facades\Module;
 
 class ProjectModules extends Command
 {
@@ -38,9 +39,9 @@ class ProjectModules extends Command
      */
     public function handle()
     {
-        foreach (\Module::all() as $item) {
-            if ($item->getName() !== 'GroupCategory')
-                Artisan::call('module:enable ' . $item->getName());
+        foreach (Module::all() as $item) {
+            Artisan::call('module:enable ' . $item->getName());
+            $this->info($item->getName() . " has been enabled!");
         }
     }
 }

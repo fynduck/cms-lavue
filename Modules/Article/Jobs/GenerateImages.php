@@ -54,7 +54,7 @@ class GenerateImages implements ShouldQueue
         if ($sizes->data['sizes']) {
             $resizeMethod = !empty($sizes->data['action']) ? $sizes->data['action'] : 'resize';
             $greyscale = !empty($sizes->data['greyscale']) ? $sizes->data['greyscale'] : false;
-            $blur = !empty($sizes->data['blur']) ? $sizes->data['blur'] : 1;
+            $blur = !empty($sizes->data['blur']) ? $sizes->data['blur'] : null;
             $brightness = !empty($sizes->data['brightness']) ? $sizes->data['brightness'] : 0;
             $background = !empty($sizes->data['background']) ? $sizes->data['background'] : null;
             $path = Storage::get(Article::FOLDER_IMG . '/' . $article->image);
