@@ -117,7 +117,7 @@ class MenuService
                 $brightness = 0;
                 $background = null;
 
-                if ($settings) {
+                if ($settings && !empty($settings->data['sizes'])) {
                     $sizes = $settings->data['sizes'];
                     $resizeMethod = $settings->data['action'];
                     $greyscale = !empty($settings->data['greyscale']) ? $settings->data['greyscale'] : $greyscale;
@@ -150,7 +150,7 @@ class MenuService
         });
 
         $data = [];
-        if ($settings) {
+        if ($settings && !empty($settings->data['sizes'])) {
             $data = $settings->data;
             $sizes = [];
             foreach ($settings->data['sizes'] as $size) {
@@ -186,7 +186,7 @@ class MenuService
             return MenuSettings::where('name', 'sizes')->first();
         });
 
-        if ($settings && $settings->data['sizes']) {
+        if ($settings && !empty($settings->data['sizes'])) {
             if ($first) {
                 return asset('storage/' . Menu::FOLDER_IMG . '/' . key($settings->data['sizes']) . '/' . $image);
             }

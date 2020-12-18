@@ -51,12 +51,12 @@ class PageController extends AdminController
         /**
          * Create page
          */
-        $pageId = PageService::addUpdate($request);
+        $page = PageService::addUpdate($request);
 
         /**
          * Create page trans
          */
-        PageService::addUpdateTrans($pageId, $request->get('items'));
+        PageService::addUpdateTrans($page->id, $request->get('items'));
 
         \DB::commit();
 
@@ -89,12 +89,12 @@ class PageController extends AdminController
         /**
          * Create page
          */
-        $pageId = PageService::addUpdate($request, $id);
+        $page = PageService::addUpdate($request, $id);
 
         /**
          * Create page trans
          */
-        PageService::addUpdateTrans($pageId, $request->get('items'));
+        PageService::addUpdateTrans($page->id, $request->get('items'));
 
         \DB::commit();
 

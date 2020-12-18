@@ -29,6 +29,10 @@ export default {
         if (this.$route.params.category) {
             await this.$store.dispatch('page/setItem', null)
             const {data} = await axios.get(`/articles/${this.$route.params.category}`)
+            if (data.data.method === 'not_found') {
+                return this.$nuxt.error({statusCode: 404, message: data.data.title, page: data.data})
+            }
+
             await this.$store.dispatch('page/setItem', data.data)
         }
     },

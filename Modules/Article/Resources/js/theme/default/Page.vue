@@ -4,7 +4,7 @@
         <v-runtime-template :template="description" v-if="page.description"/>
         <items :type="page.method" v-if="loadArticles"/>
     </section>
-    <component :is="page.method" v-else></component>
+    <component :is="page.method" v-else-if="page"></component>
 </template>
 
 <script>

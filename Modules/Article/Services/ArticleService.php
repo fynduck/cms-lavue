@@ -119,7 +119,7 @@ class ArticleService
                 $settings = Cache::remember('article_sizes', now()->addDay(), function () {
                     return ArticleSettings::where('name', 'sizes')->first();
                 });
-                if ($settings) {
+                if ($settings && !empty($settings->data['sizes'])) {
                     $sizes = $settings->data['sizes'];
                     $resizeMethod = $settings->data['action'];
                     $greyscale = !empty($settings->data['greyscale']) ? $settings->data['greyscale'] : $greyscale;
@@ -152,7 +152,7 @@ class ArticleService
         });
 
         $data = [];
-        if ($settings) {
+        if ($settings && !empty($settings->data['sizes'])) {
             $data = $settings->data;
             $sizes = [];
             foreach ($settings->data['sizes'] as $size) {
@@ -188,7 +188,7 @@ class ArticleService
             return ArticleSettings::where('name', 'sizes')->first();
         });
 
-        if ($settings && $settings->data['sizes']) {
+        if ($settings && !empty($settings->data['sizes'])) {
             if ($first) {
                 return asset('storage/' . Article::FOLDER_IMG . '/' . key($settings->data['sizes']) . '/' . $image);
             }
@@ -217,7 +217,7 @@ class ArticleService
             return ArticleSettings::where('name', 'sizes')->first();
         });
 
-        if ($image && $settings && $settings->data['sizes']) {
+        if ($image && $settings  && !empty($settings->data['sizes'])) {
             foreach ($settings->data['sizes'] as $size => $sizes) {
                 $src = asset('storage/' . Article::FOLDER_IMG . '/' . $size . '/' . $image);
                 if ($srcset)
