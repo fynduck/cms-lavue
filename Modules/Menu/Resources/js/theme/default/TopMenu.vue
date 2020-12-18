@@ -41,17 +41,19 @@
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </form>
                 <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="languages" role="button" data-toggle="dropdown"
-                           aria-haspopup="true" aria-expanded="false">
-                            {{ currentLang }}
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right" v-if="listLanguages.length > 0">
-                            <a class="dropdown-item" :href="lang.url" v-for="lang in listLanguages">
-                                {{ lang.title }}
+                    <client-only>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="languages" role="button" data-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false">
+                                {{ currentLang }}
                             </a>
-                        </div>
-                    </li>
+                            <div class="dropdown-menu dropdown-menu-right" v-if="listLanguages.length > 0">
+                                <a class="dropdown-item" :href="lang.url" v-for="lang in listLanguages">
+                                    {{ lang.title }}
+                                </a>
+                            </div>
+                        </li>
+                    </client-only>
                 </ul>
             </div>
         </div>
