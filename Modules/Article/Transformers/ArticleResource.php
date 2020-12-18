@@ -59,7 +59,7 @@ class ArticleResource extends JsonResource
     private function generateLink()
     {
         $params = [
-            count(config('app.locales')) > 1 ? config('app.locale') : null,
+//            count(config('app.locales')) > 1 ? config('app.locale') : null,
             array_key_exists($this->type, cache('urls_pages_' . config('app.locale_id'))) ? cache('urls_pages_' . config('app.locale_id'))[$this->type] : '',
             $this->slug
         ];

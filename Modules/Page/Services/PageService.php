@@ -11,18 +11,18 @@ namespace Modules\Page\Services;
 use Illuminate\Http\Request;
 use Modules\Page\Entities\Page;
 use Modules\Page\Entities\PageTrans;
+use Modules\Page\Transformers\PageClientResource;
 
 class PageService
 {
-
     /**
      * @param Request $request
      * @param int $id
-     * @return $this|mixed
+     * @return Page
      */
-    public static function addUpdate(Request $request, int $id = 0)
+    public static function addUpdate(Request $request, int $id = 0): Page
     {
-        $itemId = Page::updateOrCreate([
+        $page = Page::updateOrCreate([
             'id' => $id
         ], [
                 'sql_products' => $request->get('sql_products') ? $request->get('sql_products') : '',
@@ -30,10 +30,10 @@ class PageService
             ]
         );
 
-        if ($itemId == false)
+        if (!$page)
             return back()->withErrors(trans('admin.data_not_save'));
 
-        return $itemId->id;
+        return $page;
     }
 
     /**
@@ -78,5 +78,17 @@ class PageService
         }
 
         return $current;
+    }
+
+    public static function notFound(): PageClientResource
+    {
+        $page = Page::getPageByMethod('not_found');
+
+        $pageLang = PageTrans::where('page_id', $page->page_id)
+            ->where('active', 1)
+            ->pluck('lang_id')
+            ->toArray();
+
+        return (new PageClientResource($page))->additional(['page_lang' => $pageLang]);
     }
 }

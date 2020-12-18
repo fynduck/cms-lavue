@@ -9,7 +9,7 @@ use Modules\Page\Transformers\PageClientResource;
 
 class FrontController extends Controller
 {
-    public function findPage($slug)
+    public function findPage($slug): PageClientResource
     {
         $response = null;
         if ($slug != 'home')
@@ -21,8 +21,9 @@ class FrontController extends Controller
             $page = Page::getPageByMethod('not_found');
 
         $pageLang = PageTrans::where('page_id', $page->page_id)
+            ->where('lang_id', '!=', config('app.locale_id'))
             ->where('active', 1)
-            ->pluck('lang_id')->toArray();
+            ->pluck('slug', 'lang_id');
 
         return (new PageClientResource($page))->additional(['page_lang' => $pageLang]);
     }

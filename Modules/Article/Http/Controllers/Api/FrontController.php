@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Cache;
 use Modules\Article\Entities\Article;
 use Modules\Article\Entities\ArticleTrans;
 use Modules\Article\Transformers\ArticleResource;
+use Modules\Page\Entities\Page;
+use Modules\Page\Services\PageService;
 use Modules\Settings\Entities\Pagination;
 
 class FrontController extends Controller
@@ -80,7 +82,11 @@ class FrontController extends Controller
 
     public function article($slug)
     {
-        $articleTrans = ArticleTrans::whereSlug($slug)->active()->firstOrFail();
+        $articleTrans = ArticleTrans::whereSlug($slug)->active()->first();
+
+        if (!$articleTrans) {
+            return PageService::notFound();
+        }
 
         return new ArticleResource($articleTrans);
     }
