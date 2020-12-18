@@ -19,11 +19,6 @@ use Modules\Settings\Transformers\SocialsResource;
 
 class SettingsController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('admin:view');
-    }
-
     /**
      * Contacts page
      * @return \Illuminate\Http\JsonResponse
