@@ -18,10 +18,10 @@ export const actions = {
       commit('lang/SET_LOCALE', { locale })
     }
 
-    const base = getters["lang/checkLocales"] > 1 ? getters["lang/locale"] : '/'
-    commit('SET_BASE', base)
-    app.router.options.base = base
-    app.router.history.base = `/${base}`
+    // const base = getters["lang/checkLocales"] > 1 ? getters["lang/locale"] : '/'
+    // commit('SET_BASE', base)
+    // app.router.options.base = base
+    // app.router.history.base = `/${base}`
   },
 
   nuxtClientInit ({ commit, getters }, {app}) {
@@ -35,8 +35,8 @@ export const actions = {
       commit('lang/SET_LOCALE', { locale })
     }
 
-    const base = getters["lang/checkLocales"] > 1 ? getters["lang/locale"] : '/'
-    app.router.options.base = base
-    app.router.history.base = `/${base}`
+    // const base = getters["lang/checkLocales"] > 1 ? getters["lang/locale"] : '/'
+    // app.router.options.base = base
+    // app.router.history.base = `/${base}`
   }
 }
