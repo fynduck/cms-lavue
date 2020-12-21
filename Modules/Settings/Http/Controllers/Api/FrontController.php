@@ -32,7 +32,7 @@ class FrontController
                     ->orWhere('lang', 0);
             })->get(['key', 'value'])
             ->each(function ($item) {
-                if ($item->key == 'logo') {
+                if ($item->key == 'logo' && $item->value) {
                     $item->value = asset('storage/' . Settings::FOLDER_IMG . '/' . $item->value);
                 }
             });

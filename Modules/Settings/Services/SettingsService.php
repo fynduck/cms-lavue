@@ -54,7 +54,7 @@ class SettingsService
         $settings = [];
         Settings::all()->each(function ($item) use (&$settings) {
             $value = $item['value'];
-            if ($item['key'] == 'logo') {
+            if ($item['key'] == 'logo' && $item['value']) {
                 $value = asset('storage/' . Settings::FOLDER_IMG . '/' . $item['value']);
             }
             $settings[$item['lang']][$item['key']] = $value;
