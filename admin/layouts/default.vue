@@ -21,7 +21,7 @@
             SideBar
         },
         computed: mapGetters({
-            contentMin: 'global/container',
+            contentMin: 'container',
             authenticated: 'auth/check'
         }),
     }

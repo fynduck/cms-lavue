@@ -32,8 +32,8 @@
         },
         computed: {
             ...mapGetters({
-                items: 'global/routes',
-                affix: 'global/affix'
+                items: 'index/routes',
+                affix: 'index/affix'
             })
         },
         data() {

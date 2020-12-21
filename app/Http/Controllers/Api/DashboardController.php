@@ -14,6 +14,11 @@ use Illuminate\Support\Str;
 
 class DashboardController extends AdminController
 {
+    public function __construct()
+    {
+        $this->middleware('admin');
+    }
+
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */

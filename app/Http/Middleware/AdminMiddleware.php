@@ -9,25 +9,27 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\Request;
 
 class AdminMiddleware
 {
     /**
      * Handle an incoming request.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure $next
+     * @param Request $request
+     * @param Closure $next
      * @param string $right
      * @return mixed
      */
-    public function handle($request, Closure $next, $right = 'view')
+    public function handle(Request $request, Closure $next, $right = 'view')
     {
         if (!auth()->check()) {
 
             if ($request->ajax())
-                return response('Permission denied', 403);
+                return response('Permission denied', 401);
 
-            return redirect()->route('login');
+            abort(401);
+
         } elseif (auth()->user()->isAdmin()) {
 
             return $next($request);
