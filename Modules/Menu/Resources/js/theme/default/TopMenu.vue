@@ -2,7 +2,8 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <router-link :to="`/${locale}`" class="navbar-brand">
-                {{ appName }}
+                <img :src="logo" :alt="appName" v-if="logo">
+                <span v-else>{{ appName }}</span>
             </router-link>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNav"
                     aria-controls="topNav"
@@ -48,7 +49,7 @@
                                 {{ currentLang }}
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" v-if="listLanguages.length > 0">
-                                <a class="dropdown-item" :href="lang.url" v-for="lang in listLanguages">
+                                <a class="dropdown-item" href="#" v-for="lang in listLanguages" @click.prevent="setLocale(lang)">
                                     {{ lang.title }}
                                 </a>
                             </div>
@@ -88,6 +89,7 @@ export default {
             locale: 'lang/locale',
             locales: 'lang/locales',
             languages: 'lang/languages',
+            logo: 'settings/logo',
         }),
         currentLang() {
             const arrayLocales = Object.keys(this.locales)
@@ -128,14 +130,8 @@ export default {
                 await loadMessages(locale)
 
                 await this.$store.dispatch('lang/setLocale', {locale})
-                const route = Object.assign({}, this.$route);
-                route.params.lang = locale;
 
-                this.$router.push(route)
-
-                this.$nextTick(function () {
-                    this.$fetch()
-                })
+                location.href = lang.url
             }
         },
         parseCustomAttributes(attributes) {

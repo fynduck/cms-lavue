@@ -26,8 +26,8 @@ export default {
         };
     },
     async fetch() {
-        const {data} = await axios.get(`/get-settings?key=svg_logo`)
-        await this.$store.dispatch('settings/setLogo', data)
+        const {data} = await axios.get(`/get-settings`)
+        await this.$store.dispatch('settings/setSettings', data)
     },
     components: {
         TopMenu: () => import(`../../Modules/Menu/Resources/js/theme/${process.env.appTheme}/TopMenu`)
@@ -38,8 +38,7 @@ export default {
     }),
     computed: {
         ...mapGetters({
-            locale: 'lang/locale',
-            logo: 'settings/logo'
+            locale: 'lang/locale'
         })
     }
 }

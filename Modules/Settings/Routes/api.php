@@ -12,6 +12,7 @@
 */
 
 use Illuminate\Support\Facades\Route;
+use Modules\Settings\Http\Controllers\Api\FrontController;
 use Modules\Settings\Http\Controllers\Api\SettingsController;
 
 Route::middleware(['auth:api'])->prefix('admin')->group(function () {
@@ -27,4 +28,4 @@ Route::middleware(['auth:api'])->prefix('admin')->group(function () {
     Route::post('settings-paginate', [SettingsController::class, 'savePagination'])->name('settings-paginate.create');
 });
 
-Route::get('get-settings', [SettingsController::class, 'settings'])->name('settings');
+Route::get('get-settings', [FrontController::class, 'settings'])->name('settings');
