@@ -34,7 +34,11 @@
                 default: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media | forecolor backcolor emoticons blockquote',
                 type: String
             },
-            path_absolute: {
+            base: {
+                type: String,
+                default: ''
+            },
+            path: {
                 type: String | Boolean,
                 default: false
             },
@@ -53,7 +57,7 @@
                     verify_html: true,
                     codemirror: {
                         indentOnInit: true,
-                        path: '/tinymce/plugins/codemirror/codemirror-5',
+                        path: this.base + '/tinymce/plugins/codemirror/codemirror-5',
                         config: {
                             mode: 'text/html',
                             lineNumbers: true,
@@ -73,8 +77,8 @@
             if (this.height)
                 this.configuration.height = this.height;
 
-            if (this.path_absolute) {
-                const file_manager_path = this.path_absolute;
+            if (this.path) {
+                const file_manager_path = this.base + this.path;
                 const lang = this.lang;
                 const token = this.token;
 
