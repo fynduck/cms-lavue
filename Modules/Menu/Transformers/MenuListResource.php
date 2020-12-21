@@ -37,6 +37,6 @@ class MenuListResource extends JsonResource
 
     private function image(): string
     {
-        return (new MenuService())->linkImage($this->image, null, 'first');
+        return (new MenuService())->linkImage($this->image, null, true);
     }
 }

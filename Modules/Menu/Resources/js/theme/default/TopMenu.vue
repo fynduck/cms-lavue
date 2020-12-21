@@ -41,19 +41,19 @@
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </form>
                 <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="languages" role="button" data-toggle="dropdown"
-                           aria-haspopup="true" aria-expanded="false">
-                            {{ currentLang }}
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="languages"
-                             v-if="Object.keys(locales).length > 1">
-                            <a class="dropdown-item" href="#" v-for="lang in locales"
-                               @click.prevent="setLocale(lang.slug)">
-                                {{ lang.name }}
+                    <client-only>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="languages" role="button" data-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false">
+                                {{ currentLang }}
                             </a>
-                        </div>
-                    </li>
+                            <div class="dropdown-menu dropdown-menu-right" v-if="listLanguages.length > 0">
+                                <a class="dropdown-item" :href="lang.url" v-for="lang in listLanguages">
+                                    {{ lang.title }}
+                                </a>
+                            </div>
+                        </li>
+                    </client-only>
                 </ul>
             </div>
         </div>
@@ -87,6 +87,7 @@ export default {
         ...mapGetters({
             locale: 'lang/locale',
             locales: 'lang/locales',
+            languages: 'lang/languages',
         }),
         currentLang() {
             const arrayLocales = Object.keys(this.locales)
@@ -96,6 +97,18 @@ export default {
             }
 
             return ''
+        },
+        listLanguages() {
+            let list = [];
+            for (let key of Object.keys(this.languages)) {
+                list.push({
+                    title: this.locales[key].name,
+                    slug: this.locales[key].slug,
+                    url: '/' + [this.locales[key].slug, this.languages[key]].join('/')
+                })
+            }
+
+            return list;
         }
     },
     async fetch() {
@@ -108,7 +121,9 @@ export default {
 
             return pattern.test(link)
         },
-        async setLocale(locale) {
+        async setLocale(lang) {
+            const locale = lang.slug;
+
             if (this.locale !== locale) {
                 await loadMessages(locale)
 
@@ -124,8 +139,8 @@ export default {
             }
         },
         parseCustomAttributes(attributes) {
+            let data = [];
             if (attributes) {
-                let data = [];
                 const arrAttributes = attributes.split(',');
                 for (let item of arrAttributes) {
                     const keyAndValue = item.split('=')
@@ -136,11 +151,9 @@ export default {
                         })
                     }
                 }
-
-                return data
             }
 
-            return [];
+            return data
         },
     }
 }

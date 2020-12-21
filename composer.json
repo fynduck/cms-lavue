@@ -12,7 +12,7 @@
         "ext-json": "*",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
-        "fynduck/files-upload": "^2",
+        "fynduck/files-upload": "^3",
         "fynduck/laravel-searchable": "^2.0",
         "laravel/framework": "^8.0",
         "laravel/ui": "^3.0",

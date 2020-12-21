@@ -3,11 +3,11 @@
 namespace Modules\Article\Http\Controllers\Api;
 
 use App\Http\Controllers\AdminController;
-use Fynduck\FilesUpload\PrepareFile;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Modules\Article\Entities\Article;
 use Modules\Article\Entities\ArticleSettings;
+use Modules\Article\Http\Requests\SizeValidate;
+use Modules\Article\Jobs\DeleteImages;
 use Modules\Article\Services\ArticleService;
 use Modules\Article\Http\Requests\ArticleValidate;
 use Modules\Article\Transformers\ArticleFormResource;
@@ -133,13 +133,7 @@ class ArticleController extends AdminController
      */
     public function destroy(Request $request, Article $article)
     {
-        $settings = Cache::remember('article_settings', now()->addDay(), function () {
-            return ArticleSettings::latest()->first();
-        });
-
-        if($settings) {
-            PrepareFile::deleteImages(Article::FOLDER_IMG, $article->image, $settings->sizes);
-        }
+        DeleteImages::dispatch($article);
 
         if ($request->get('image')) {
             $article->image = null;
@@ -153,28 +147,36 @@ class ArticleController extends AdminController
 
     /**
      * Save menus settings
-     * @param Request $request
+     * @param SizeValidate $request
      * @return bool
      */
-    public function saveSettings(Request $request): bool
+    public function saveSettings(SizeValidate $request)
     {
-        $sizes = [];
+        $defaultAction = ArticleSettings::RESIZE;
+        $action = $request->get('resize', $defaultAction);
+        $blur = $request->get('blur') >= 0 && $request->get('blur') <= 100 ? $request->get('blur') : null;
+        $brightness = $request->get('brightness') >= -100 && $request->get('brightness') <= 100 ? $request->get('brightness') : null;
+
+        $data = [
+            'action'     => in_array($action, ArticleSettings::resizeMethods()) ? $action : $defaultAction,
+            'greyscale'  => $request->get('greyscale'),
+            'blur'       => $blur,
+            'brightness' => $brightness,
+            'background' => $request->get('background'),
+        ];
         foreach ($request->get('sizes') as $size) {
-            $sizes[$size['name']] = [
+            $data['sizes'][$size['name']] = [
                 'name'   => $size['name'],
                 'width'  => $size['width'] > 0 ? $size['width'] : null,
                 'height' => $size['height'] > 0 ? $size['height'] : null
             ];
         }
 
-        if ($request->get('id')) {
-            $settings = ArticleSettings::find($request->get('id'));
-            $settings->sizes = $sizes;
-            $settings->resize = $request->get('resize');
-            $settings->save();
-        } else {
-            ArticleSettings::create(['sizes' => $sizes, 'resize' => $request->get('resize')]);
-        }
+        ArticleSettings::updateOrCreate([
+            'name' => 'sizes',
+        ], [
+            'data' => $data
+        ]);
 
         return true;
     }

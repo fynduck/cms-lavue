@@ -42,8 +42,8 @@
   "action": "Action",
   "save": "save",
   "status": "Status",
-  "data_save": "Data save",
-  "data_not_save": "Data not save",
-  "data_delete": "Data delete",
-  "you_really_delete": "You really delete"
+  "data_save": "Data has been saved",
+  "data_not_save": "Data not has been save",
+  "data_delete": "Data has been deleted",
+  "you_really_delete": "Do you really want to delete"
 }

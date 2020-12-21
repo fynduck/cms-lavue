@@ -27,22 +27,18 @@ export default {
                 nameModules.push(moduleName)
         }
 
-        let module = 'Page';
+        let module = null;
         const pageSlug = typeof this.$route.params.page !== "undefined" ? this.$route.params.page : 'home'
         const {data} = await axios.get(`/find-page/${pageSlug}`)
         module = data.data.module || 'Page'
-        if (!nameModules.includes(module))
-            module = null;
+
+        if (data.data.method === 'not_found' || !nameModules.includes(module)) {
+            return this.$nuxt.error({statusCode: 404, message: data.data.title, page: data.data})
+        }
 
         await this.$store.dispatch('page/setModule', module)
         await this.$store.dispatch('page/setPage', data.data)
-
-        try {
-            require(`../../Modules/${this.module_name}/Resources/js/theme/${process.env.appTheme}/Page`);
-        } catch (e) {
-            module = null
-            await this.$store.dispatch('page/setModule', {module})
-        }
+        await this.$store.dispatch('lang/setPageLang', data.page_lang)
     }
 }
 </script>

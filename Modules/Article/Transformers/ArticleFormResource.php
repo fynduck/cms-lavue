@@ -38,7 +38,7 @@ class ArticleFormResource extends JsonResource
     {
         $old_image = null;
         if ($this->image)
-            $old_image = (new ArticleService())->linkImage($this->image, null, 'first');
+            $old_image = (new ArticleService())->linkImage($this->image, null, true);
 
         return $old_image;
     }

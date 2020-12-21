@@ -17,7 +17,7 @@
     "title": "Название",
     "clear": "Очистить",
     "data_save": "Данные сохранены",
-    "data_not_save": "Data not save",
-    "data_delete": "Data delete",
+    "data_not_save": "Data not has been save",
+    "data_delete": "Data has been deleted",
     "you_really_delete": "Вы действительно хотите удалить"
 }

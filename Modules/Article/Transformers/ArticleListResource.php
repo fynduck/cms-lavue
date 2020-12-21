@@ -37,6 +37,6 @@ class ArticleListResource extends JsonResource
 
     private function image(): string
     {
-        return (new ArticleService())->linkImage($this->image, null, 'first');
+        return (new ArticleService())->linkImage($this->image, null, true);
     }
 }

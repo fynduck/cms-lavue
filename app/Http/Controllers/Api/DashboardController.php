@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\AdminController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class DashboardController extends AdminController
 {
@@ -19,14 +20,6 @@ class DashboardController extends AdminController
     public function dashboard()
     {
         return view('layouts.admin');
-    }
-
-    public function customAuth($id)
-    {
-        if (auth()->check() && auth()->user()->isAdmin)
-            \Auth::loginUsingId($id);
-
-        return redirect()->route('pages');
     }
 
     public function getAppData()
@@ -43,7 +36,7 @@ class DashboardController extends AdminController
     {
         $slug = '';
         if ($request->get('txt'))
-            $slug = \Str::slug($request->get('txt'));
+            $slug = Str::slug($request->get('txt'));
 
         return response()->json($slug);
     }

@@ -3,7 +3,6 @@
 namespace Modules\Menu\Http\Controllers\Api;
 
 use App\Http\Controllers\AdminController;
-use Fynduck\FilesUpload\PrepareFile;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -11,6 +10,7 @@ use Modules\Language\Entities\Language;
 use Modules\Menu\Entities\Menu;
 use Modules\Menu\Entities\MenuSettings;
 use Modules\Menu\Http\Requests\MenuValidate;
+use Modules\Menu\Jobs\DeleteImages;
 use Modules\Menu\Services\MenuService;
 use Modules\Menu\Transformers\MenuFormResource;
 use Modules\Menu\Transformers\MenuListResource;
@@ -142,7 +142,8 @@ class MenuController extends AdminController
      */
     public function destroy(Menu $menu, Request $request): bool
     {
-        PrepareFile::deleteImages(Menu::FOLDER_IMG, $menu->image, Menu::getSizes());
+        DeleteImages::dispatch($menu);
+
         if ($request->get('image')) {
             $menu->image = '';
             $menu->save();
@@ -158,26 +159,34 @@ class MenuController extends AdminController
      * @param Request $request
      * @return JsonResponse
      */
-    public function saveSettings(Request $request): JsonResponse
+    public function saveSettings(Request $request): bool
     {
-        $sizes = [];
+        $defaultAction = MenuSettings::RESIZE;
+        $action = $request->get('resize', $defaultAction);
+        $blur = $request->get('blur') >= 0 && $request->get('blur') <= 100 ? $request->get('blur') : null;
+        $brightness = $request->get('brightness') >= -100 && $request->get('brightness') <= 100 ? $request->get('brightness') : null;
+
+        $data = [
+            'action'     => in_array($action, MenuSettings::resizeMethods()) ? $action : $defaultAction,
+            'greyscale'  => $request->get('greyscale'),
+            'blur'       => $blur,
+            'brightness' => $brightness,
+            'background' => $request->get('background'),
+        ];
         foreach ($request->get('sizes') as $size) {
-            $sizes[$size['name']] = [
+            $data['sizes'][$size['name']] = [
                 'name'   => $size['name'],
-                'width'  => $size['width'],
-                'height' => $size['height']
+                'width'  => $size['width'] > 0 ? $size['width'] : null,
+                'height' => $size['height'] > 0 ? $size['height'] : null
             ];
         }
 
-        if ($request->get('id')) {
-            $settings = MenuSettings::find($request->get('id'));
-            $settings->sizes = $sizes;
-            $settings->resize = $request->get('resize');
-            $settings->save();
-        } else {
-            MenuSettings::create(['sizes' => $sizes, 'resize' => $request->get('resize')]);
-        }
+        MenuSettings::updateOrCreate([
+            'name' => 'sizes',
+        ], [
+            'data' => $data
+        ]);
 
-        return response()->json('ok');
+        return true;
     }
 }

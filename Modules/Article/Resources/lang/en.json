@@ -42,11 +42,11 @@
   "default": "Default",
   "all_lang": "All languages",
   "warning": "Warning",
-  "you_really_delete": "You really delete",
-  "data_save": "Data save",
-  "data_not_save": "Data not save",
-  "data_delete": "Data delete",
-  "data_not_deletes": "Data not deletes",
+  "you_really_delete": "Do you really want to delete",
+  "data_save": "Data has been saved",
+  "data_not_save": "Data not has been save",
+  "data_delete": "Data has been deleted",
+  "data_not_deletes": "Data not has been deleted",
   "lang": "Lang",
   "slug": "Slug",
   "meta_title": "Meta title",
@@ -62,5 +62,9 @@
   "height": "Height",
   "add_size": "Add size",
   "resize": "Resize",
-  "crop": "Crop"
+  "crop": "Crop",
+  "greyscale": "Greyscale",
+  "blur": "Blur",
+  "brightness": "Brightness",
+  "background": "Background"
 }
