@@ -1,12 +1,19 @@
 export const state = () => ({
-    settings: null,
-    log: null
+    settings: null
 })
 
 // getters
 export const getters = {
     settings: state => state.settings,
-    logo: state => state.logo
+    logo: state => {
+        const item = state.settings.find(item => item.key === 'logo')
+        let logo = '';
+        if (item) {
+            logo = item.value;
+        }
+
+        return logo;
+    }
 }
 
 // mutations

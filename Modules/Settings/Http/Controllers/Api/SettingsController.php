@@ -3,7 +3,11 @@
 namespace Modules\Settings\Http\Controllers\Api;
 
 use App\Services\SiteMapService;
+use Fynduck\FilesUpload\UploadFile;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
@@ -19,23 +23,35 @@ use Modules\Settings\Transformers\SocialsResource;
 
 class SettingsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('admin:view');
+    }
+
     /**
      * Contacts page
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
         return response()->json(SettingsService::formatShowSettings());
     }
 
     /**
      * @param SettingsPost|Request $request
-     * @return mixed
+     * @return JsonResponse
      */
     public function store(SettingsPost $request)
     {
         foreach ($request->get('items') as $lang => $item) {
             foreach ($item as $key => $value) {
+                if ($key == 'logo') {
+                    if ((bool)preg_match("/data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+).base64,.*/", $value)) {
+                        $value = UploadFile::file($value)
+                            ->setFolder(Settings::FOLDER_IMG)
+                            ->save();
+                    }
+                }
                 $item = Settings::updateOrCreate([
                     'key'  => $key,
                     'lang' => $lang
@@ -45,7 +61,7 @@ class SettingsController extends Controller
                 );
 
                 if (!$item)
-                    return false;
+                    return response()->json(trans('Settings::admin.data_not_save'));
             }
         }
 
@@ -56,9 +72,9 @@ class SettingsController extends Controller
 
     /**
      * Add custom style
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function css()
+    public function css(): JsonResponse
     {
         $css = '';
         if (File::exists(base_path('front/static/css/custom.css')))
@@ -71,15 +87,15 @@ class SettingsController extends Controller
      * @param Request $request
      * @return bool
      */
-    public function saveCss(Request $request)
+    public function saveCss(Request $request): bool
     {
         return file_put_contents(base_path('front/static/css/custom.css'), $request->get('css'));
     }
 
     /**
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function config()
+    public function config(): JsonResponse
     {
         $config = file_get_contents(base_path('.env'));
         $config = explode("\n", $config);
@@ -123,18 +139,18 @@ class SettingsController extends Controller
     }
 
     /** Social lists
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
      */
-    public function socials()
+    public function socials(): AnonymousResourceCollection
     {
         return SocialsResource::collection(Social::all());
     }
 
     /** Save socials
      * @param SocialValidate $request
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
      */
-    protected function saveSocials(SocialValidate $request)
+    protected function saveSocials(SocialValidate $request): AnonymousResourceCollection
     {
         Social::whereNotIn('name', collect($request->all())->pluck('name')->toArray())->delete();
 
@@ -146,18 +162,18 @@ class SettingsController extends Controller
     }
 
     /** Return values for pagination
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
      */
-    public function pagination()
+    public function pagination(): AnonymousResourceCollection
     {
         return PaginateResource::collection(Pagination::all());
     }
 
     /** Save value pagination
      * @param PaginateValidate $request
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return AnonymousResourceCollection
      */
-    protected function savePagination(PaginateValidate $request)
+    protected function savePagination(PaginateValidate $request): AnonymousResourceCollection
     {
         $on = collect($request->all())->pluck('on')->toArray();
         $for = collect($request->all())->pluck('for')->toArray();
@@ -175,16 +191,10 @@ class SettingsController extends Controller
         return view('settings::sitemap');
     }
 
-    protected function sitemapGenerate(SiteMapService $siteMap)
+    protected function sitemapGenerate(SiteMapService $siteMap): RedirectResponse
     {
         $siteMap->generateMap();
 
         return back()->with('success', 'Generate success');
-    }
-
-    public function settings(Request $request)
-    {
-        if ($request->get('key'))
-            return response()->json(Settings::where('key', $request->get('key'))->value('value'));
     }
 }
