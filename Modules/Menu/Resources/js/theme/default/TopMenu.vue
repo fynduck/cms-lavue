@@ -6,8 +6,7 @@
                 <span v-else>{{ appName }}</span>
             </router-link>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNav"
-                    aria-controls="topNav"
-                    aria-expanded="false" aria-label="Toggle navigation">
+                    aria-controls="topNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="topNav">

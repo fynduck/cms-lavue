@@ -3,7 +3,7 @@
         <header>
             <top-menu :app-name="title" :source="source_menu"/>
         </header>
-        <main class="container">
+        <main>
             <nuxt/>
         </main>
     </div>

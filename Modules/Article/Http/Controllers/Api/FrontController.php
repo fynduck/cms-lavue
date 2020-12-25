@@ -56,28 +56,7 @@ class FrontController extends Controller
 
         $articles = $query->simplePaginate($perPage ?? 9);
 
-        $additional = [
-            'trans' => [
-                'promo_will_last' => trans('global.promo_will_last'),
-                'active_to'       => trans('global.active_to'),
-                'read'            => trans('global.read'),
-                'show_more'       => trans('global.show_more'),
-                'further'         => trans('global.further'),
-                'before_end'      => trans('global.before_end'),
-                'indefinitely'    => trans('global.indefinitely'),
-                'finished'        => trans('global.finished'),
-                'show'            => trans('global.show'),
-                'actives'         => trans('global.actives'),
-                'past'            => trans('global.past'),
-                'detailed'        => trans('global.detailed'),
-                'days'            => trans('global.days'),
-                'hours'           => trans('global.hours'),
-                'minutes'         => trans('global.minutes'),
-                'seconds'         => trans('global.seconds')
-            ]
-        ];
-
-        return ArticleResource::collection($articles)->additional($additional);
+        return ArticleResource::collection($articles);
     }
 
     public function article($slug)

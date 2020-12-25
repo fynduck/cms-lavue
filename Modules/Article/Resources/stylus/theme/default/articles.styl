@@ -1,116 +1,16 @@
-.block_home_articles
-  display flex
-  justify-content center
-  align-items center
-  height 100%
-  font-size 30px
-  font-weight bold
-  border 5px solid $grayWhite
-  position relative
-
-  &:after
-    content ''
-    position absolute
-    right -5px
-    height 80%
-    border-right 5px solid $white
-
-  .title
-    border-left 1px solid $blackGray
-    padding-left 1rem
-
-  .all_articles
-    font-size 18px
-    font-weight bold
-    color $black
-    position absolute
-    bottom 1rem
-
-    &:hover
-      text-decoration none
-
-  .nav_slide
-    position absolute
-    bottom 1.3rem
-    font-size 18px
-    cursor pointer
-
-    &.fa-chevron-left
-      left 20%
-
-    &.fa-chevron-right
-      right 20%
-
-.title_article
-  font-size 1.37rem
-  font-weight bold
-  color $black
-  padding-left 1rem
-  border-left 1px solid $blackGray
-  margin-bottom 2rem
-
-  a
-    color $black
-
-    &:hover
-      text-decoration none
-
-.further_article
-  font-weight bold
-  font-size 18px
-  color $black
-
-  &:hover
-  &:focus
-    text-decoration none
-
-.home_articles
-  .article
-    margin-right 2rem
-    height 100%
-    display flex
-    flex-direction column
-    justify-content space-between
-
-    .title
-      @extend .title_article
-
-    .desc
-      font-size 1rem
-      color $blackGray
-
-    .further
-      @extend .further_article
-
 .article
   height 100%
   position relative
 
-  &.relate
-
-    .title
-      @extend .title_article
-
-    .further
-      @extend .further_article
-
   .title
-    color $black
-    font-size 28px
+    font-size 1.37rem
     font-weight bold
-    line-height 1.3
+    color $black
+    margin-bottom 1rem
+    text-align center
 
-    &:hover
-      text-decoration none
+    a
+      color $black
 
-  &:not(.relate)
-    .info
-      border 1px solid $grayWhite
-      border-top none
-      padding 1rem
-      height 140px
-      display flex
-      align-items center
-
-@import "article-inner.styl"
-//@import "promotion.styl"
+      &:hover
+        text-decoration none
