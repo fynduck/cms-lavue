@@ -41,19 +41,18 @@
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </form>
                 <ul class="navbar-nav">
-                    <client-only>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="languages" role="button" data-toggle="dropdown"
-                               aria-haspopup="true" aria-expanded="false">
-                                {{ currentLang }}
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right" v-if="listLanguages.length > 0">
+                    <li :class="['nav-item', open_lang ? 'dropdown' : '']">
+                        <a class="nav-link dropdown-toggle" href="#" id="languages" role="button" @click.prevent="open_lang = !open_lang">
+                            {{ currentLang }}
+                        </a>
+                        <no-ssr>
+                            <div :class="['dropdown-menu dropdown-menu-right', open_lang ? 'show' : '']" v-if="listLanguages.length > 0">
                                 <a class="dropdown-item" href="#" v-for="lang in listLanguages" @click.prevent="setLocale(lang)">
                                     {{ lang.title }}
                                 </a>
                             </div>
-                        </li>
-                    </client-only>
+                        </no-ssr>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -80,7 +79,8 @@ export default {
     data() {
         return {
             items: [],
-            show_child: false
+            show_child: false,
+            open_lang: false
         }
     },
     computed: {
@@ -125,6 +125,7 @@ export default {
         async setLocale(lang) {
             const locale = lang.slug;
 
+            this.open_lang = false;
             if (this.locale !== locale) {
                 await loadMessages(locale)
 
