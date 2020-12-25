@@ -45,13 +45,13 @@
                         <a class="nav-link dropdown-toggle" href="#" id="languages" role="button" @click.prevent="open_lang = !open_lang">
                             {{ currentLang }}
                         </a>
-                        <no-ssr>
+                        <client-only>
                             <div :class="['dropdown-menu dropdown-menu-right', open_lang ? 'show' : '']" v-if="listLanguages.length > 0">
                                 <a class="dropdown-item" href="#" v-for="lang in listLanguages" @click.prevent="setLocale(lang)">
                                     {{ lang.title }}
                                 </a>
                             </div>
-                        </no-ssr>
+                        </client-only>
                     </li>
                 </ul>
             </div>

@@ -1,10 +1,10 @@
-const { mix } = require('laravel-mix');
-require('laravel-mix-merge-manifest');
+const mix = require('laravel-mix');
 
-mix.setPublicPath('../../public').mergeManifest();
-
-mix.js(__dirname + '/Resources/assets/js/app.js', 'js/article.js')
-    .sass( __dirname + '/Resources/assets/sass/app.scss', 'css/article.css');
+mix.stylus(__dirname + '/Resources/stylus/theme/default/articles.styl', '../../front/static/css/theme/default', {
+    use: [
+        require('rupture')()
+    ]
+})
 
 if (mix.inProduction()) {
     mix.version();

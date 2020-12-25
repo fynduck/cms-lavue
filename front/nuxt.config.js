@@ -37,17 +37,16 @@ module.exports = {
     router: {
         middleware: ['locale', 'check-auth']
     },
-
     css: [
         {src: '~assets/sass/app.scss', lang: 'scss', mode: 'client'},
-        {src: '~assets/stylus/styles.styl', lang: 'stylus', mode: 'client'},
+        {src: '~assets/stylus/theme/' + process.env.THEME + '/styles.styl', lang: 'stylus', mode: 'client'},
         {src: '~static/fontawesome/css/all.min.css', mode: 'client'}
     ],
 
     plugins: [
         '~plugins/i18n',
         '~plugins/axios',
-        { src: '~plugins/bootstrap', mode: 'client' },
+        {src: '~plugins/bootstrap', mode: 'client'},
         {src: '~plugins/lazyImage', mode: 'client'}
     ],
 

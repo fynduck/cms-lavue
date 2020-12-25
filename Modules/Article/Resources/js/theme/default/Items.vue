@@ -19,7 +19,6 @@
     import ArticleItem from '../../components/ArticleItem';
     import Promotion from "../../components/Promotion";
     import SkeletonPromo from "../../components/SkeletonPromo";
-
     export default {
         name: "Items",
         components: {
@@ -27,6 +26,14 @@
             SkeletonArticle,
             ArticleItem,
             Promotion
+        },
+        head() {
+            return {
+                link: [
+                    {rel: 'preload', href: `/css/theme/default/articles.css`, as: 'style'},
+                    {rel: 'stylesheet', href: `/css/theme/default/articles.css`}
+                ]
+            }
         },
         props: {
             type: {
