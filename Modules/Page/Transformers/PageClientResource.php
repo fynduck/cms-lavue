@@ -54,7 +54,7 @@ class PageClientResource extends JsonResource
 
     public function with($request): array
     {
-        $pageLang = PageTrans::where('page_id', $this->id)
+        $pageLang = PageTrans::where('page_id', $this->page_id)
             ->where('lang_id', '!=', $this->lang_id)
             ->where('active', 1)
             ->pluck('slug', 'lang_id');
@@ -65,7 +65,8 @@ class PageClientResource extends JsonResource
                 'meta_description'   => $this->generateMeta('meta_description', ['description', 'description_footer']),
                 'meta_keywords'      => $this->generateMeta('meta_keywords')
             ],
-            'page_lang' => $pageLang
+            'page_lang' => $pageLang,
+            's' => config('app.locale_id')
         ];
     }
 }
