@@ -59,6 +59,8 @@ class ArticleResource extends JsonResource
         $pageSlug = null;
         if (array_key_exists($this->type, cache('urls_pages_' . config('app.locale_id')))) {
             $pageSlug = cache('urls_pages_' . config('app.locale_id'))[$this->type];
+        } else {
+            return '';
         }
 
         $params = [
