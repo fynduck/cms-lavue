@@ -45,13 +45,16 @@ export default {
 
             await this.$store.dispatch('page/setItem', data.data)
 
-            if(typeof data.meta !== "undefined") {
+            if (typeof data.meta !== "undefined") {
+                await this.$store.dispatch('page/setMeta', data.meta)
+            }
+            if (typeof data.meta !== "undefined") {
                 this.meta.title = data.meta.meta_title
                 this.meta.description = data.meta.meta_description
                 this.meta.keywords = data.meta.meta_keywords
             }
 
-            if(typeof data.page_lang !== "undefined") {
+            if (typeof data.page_lang !== "undefined") {
                 await this.$store.dispatch('lang/setPageLang', data.page_lang)
             }
         }

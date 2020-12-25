@@ -1,14 +1,16 @@
 export const state = () => ({
     page: null,
     module_name: null,
-    item: null
+    item: null,
+    meta: {}
 })
 
 // getters
 export const getters = {
     page: state => state.page,
     module: state => state.module_name,
-    item: state => state.item
+    item: state => state.item,
+    meta: state => state.meta
 }
 
 // mutations
@@ -22,6 +24,9 @@ export const mutations = {
     SET_ITEM(state, {item}) {
         state.item = item;
     },
+    SET_META(state, {meta}) {
+        state.meta = meta;
+    },
 }
 
 // actions
@@ -34,5 +39,8 @@ export const actions = {
     },
     setItem({commit}, item) {
         commit('SET_ITEM', {item})
+    },
+    setMeta({commit}, meta) {
+        commit('SET_META', {meta})
     }
 }

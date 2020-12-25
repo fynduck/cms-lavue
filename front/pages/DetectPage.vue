@@ -11,6 +11,15 @@ import {mapGetters} from "vuex";
 
 export default {
     name: "DetectPage",
+    head() {
+        return {
+            title: this.meta.title,
+            meta: [
+                {hid: 'description', name: 'description', content: this.meta.description},
+                {hid: 'keywords', name: 'keywords', content: this.meta.keywords}
+            ]
+        }
+    },
     computed: {
         ...mapGetters({
             module_name: 'page/module'
@@ -18,6 +27,15 @@ export default {
         componentInstance() {
             if (this.module_name)
                 return () => import(`../../Modules/${this.module_name}/Resources/js/theme/${process.env.appTheme}/Page`)
+        }
+    },
+    data() {
+        return {
+            meta: {
+                title: '',
+                description: '',
+                keywords: ''
+            }
         }
     },
     async fetch() {
@@ -38,7 +56,21 @@ export default {
 
         await this.$store.dispatch('page/setModule', module)
         await this.$store.dispatch('page/setPage', data.data)
-        await this.$store.dispatch('lang/setPageLang', data.page_lang)
+
+        if (typeof data.meta !== "undefined") {
+            this.meta.title = data.meta.meta_title
+            this.meta.description = data.meta.meta_description
+            this.meta.keywords = data.meta.meta_keywords
+            await this.$store.dispatch('page/setMeta', data.meta)
+        }
+
+        // if(typeof data.meta !== "undefined") {
+        //     await this.$store.dispatch('page/setMeta', data.meta)
+        // }
+
+        if(typeof data.page_lang !== "undefined") {
+            await this.$store.dispatch('lang/setPageLang', data.page_lang)
+        }
     }
 }
 </script>

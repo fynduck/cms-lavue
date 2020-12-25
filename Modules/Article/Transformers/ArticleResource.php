@@ -113,23 +113,22 @@ class ArticleResource extends JsonResource
     public function with($request): array
     {
         $pageLang = ArticleTrans::where('article_id', $this->id)
-            ->where('lang_id', '!=', config('app.locale_id'))
+            ->where('lang_id', '!=', $this->lang_id)
             ->active()
-            ->get(['slug', 'lang_id', 'article_id'])
-            ->each(function ($item) {
-                $pageSlug = null;
-                $type = $item->getArticle->type;
-                if (array_key_exists($type, cache('urls_pages_' . config('app.locale_id')))) {
-                    $pageSlug = cache('urls_pages_' . $item->lang_id)[$type];
-                }
+            ->get(['slug', 'lang_id', 'article_id']);
 
+        foreach ($pageLang as $key => $item) {
+            $type = $item->getArticle->type;
+            if (array_key_exists($type, cache('urls_pages_' . $item->lang_id))) {
                 $params = [
-                    $pageSlug,
+                    cache('urls_pages_' . $item->lang_id)[$type],
                     $item->slug
                 ];
-
-                return $item->slug = implode('/', $params);
-            })->pluck('slug', 'lang_id');
+                $item->slug = implode('/', $params);
+            } else {
+                $pageLang->forget($key);
+            }
+        }
 
         return [
             'meta'      => [
@@ -137,7 +136,7 @@ class ArticleResource extends JsonResource
                 'meta_description' => $this->generateMeta('meta_description', ['description', 'short_desc']),
                 'meta_keywords'    => $this->generateMeta('meta_keywords')
             ],
-            'page_lang' => $pageLang
+            'page_lang' => $pageLang->pluck('slug', 'lang_id')
         ];
     }
 }

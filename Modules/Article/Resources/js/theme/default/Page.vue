@@ -1,7 +1,7 @@
 <template>
     <section v-if="loadArticles && page">
         <div class="container">
-            <h1 class="text-center my-4 title_page">{{ page.title }}</h1>
+            <h1 class="text-center my-4 title_page">{{ page.title }} Sukas</h1>
             <v-runtime-template :template="description" v-if="page.description"/>
         </div>
         <items :type="page.method" v-if="loadArticles"/>
@@ -19,10 +19,10 @@ export default {
     name: "ArticlePage",
     head() {
         return {
-            title: this.page ? this.page.meta_title : '',
+            title: this.meta.title,
             meta: [
-                {hid: 'description', name: 'description', content: this.page ? this.page.meta_description : ''},
-                {hid: 'keywords', name: 'keywords', content: this.page ? this.page.meta_keywords : ''}
+                {hid: 'description', name: 'description', content: this.meta.description},
+                {hid: 'keywords', name: 'keywords', content: this.meta.keywords}
             ]
         }
     },
@@ -34,6 +34,7 @@ export default {
     computed: {
         ...mapGetters({
             page: 'page/page',
+            meta: 'page/meta'
         }),
         loadArticles() {
             return typeof this.$route.params.category === "undefined"

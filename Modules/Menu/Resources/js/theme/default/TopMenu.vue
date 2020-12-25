@@ -101,12 +101,14 @@ export default {
         },
         listLanguages() {
             let list = [];
-            for (let key of Object.keys(this.languages)) {
-                list.push({
-                    title: this.locales[key].name,
-                    slug: this.locales[key].slug,
-                    url: '/' + [this.locales[key].slug, this.languages[key]].join('/')
-                })
+            if(Object.keys(this.languages).length > 0) {
+                for (let key of Object.keys(this.languages)) {
+                    list.push({
+                        title: this.locales[key].name,
+                        slug: this.locales[key].slug,
+                        url: '/' + [this.locales[key].slug, this.languages[key]].join('/')
+                    })
+                }
             }
 
             return list;

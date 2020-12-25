@@ -4,6 +4,7 @@ namespace Modules\Page\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Str;
+use Modules\Page\Entities\PageTrans;
 
 class PageClientResource extends JsonResource
 {
@@ -22,10 +23,7 @@ class PageClientResource extends JsonResource
             'socials'            => $this->socials ?? 0,
             'title'              => $this->title,
             'description'        => "<div>$this->description</div>",
-            'description_footer' => "<div>$this->description_footer</div>",
-            'meta_title'         => $this->generateMeta('meta_title', ['title']),
-            'meta_description'   => $this->generateMeta('meta_description', ['description', 'description_footer']),
-            'meta_keywords'      => $this->generateMeta('meta_keywords')
+            'description_footer' => "<div>$this->description_footer</div>"
         ];
     }
 
@@ -52,5 +50,22 @@ class PageClientResource extends JsonResource
         $string = Str::limit($string, $limit, '');
 
         return preg_replace('!\s+!', ' ', trim($string));
+    }
+
+    public function with($request): array
+    {
+        $pageLang = PageTrans::where('page_id', $this->id)
+            ->where('lang_id', '!=', $this->lang_id)
+            ->where('active', 1)
+            ->pluck('slug', 'lang_id');
+
+        return [
+            'meta'      => [
+                'meta_title'         => $this->generateMeta('meta_title', ['title']),
+                'meta_description'   => $this->generateMeta('meta_description', ['description', 'description_footer']),
+                'meta_keywords'      => $this->generateMeta('meta_keywords')
+            ],
+            'page_lang' => $pageLang
+        ];
     }
 }
