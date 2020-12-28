@@ -27,7 +27,8 @@ import {
     faShareAlt,
     faQuestionCircle,
     faPaperPlane,
-    faClone
+    faClone,
+    faPuzzlePiece
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
@@ -71,7 +72,8 @@ library.add(
     faGlobe,
     faQuestionCircle,
     faPaperPlane,
-    faClone
+    faClone,
+    faPuzzlePiece
 )
 
 Vue.component('fa', FontAwesomeIcon)
