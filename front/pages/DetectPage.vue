@@ -39,18 +39,13 @@ export default {
         }
     },
     async fetch() {
-        let nameModules = []
-        for (let moduleName of Object.keys(modules)) {
-            if (modules[moduleName])
-                nameModules.push(moduleName)
-        }
 
         let module = null;
         const pageSlug = typeof this.$route.params.page !== "undefined" ? this.$route.params.page : 'home'
         const {data} = await axios.get(`/find-page/${pageSlug}`)
         module = data.data.module || 'Page'
 
-        if (data.data.method === 'not_found' || !nameModules.includes(module)) {
+        if (data.data.method === 'not_found' || !Object.keys(modules).includes(module) || !modules[module]) {
             return this.$nuxt.error({statusCode: 404, message: data.data.title, page: data.data})
         }
 
@@ -63,10 +58,6 @@ export default {
             this.meta.keywords = data.meta.meta_keywords
             await this.$store.dispatch('page/setMeta', data.meta)
         }
-
-        // if(typeof data.meta !== "undefined") {
-        //     await this.$store.dispatch('page/setMeta', data.meta)
-        // }
 
         if(typeof data.page_lang !== "undefined") {
             await this.$store.dispatch('lang/setPageLang', data.page_lang)

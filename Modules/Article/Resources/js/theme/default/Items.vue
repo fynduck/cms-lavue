@@ -13,93 +13,96 @@
 </template>
 
 <script>
-    import axios from 'axios'
+import axios from 'axios'
 
-    import SkeletonArticle from '../../components/SkeletonArticle'
-    import ArticleItem from '../../components/ArticleItem';
-    import Promotion from "../../components/Promotion";
-    import SkeletonPromo from "../../components/SkeletonPromo";
-    export default {
-        name: "Items",
-        components: {
-            SkeletonPromo,
-            SkeletonArticle,
-            ArticleItem,
-            Promotion
-        },
-        head() {
-            return {
-                link: [
-                    {rel: 'preload', href: `/css/theme/default/articles.css`, as: 'style'},
-                    {rel: 'stylesheet', href: `/css/theme/default/articles.css`}
-                ]
-            }
-        },
-        props: {
-            type: {
-                type: String,
-                required: true
-            }
-        },
-        async fetch() {
-            this.loading = true;
-            let data = {
-                params: {
-                    page: this.current_page,
-                    type: this.type,
-                    past: this.past
-                }
-            };
-           await axios.get(this.source, data).then((response) => {
-                for (let i = 0; i < response.data.data.length; i++)
-                    this.items.push(response.data.data[i]);
+import SkeletonArticle from '../../components/SkeletonArticle'
+import ArticleItem from '../../components/ArticleItem';
+import Promotion from "../../components/Promotion";
+import SkeletonPromo from "../../components/SkeletonPromo";
 
-                this.links = response.data.links;
-                this.pageTitle = response.data.pageTitle;
-                this.loading = false;
-            }).catch(function (error) {
-                console.log(error);
-            });
-        },
-        data() {
-            return {
-                loading: true,
-                items: [],
-                show_more: '',
-                past: null,
-                links: {
-                    first: '',
-                    last: null,
-                    next: null,
-                    prev: null,
-                },
-                current_page: 1
+export default {
+    name: "Items",
+    components: {
+        SkeletonPromo,
+        SkeletonArticle,
+        ArticleItem,
+        Promotion
+    },
+    head() {
+        return {
+            link: [
+                {rel: 'preload', href: `/css/theme/${process.env.appTheme}/articles.css`, as: 'style'},
+                {rel: 'stylesheet', href: `/css/theme/${process.env.appTheme}/articles.css`}
+            ]
+        }
+    },
+    props: {
+        type: {
+            type: String,
+            required: true
+        }
+    },
+    mounted() {
+    },
+    async fetch() {
+        this.loading = true;
+        let data = {
+            params: {
+                page: this.current_page,
+                type: this.type,
+                past: this.past
             }
-        },
-        computed: {
-            source() {
-                return '/get-articles'
-            }
-        },
-        methods: {
-            changeShow(show) {
-                let locate = location.pathname;
-                if (show === 'past') {
-                    this.past = true;
-                    locate += '?show=past';
-                } else {
-                    this.past = null;
-                }
+        };
+        await axios.get(this.source, data).then(response => {
+            for (let i = 0; i < response.data.data.length; i++)
+                this.items.push(response.data.data[i]);
 
-                window.history.pushState('', '', locate);
-                this.items = [];
-                this.getItems();
+            this.links = response.data.links;
+            this.pageTitle = response.data.pageTitle;
+            this.loading = false;
+        }).catch(error => {
+            this.loading = false;
+        });
+    },
+    data() {
+        return {
+            loading: true,
+            items: [],
+            show_more: '',
+            past: null,
+            links: {
+                first: '',
+                last: null,
+                next: null,
+                prev: null,
             },
-            changePage() {
-                this.current_page++;
-
-                this.getItems();
+            current_page: 1
+        }
+    },
+    computed: {
+        source() {
+            return '/get-articles'
+        }
+    },
+    methods: {
+        changeShow(show) {
+            let locate = location.pathname;
+            if (show === 'past') {
+                this.past = true;
+                locate += '?show=past';
+            } else {
+                this.past = null;
             }
+
+            window.history.pushState('', '', locate);
+            this.items = [];
+            this.getItems();
+        },
+        changePage() {
+            this.current_page++;
+
+            this.getItems();
         }
     }
+}
 </script>

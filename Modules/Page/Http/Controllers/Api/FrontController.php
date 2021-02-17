@@ -16,7 +16,7 @@ class FrontController extends Controller
         else
             $page = Page::getDefault();
 
-        if (!$page)
+        if (!$page || ($page->module && !checkModule($page->module)))
             $page = Page::getPageByMethod('not_found');
 
         return new PageClientResource($page);

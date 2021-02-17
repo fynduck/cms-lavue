@@ -106,7 +106,11 @@ export default {
         },
         changeStatus(item) {
             axios.put(this.source + '/' + item.name, {status: !item.active}).then(response => {
-                console.log(response.data)
+                this.$bvToast.toast(this.$t('Module.status_saved'), {
+                    title: this.$t('Module.status'),
+                    variant: 'info',
+                    solid: true
+                })
             }).catch(error => {
                 console.log(error)
             })

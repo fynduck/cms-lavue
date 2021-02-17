@@ -1,7 +1,7 @@
 <template>
     <section v-if="loadArticles && page">
         <div class="container">
-            <h1 class="text-center my-4 title_page">{{ page.title }} Sukas</h1>
+            <h1 class="text-center my-4 title_page">{{ page.title }}</h1>
             <v-runtime-template :template="description" v-if="page.description"/>
         </div>
         <items :type="page.method" v-if="loadArticles"/>
