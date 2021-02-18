@@ -4,7 +4,7 @@
     "description": "",
     "keywords": [],
     "active": 1,
-    "order": 79,
+    "priority": 79,
     "providers": [
         "Modules\\CustomForm\\Providers\\CustomFormServiceProvider"
     ],
