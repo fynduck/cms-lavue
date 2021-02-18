@@ -15,18 +15,14 @@
 <script>
 import axios from 'axios'
 
-import SkeletonArticle from '../../components/SkeletonArticle'
-import ArticleItem from '../../components/ArticleItem';
-import Promotion from "../../components/Promotion";
-import SkeletonPromo from "../../components/SkeletonPromo";
+import SkeletonArticle from './components/SkeletonArticle'
+import ArticleItem from './components/ArticleItem';
 
 export default {
     name: "Items",
     components: {
-        SkeletonPromo,
         SkeletonArticle,
-        ArticleItem,
-        Promotion
+        ArticleItem
     },
     head() {
         return {

@@ -11,8 +11,6 @@
 
 <script>
 import VRuntimeTemplate from "v-runtime-template";
-import Items from "../../../../../Article/Resources/js/theme/default/Items";
-import Articles from "../../../../../Article/Resources/js/theme/default/Articles";
 import {mapGetters} from "vuex";
 
 export default {
@@ -28,8 +26,8 @@ export default {
     },
     components: {
         VRuntimeTemplate,
-        Items,
-        Articles
+        Items: () => import(`../../../../../Article/Resources/js/theme/${process.env.appTheme}/Items`),
+        Articles: () => import(`../../../../../Article/Resources/js/theme/${process.env.appTheme}/Articles`)
     },
     computed: {
         ...mapGetters({

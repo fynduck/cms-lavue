@@ -4,7 +4,7 @@
     "description": "",
     "keywords": [],
     "active": 1,
-    "order": 10,
+    "priority": 10,
     "providers": [
         "Modules\\Menu\\Providers\\MenuServiceProvider"
     ],

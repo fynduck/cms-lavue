@@ -4,7 +4,7 @@
     "description": "",
     "keywords": [],
     "active": 1,
-    "order": 30,
+    "priority": 30,
     "providers": [
         "Modules\\Translate\\Providers\\TranslateServiceProvider"
     ],

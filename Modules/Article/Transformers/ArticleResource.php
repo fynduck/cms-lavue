@@ -79,10 +79,11 @@ class ArticleResource extends JsonResource
     private function generateMiniDescription(): string
     {
         $description = null;
-        if ($this->short_desc)
+        if ($this->short_desc) {
             $description = $this->short_desc;
-        else
+        } else {
             $description = $this->description;
+        }
 
         return html_entity_decode(Str::limit(strip_tags($description), 160));
     }
