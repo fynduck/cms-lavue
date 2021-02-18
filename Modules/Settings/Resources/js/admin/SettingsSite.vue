@@ -52,10 +52,6 @@
                     <label>{{ $t('Settings.logo') }}</label>
                     <upload v-model="items[0].logo"></upload>
                 </div>
-                <div class="col-md-6 mb-3">
-                    <label for="svg_logo">{{ $t('Settings.logo_svg') }}</label>
-                    <textarea v-model="items[0].svg_logo" id="svg_logo" cols="30" rows="4" class="form-control"></textarea>
-                </div>
             </div>
             <div class="form-group">
                 <label for="analytics_top">{{ $t('Settings.arbitrary_code') }}</label>
@@ -78,78 +74,85 @@
 </template>
 
 <script>
-    import axios from 'axios'
-    import {mapGetters} from 'vuex'
-    import Upload from "../../../../../admin/components/Upload";
+import axios from 'axios'
+import {mapGetters} from 'vuex'
+import Upload from "../../../../../admin/components/Upload";
 
-    export default {
-        middleware: 'auth',
-        name: "SettingsSite",
-        components: {
-          Upload
-        },
-        data() {
-            return {
-                items: [],
-                loading: true,
-                submit: false,
-                errors: {},
-            }
-        },
-        computed: {
-            ...mapGetters({
-                locale: 'lang/locale',
-                locales: 'lang/locales',
-                authenticated: 'auth/check',
-                permissions: 'auth/checkPermission'
-            }),
-            source() {
-                const arrayRoute = this.$route.name.split('.');
-                let action = `/admin/${arrayRoute[0]}`;
+export default {
+    middleware: 'auth',
+    name: "SettingsSite",
+    components: {
+        Upload
+    },
+    data() {
+        return {
+            items: [],
+            loading: true,
+            submit: false,
+            errors: {},
+        }
+    },
+    computed: {
+        ...mapGetters({
+            locale: 'lang/locale',
+            locales: 'lang/locales',
+            authenticated: 'auth/check',
+            permissions: 'auth/checkPermission'
+        }),
+        source() {
+            const arrayRoute = this.$route.name.split('.');
+            let action = `/admin/${arrayRoute[0]}`;
 
-                action = action.split('-')
-                action.pop()
+            action = action.split('-')
+            action.pop()
 
-                return action.join('-');
-            },
-            canCreate() {
-                if (!this.authenticated)
-                    return false;
+            return action.join('-');
+        },
+        canCreate() {
+            if (!this.authenticated)
+                return false;
 
-                return this.permissions('settings', 'create')
-            }
+            return this.permissions('settings', 'create')
+        }
+    },
+    mounted() {
+        this.getItems()
+    },
+    methods: {
+        getItems() {
+            axios.get(this.source).then(response => {
+                this.items = response.data;
+                this.loading = false;
+            }).catch(error => {
+                console.log(error)
+            })
         },
-        mounted() {
-            this.getItems()
-        },
-        methods: {
-            getItems() {
-                axios.get(this.source).then(response => {
-                    this.items = response.data;
-                    this.loading = false;
-                }).catch(error => {
-                    console.log(error)
+        onSubmit() {
+            this.submit = true;
+            axios.post(this.source, {items: this.items}).then(response => {
+                let message = this.$t('Settings.data_save');
+                if (typeof response.data === 'string') {
+                    message = response.data;
+                }
+
+                this.$bvToast.toast(message, {
+                    title: this.$t('Settings.status'),
+                    variant: 'info',
+                    solid: true
                 })
-            },
-            onSubmit() {
-                this.submit = true;
-                axios.post(this.source, {items: this.items}).then(response => {
-                    this.$bvToast.toast(this.$t('Settings.data_save'), {
-                        title: this.$t('Settings.status'),
-                        variant: 'info',
-                        solid: true
-                    })
+                if (typeof response.data !== 'string') {
                     this.items = response.data;
-                    this.$nextTick(() => {
-                        this.submit = false;
-                    })
-                }).catch(error => {
-                    if (error.response.status === 422) {
-                        this.errors = error.response.data.errors
-                        this.submit = false;
-                    }
+                }
+                this.$nextTick(() => {
+                    this.submit = false;
                 })
-            }
+            }).catch(error => {
+                if (error.response.status === 422) {
+                    this.errors = error.response.data.errors
+                    this.submit = false;
+                }
+            })
         }
     }
+}
 </script>

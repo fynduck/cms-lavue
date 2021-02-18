@@ -148,6 +148,7 @@ export default {
             align-items center
             border-width 4px
             border-style dotted
+            white-space pre-wrap
 
 .list_uploaded
     width 120px

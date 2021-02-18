@@ -64,8 +64,8 @@
                 else
                     this.hideAside = !this.hideAside;
 
-                this.$store.dispatch('global/saveAffix', this.hideAside)
-                this.$store.dispatch('global/saveContainerWidth', this.hideAside)
+                this.$store.dispatch('saveAffix', this.hideAside)
+                this.$store.dispatch('saveContainerWidth', this.hideAside)
             },
             setLocale(locale) {
                 if (this.$i18n.locale !== locale) {

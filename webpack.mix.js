@@ -11,21 +11,3 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.sass('resources/sass/app.scss', 'public/css')
-    .sass('resources/sass/admin/app.scss', 'public/admin/css')
-    .stylus('resources/stylus/admin/admin.styl', 'public/admin/css', {
-        use: [
-            require('rupture')()
-        ]
-    })
-    .stylus('resources/stylus/styles.styl', 'public/css', {
-        use: [
-            require('rupture')()
-        ]
-    })
-    .js('resources/js/admin/app.js', 'public/admin/js')
-    .js('resources/js/app.js', 'public/js');
-
-if (mix.inProduction()) {
-    mix.version();
-}

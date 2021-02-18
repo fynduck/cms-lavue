@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\AdminSearch;
+use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\FrontController;
 use Illuminate\Support\Facades\Route;
 use UniSharp\LaravelFilemanager\Lfm;
 
@@ -19,17 +22,18 @@ use UniSharp\LaravelFilemanager\Lfm;
  * | Route for settings
  * |---------------------
  **/
-Route::prefix('admin')->group(function () {
-    Route::get('get-app-data', 'Api\DashboardController@getAppData')->name('app-data');
+Route::get('get-app-data', [FrontController::class, 'getAppData'])->name('app-data');
 
-    Route::middleware('auth:api')->group(function () {
+Route::prefix('admin')->group(function () {
+    Route::get('get-app-data', [DashboardController::class, 'getAppData'])->name('app-admin-data');
+
+    Route::middleware(['auth:api', 'admin'])->group(function () {
         Route::namespace('Api')->group(function () {
-            Route::get('live-select', 'AdminSearch@liveSelect')->name('admin-live-select-list');
-            Route::options('trans-slug', 'DashboardController@transSlug')->name('trans-slug-list');
+            Route::get('live-select', [AdminSearch::class, 'liveSelect'])->name('admin-live-select-list');
+            Route::options('trans-slug', [DashboardController::class, 'transSlug'])->name('trans-slug-list');
         });
 
-        Route::middleware(['admin'])
-            ->prefix('filemanager')
+        Route::prefix('filemanager')
             ->group(function () {
                 Lfm::routes();
             });

@@ -13,6 +13,7 @@ class ArticleResource extends JsonResource
     {
         if ($resource instanceof ArticleTrans) {
 
+            $resource->id = $resource->article_id;
             $resource->date = $resource->getArticle->date;
             $resource->date_to = $resource->getArticle->date_to;
             $resource->image = $resource->getArticle->image;
@@ -28,7 +29,7 @@ class ArticleResource extends JsonResource
      * @return array
      * @throws \Exception
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         return [
             'id'                => $this->id,
@@ -41,10 +42,7 @@ class ArticleResource extends JsonResource
             'date'              => $this->date,
             'show_date'         => $this->date->format('d.m.Y'),
             'date_to'           => $this->date_to,
-            'promo_finish_date' => $this->date_to && $this->date_to->isFuture() ? $this->date_to->timestamp : null,
-            'meta_title'        => $this->generateMeta('meta_title', ['title']),
-            'meta_description'  => $this->generateMeta('meta_description', ['description', 'short_desc']),
-            'meta_keywords'     => $this->generateMeta('meta_keywords')
+            'promo_finish_date' => $this->date_to && $this->date_to->isFuture() ? $this->date_to->timestamp : null
         ];
     }
 
@@ -56,30 +54,38 @@ class ArticleResource extends JsonResource
         ];
     }
 
-    private function generateLink()
+    private function generateLink(): string
     {
+        $pageSlug = null;
+        if (array_key_exists($this->type, cache('urls_pages_' . config('app.locale_id')))) {
+            $pageSlug = cache('urls_pages_' . config('app.locale_id'))[$this->type];
+        } else {
+            return '';
+        }
+
         $params = [
-//            count(config('app.locales')) > 1 ? config('app.locale') : null,
-            array_key_exists($this->type, cache('urls_pages_' . config('app.locale_id'))) ? cache('urls_pages_' . config('app.locale_id'))[$this->type] : '',
+            count(config('app.locales')) > 1 ? config('app.locale') : null,
+            $pageSlug,
             $this->slug
         ];
-        return implode('/', $params);
+        return '/' . implode('/', $params);
     }
 
-    private function srcset()
+    private function srcset(): array
     {
         return (new ArticleService())->linkImages($this->image);
     }
 
-    private function generateMiniDescription()
+    private function generateMiniDescription(): string
     {
         $description = null;
-        if ($this->short_desc)
+        if ($this->short_desc) {
             $description = $this->short_desc;
-        else
+        } else {
             $description = $this->description;
+        }
 
-        return '<div>' . html_entity_decode(Str::limit(strip_tags($description), 160)) . '</div>';
+        return html_entity_decode(Str::limit(strip_tags($description), 160));
     }
 
     private function generateMeta(string $key, array $keys = [], int $length = 140)
@@ -105,5 +111,35 @@ class ArticleResource extends JsonResource
         $string = Str::limit($string, $limit, '');
 
         return preg_replace('!\s+!', ' ', trim($string));
+    }
+
+    public function with($request): array
+    {
+        $pageLang = ArticleTrans::where('article_id', $this->id)
+            ->where('lang_id', '!=', $this->lang_id)
+            ->active()
+            ->get(['slug', 'lang_id', 'article_id']);
+
+        foreach ($pageLang as $key => $item) {
+            $type = $item->getArticle->type;
+            if (array_key_exists($type, cache('urls_pages_' . $item->lang_id))) {
+                $params = [
+                    cache('urls_pages_' . $item->lang_id)[$type],
+                    $item->slug
+                ];
+                $item->slug = implode('/', $params);
+            } else {
+                $pageLang->forget($key);
+            }
+        }
+
+        return [
+            'meta'      => [
+                'meta_title'       => $this->generateMeta('meta_title', ['title']),
+                'meta_description' => $this->generateMeta('meta_description', ['description', 'short_desc']),
+                'meta_keywords'    => $this->generateMeta('meta_keywords')
+            ],
+            'page_lang' => $pageLang->pluck('slug', 'lang_id')
+        ];
     }
 }

@@ -4,7 +4,6 @@ namespace Modules\Page\Http\Controllers\Api;
 
 use Illuminate\Routing\Controller;
 use Modules\Page\Entities\Page;
-use Modules\Page\Entities\PageTrans;
 use Modules\Page\Transformers\PageClientResource;
 
 class FrontController extends Controller
@@ -17,14 +16,9 @@ class FrontController extends Controller
         else
             $page = Page::getDefault();
 
-        if (!$page)
+        if (!$page || ($page->module && !checkModule($page->module)))
             $page = Page::getPageByMethod('not_found');
 
-        $pageLang = PageTrans::where('page_id', $page->page_id)
-            ->where('lang_id', '!=', config('app.locale_id'))
-            ->where('active', 1)
-            ->pluck('slug', 'lang_id');
-
-        return (new PageClientResource($page))->additional(['page_lang' => $pageLang]);
+        return new PageClientResource($page);
     }
 }

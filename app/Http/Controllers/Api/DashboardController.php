@@ -14,14 +14,6 @@ use Illuminate\Support\Str;
 
 class DashboardController extends AdminController
 {
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function dashboard()
-    {
-        return view('layouts.admin');
-    }
-
     public function getAppData()
     {
         return [

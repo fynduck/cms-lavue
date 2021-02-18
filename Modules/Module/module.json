@@ -1,0 +1,14 @@
+{
+    "name": "Module",
+    "alias": "module",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "priority": 49,
+    "providers": [
+        "Modules\\Module\\Providers\\ModuleServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

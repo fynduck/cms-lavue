@@ -2,11 +2,11 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <router-link :to="`/${locale}`" class="navbar-brand">
-                {{ appName }}
+                <img :src="logo" :alt="appName" v-if="logo">
+                <span v-else>{{ appName }}</span>
             </router-link>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNav"
-                    aria-controls="topNav"
-                    aria-expanded="false" aria-label="Toggle navigation">
+                    aria-controls="topNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="topNav">
@@ -41,19 +41,18 @@
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </form>
                 <ul class="navbar-nav">
-                    <client-only>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="languages" role="button" data-toggle="dropdown"
-                               aria-haspopup="true" aria-expanded="false">
-                                {{ currentLang }}
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right" v-if="listLanguages.length > 0">
-                                <a class="dropdown-item" :href="lang.url" v-for="lang in listLanguages">
+                    <li :class="['nav-item', open_lang ? 'dropdown' : '']">
+                        <a class="nav-link dropdown-toggle" href="#" id="languages" role="button" @click.prevent="open_lang = !open_lang">
+                            {{ currentLang }}
+                        </a>
+                        <client-only>
+                            <div :class="['dropdown-menu dropdown-menu-right', open_lang ? 'show' : '']" v-if="listLanguages.length > 0">
+                                <a class="dropdown-item" href="#" v-for="lang in listLanguages" @click.prevent="setLocale(lang)">
                                     {{ lang.title }}
                                 </a>
                             </div>
-                        </li>
-                    </client-only>
+                        </client-only>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -80,7 +79,8 @@ export default {
     data() {
         return {
             items: [],
-            show_child: false
+            show_child: false,
+            open_lang: false
         }
     },
     computed: {
@@ -88,6 +88,7 @@ export default {
             locale: 'lang/locale',
             locales: 'lang/locales',
             languages: 'lang/languages',
+            logo: 'settings/logo',
         }),
         currentLang() {
             const arrayLocales = Object.keys(this.locales)
@@ -100,12 +101,14 @@ export default {
         },
         listLanguages() {
             let list = [];
-            for (let key of Object.keys(this.languages)) {
-                list.push({
-                    title: this.locales[key].name,
-                    slug: this.locales[key].slug,
-                    url: '/' + [this.locales[key].slug, this.languages[key]].join('/')
-                })
+            if(Object.keys(this.languages).length > 0) {
+                for (let key of Object.keys(this.languages)) {
+                    list.push({
+                        title: this.locales[key].name,
+                        slug: this.locales[key].slug,
+                        url: '/' + [this.locales[key].slug, this.languages[key]].join('/')
+                    })
+                }
             }
 
             return list;
@@ -124,18 +127,13 @@ export default {
         async setLocale(lang) {
             const locale = lang.slug;
 
+            this.open_lang = false;
             if (this.locale !== locale) {
                 await loadMessages(locale)
 
                 await this.$store.dispatch('lang/setLocale', {locale})
-                const route = Object.assign({}, this.$route);
-                route.params.lang = locale;
 
-                this.$router.push(route)
-
-                this.$nextTick(function () {
-                    this.$fetch()
-                })
+                location.href = lang.url
             }
         },
         parseCustomAttributes(attributes) {

@@ -76,14 +76,6 @@ class AdminSearch extends AdminController
                         if (checkModule('Page'))
                             $current = (new PageService())->searchPage($limit, $typeName, $value, $q, $data['selected']);
                         break;
-                    case 'categories':
-                        if (checkModule('Category'))
-                            $current = (new CategoryService())->searchCategories($limit, $typeName, $value, $q, $data['selected']);
-                        break;
-                    case 'products':
-                        if (checkModule('Product'))
-                            $current = (new ProductService())->searchInProducts($limit, $typeName, $value, $q, $data['selected']);
-                        break;
                     case 'articles':
                     case 'news':
                     case 'promotions':

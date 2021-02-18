@@ -24,6 +24,8 @@ class Settings extends Model
 {
     public $timestamps = false;
 
+    const FOLDER_IMG = 'settings';
+
     protected $fillable = [
         'key', 'value', 'lang'
     ];

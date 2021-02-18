@@ -49,11 +49,15 @@ class SettingsService
         }
     }
 
-    public static function formatShowSettings()
+    public static function formatShowSettings(): array
     {
         $settings = [];
         Settings::all()->each(function ($item) use (&$settings) {
-            $settings[$item['lang']][$item['key']] = $item['value'];
+            $value = $item['value'];
+            if ($item['key'] == 'logo' && $item['value']) {
+                $value = asset('storage/' . Settings::FOLDER_IMG . '/' . $item['value']);
+            }
+            $settings[$item['lang']][$item['key']] = $value;
         });
 
         $check = $settings;
@@ -69,8 +73,9 @@ class SettingsService
             }
         }
 
-        if (!array_key_exists(0, $settings))
+        if (!array_key_exists(0, $settings)) {
             $settings[0] = (object)[];
+        }
 
         return $settings;
     }

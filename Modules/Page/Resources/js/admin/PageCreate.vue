@@ -39,7 +39,7 @@
                         </div>
                         <div class="form-group">
                             <label :for="`description_${locale_id}`">{{ $t('Page.description')}}</label>
-                            <tinymce :id="`description_${locale_id}`" path_absolute="/api/admin/filemanager" :lang="locale"
+                            <tinymce :id="`description_${locale_id}`" :path_absolute="`${baseAPI}/admin/filemanager`" :lang="locale"
                                      :token="token" v-model="item.items[locale_id].description"></tinymce>
                         </div>
                         <div class="form-group">
@@ -121,6 +121,7 @@
                 locale: 'lang/locale',
                 locales: 'lang/locales',
                 token: 'auth/token',
+                baseAPI: 'base'
             }),
             routeEdit() {
                 return typeof this.$route.params.id !== "undefined";

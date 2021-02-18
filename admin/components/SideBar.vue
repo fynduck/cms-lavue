@@ -34,7 +34,7 @@
         },
         computed: {
             ...mapGetters({
-                affix: 'global/affix',
+                affix: 'affix',
                 user: 'auth/user',
                 locale: 'lang/locale',
                 checkLocales: 'lang/checkLocales'

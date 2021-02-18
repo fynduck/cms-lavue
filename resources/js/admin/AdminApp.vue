@@ -30,7 +30,7 @@
         },
         computed: mapGetters({
             appName: 'global/appName',
-            contentMin: 'global/container',
+            contentMin: 'general/container',
             user: 'users/user'
         }),
         methods: {
