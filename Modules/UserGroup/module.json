@@ -4,7 +4,7 @@
     "description": "",
     "keywords": [],
     "active": 1,
-    "order": 2,
+    "priority": 2,
     "providers": [
         "Modules\\UserGroup\\Providers\\UserGroupServiceProvider"
     ],

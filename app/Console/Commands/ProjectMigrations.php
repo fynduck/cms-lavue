@@ -42,7 +42,7 @@ class ProjectMigrations extends Command
         $modules = [];
 
         foreach (Module::getCached() as $module) {
-            $modules[$module['order']] = $module['name'];
+            $modules[$module['priority']] = $module['name'];
         }
 
         ksort($modules);
