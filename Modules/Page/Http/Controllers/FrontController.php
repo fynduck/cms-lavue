@@ -31,47 +31,61 @@ class FrontController extends Controller
             /**
              * 404
              */
-            if (!$this->data['page'])
+            if (!$this->data['page']) {
                 return (new SetGlobal())->page404($this->data, [$page, $category, $url]);
+            }
 
             if ($this->data['page']->parent_id) {
                 $parent_page = Page::parent($this->data['page']->parent_id);
-                if ($parent_page)
+                if ($parent_page) {
                     SetGlobal::setBreadcrumbs($this->data, route('pages', $parent_page->url), $parent_page->title);
+                }
             }
 
-            if (is_null($category))
+            if (is_null($category)) {
                 SetGlobal::setBreadcrumbs($this->data, '', $this->data['page']->title);
-            else
+            } else {
                 SetGlobal::setBreadcrumbs($this->data, route('pages', $this->data['page']->url), $this->data['page']->title);
-        } else if(!$this->data['page']) {
-            $this->data['page'] = Page::getDefault('home');
+            }
+        } else {
+            if (!$this->data['page']) {
+                $this->data['page'] = Page::getDefault('home');
+            }
         }
 
         /**
          * 404
          */
-        if (!$this->data['page'])
+        if (!$this->data['page']) {
             return (new SetGlobal())->page404($this->data, [$page, $category, $url]);
+        }
 
         // set meta data for page
         SetGlobal::setMeta($this->data, $this->data['page']);
         $urlsPage = PageTrans::getSlugs($this->data['page']->page_id);
         SetGlobal::setLanguagesMenu($this->data, $urlsPage);
 
-        if ($this->data['page']->method && $this->data['page']->module == null && method_exists($this, $this->data['page']->method)) {
+        if ($this->data['page']->method && $this->data['page']->module == null && method_exists(
+                $this,
+                $this->data['page']->method
+            )) {
             //if static page
-            if (!is_null($url))
+            if (!is_null($url)) {
                 return $this->{$this->data['page']->method}($this->request, $category, $url);
-            elseif (!is_null($category))
+            } elseif (!is_null($category)) {
                 return $this->{$this->data['page']->method}($this->request, $category);
-            else
+            } else {
                 return $this->{$this->data['page']->method}($this->request);
-
+            }
         } elseif ($this->data['page']->module) {
             $this->data['request'] = $this->request;
 
-            return app('Modules\\' . $this->data['page']->module . '\Http\Controllers\FrontController')->index($this->data, $this->data['page']->method, $category, $url);
+            return app('Modules\\' . $this->data['page']->module . '\Http\Controllers\FrontController')->index(
+                $this->data,
+                $this->data['page']->method,
+                $category,
+                $url
+            );
         } else {
             if ($this->data['page']->sql_products) {
                 $this->data['request'] = $this->request;

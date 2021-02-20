@@ -31,8 +31,9 @@ class CustomFormResource extends JsonResource
     private function listShow()
     {
         $showOn = [];
-        foreach ($this->getShow as $item)
+        foreach ($this->getShow as $item) {
             $showOn[] = $item->type . '_' . $item->item_id;
+        }
 
         return $showOn;
     }

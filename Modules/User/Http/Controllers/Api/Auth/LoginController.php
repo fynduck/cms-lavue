@@ -83,11 +83,13 @@ class LoginController extends Controller
      */
     protected function respondWithToken(string $token, $expiration)
     {
-        return response()->json([
-            'access_token' => $token,
-            'token_type'   => 'bearer',
-            'expires_in'   => $expiration
-        ]);
+        return response()->json(
+            [
+                'access_token' => $token,
+                'token_type'   => 'bearer',
+                'expires_in'   => $expiration
+            ]
+        );
     }
 
     /**
@@ -105,9 +107,11 @@ class LoginController extends Controller
             throw VerifyEmailException::forUser($user);
         }
 
-        throw ValidationException::withMessages([
-            $this->username() => [trans('auth.failed')],
-        ]);
+        throw ValidationException::withMessages(
+            [
+                $this->username() => [trans('auth.failed')],
+            ]
+        );
     }
 
     /**

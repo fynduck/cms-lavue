@@ -13,15 +13,18 @@ class CreateFormSentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('form_sents', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('form_id')->nullable();
-            $table->longText('form_data');
-            $table->timestamps();
+        Schema::create(
+            'form_sents',
+            function (Blueprint $table) {
+                $table->increments('id');
+                $table->unsignedInteger('form_id')->nullable();
+                $table->longText('form_data');
+                $table->timestamps();
 
-            $table->foreign('form_id')->references('id')->on('forms')
-                ->onUpdate('set null')->onDelete('set null');
-        });
+                $table->foreign('form_id')->references('id')->on('forms')
+                    ->onUpdate('set null')->onDelete('set null');
+            }
+        );
     }
 
     /**

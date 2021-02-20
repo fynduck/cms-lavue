@@ -22,16 +22,19 @@ class PageService
      */
     public static function addUpdate(Request $request, int $id = 0): Page
     {
-        $page = Page::updateOrCreate([
-            'id' => $id
-        ], [
+        $page = Page::updateOrCreate(
+            [
+                'id' => $id
+            ],
+            [
                 'sql_products' => $request->get('sql_products') ? $request->get('sql_products') : '',
                 'socials'      => $request->get('socials'),
             ]
         );
 
-        if (!$page)
+        if (!$page) {
             return back()->withErrors(trans('admin.data_not_save'));
+        }
 
         return $page;
     }
@@ -44,10 +47,12 @@ class PageService
     public static function addUpdateTrans(int $id, array $items)
     {
         foreach ($items as $lang => $item) {
-            $pageLang = PageTrans::updateOrCreate([
-                'page_id' => $id,
-                'lang_id' => $lang
-            ], [
+            $pageLang = PageTrans::updateOrCreate(
+                [
+                    'page_id' => $id,
+                    'lang_id' => $lang
+                ],
+                [
                     'page_id'            => $id,
                     'title'              => $item['title'],
                     'description'        => $item['description'],
@@ -60,8 +65,9 @@ class PageService
                 ]
             );
 
-            if (!$pageLang)
+            if (!$pageLang) {
                 return back()->withErrors(trans('admin.data_not_save'));
+            }
         }
     }
 
@@ -73,8 +79,10 @@ class PageService
         if ($selected && array_key_exists($value, $selected)) {
             $current->whereIn('page_id', $selected[$value]);
             $limit += count($selected[$value]);
-        } else if ($q) {
-            $current->where('title', 'like', '%' . $q . '%');
+        } else {
+            if ($q) {
+                $current->where('title', 'like', '%' . $q . '%');
+            }
         }
 
         return $current;

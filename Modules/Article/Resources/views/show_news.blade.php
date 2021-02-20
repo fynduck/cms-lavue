@@ -46,7 +46,8 @@
             </div>
             <div class="col-lg-4">
                 @if(checkModule('Menu'))
-                    <custom-menu source="{{ route('get-menu', ['position' => \Modules\Menu\Entities\Menu::CUSTOM_MENU, 'page_id' => $page->page_id]) }}"></custom-menu>
+                    <custom-menu
+                            source="{{ route('get-menu', ['position' => \Modules\Menu\Entities\Menu::CUSTOM_MENU, 'page_id' => $page->page_id]) }}"></custom-menu>
                 @endif
             </div>
         </div>

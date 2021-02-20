@@ -13,20 +13,21 @@ trait InfoClient
 {
     public function getPlatform($agent)
     {
-        if (preg_match('/linux/i', $agent))
+        if (preg_match('/linux/i', $agent)) {
             $platform = 'Linux';
-        elseif (preg_match('/iPhone os x/i', $agent))
+        } elseif (preg_match('/iPhone os x/i', $agent)) {
             $platform = 'iPhone';
-        elseif (preg_match('/macintosh|mac os x/i', $agent))
+        } elseif (preg_match('/macintosh|mac os x/i', $agent)) {
             $platform = 'Mac';
-        elseif (preg_match('/windows phone/i', $agent))
+        } elseif (preg_match('/windows phone/i', $agent)) {
             $platform = 'Windows phone';
-        elseif (preg_match('/windows|win32/i', $agent))
+        } elseif (preg_match('/windows|win32/i', $agent)) {
             $platform = 'Windows';
-        elseif (preg_match('/Android/i', $agent))
+        } elseif (preg_match('/Android/i', $agent)) {
             $platform = 'Android';
-        else
+        } else {
             $platform = 'Unknown';
+        }
 
         return $platform;
     }
@@ -80,7 +81,7 @@ trait InfoClient
 
     public function getBrowserVersion($agent, $ub)
     {
-        $known = array('Version', $ub, 'other');
+        $known = ['Version', $ub, 'other'];
         $pattern = '#(?<browser>' . join('|', $known) . ')[/ ]+(?<version>[0-9.|a-zA-Z.]*)#';
         preg_match_all($pattern, $agent, $matches);
 

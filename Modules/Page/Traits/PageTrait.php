@@ -13,15 +13,18 @@ trait PageTrait
      */
     public function scopeFilter($query, Request $request)
     {
-        if ($request->get('q'))
+        if ($request->get('q')) {
             $query->where('title', 'LIKE', '%' . $request->get('q') . '%')
                 ->orWhere('description', 'LIKE', '%' . $request->get('q') . '%');
+        }
 
-        if ($request->get('active'))
+        if ($request->get('active')) {
             $query->where('active', $request->get('active'));
+        }
 
-        if ($request->get('lang_id'))
+        if ($request->get('lang_id')) {
             $query->where('lang_id', $request->get('lang_id'));
+        }
     }
 
     /**
@@ -55,8 +58,9 @@ trait PageTrait
         $query = Page::leftJoin('page_trans', 'pages.id', '=', 'page_trans.page_id')
             ->where('lang_id', $lang_id)
             ->where('pages.id', $id);
-        if ($active)
+        if ($active) {
             $query->where('active', $active);
+        }
 
         return $query->first();
     }
@@ -102,12 +106,14 @@ trait PageTrait
         $query = Page::leftJoin('page_trans', 'pages.id', '=', 'page_trans.page_id')
             ->where('lang_id', $lang_id);
 
-        if ($active)
+        if ($active) {
             $query->where('active', 1);
-        if (is_array($method))
+        }
+        if (is_array($method)) {
             $query->whereIn('method', $method);
-        else
+        } else {
             $query->where('method', $method);
+        }
 
         return $query->firstOrFail();
     }

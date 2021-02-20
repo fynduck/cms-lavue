@@ -24,14 +24,14 @@ export default {
         SkeletonArticle,
         ArticleItem
     },
-    head() {
-        return {
-            link: [
-                {rel: 'preload', href: `/css/theme/${process.env.appTheme}/articles.css`, as: 'style'},
-                {rel: 'stylesheet', href: `/css/theme/${process.env.appTheme}/articles.css`}
-            ]
-        }
-    },
+    // head() {
+    //     return {
+    //         link: [
+    //             {rel: 'preload', href: `/css/theme/${process.env.appTheme}/articles.css`, as: 'style'},
+    //             {rel: 'stylesheet', href: `/css/theme/${process.env.appTheme}/articles.css`}
+    //         ]
+    //     }
+    // },
     props: {
         type: {
             type: String,
@@ -81,19 +81,6 @@ export default {
         }
     },
     methods: {
-        changeShow(show) {
-            let locate = location.pathname;
-            if (show === 'past') {
-                this.past = true;
-                locate += '?show=past';
-            } else {
-                this.past = null;
-            }
-
-            window.history.pushState('', '', locate);
-            this.items = [];
-            this.getItems();
-        },
         changePage() {
             this.current_page++;
 
@@ -102,3 +89,4 @@ export default {
     }
 }
 </script>
+<!--<style lang="stylus" src="../../../stylus/theme/default/articles.styl"/>-->

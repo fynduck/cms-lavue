@@ -44,13 +44,15 @@ class Redirect extends Model
                 ->orWhere('to', 'LIKE', '%' . $request->get('q') . '%');
         }
 
-        if ($request->get('active'))
+        if ($request->get('active')) {
             $query->where('active', $request->get('active'));
+        }
 
         if ($request->get('sortBy')) {
             $sort = 'ASC';
-            if ($request->get('sortDesc'))
+            if ($request->get('sortDesc')) {
                 $sort = 'DESC';
+            }
             $query->orderBy($request->get('sortBy'), $sort);
         }
 

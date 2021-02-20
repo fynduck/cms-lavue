@@ -13,12 +13,15 @@ class CreateArticleSettingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('article_settings', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->json('data');
-            $table->timestamps();
-        });
+        Schema::create(
+            'article_settings',
+            function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('name');
+                $table->json('data');
+                $table->timestamps();
+            }
+        );
     }
 
     /**

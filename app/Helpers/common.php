@@ -17,8 +17,9 @@ use Modules\Page\Entities\PageTrans;
  */
 function viewsShow($count)
 {
-    if ($count > 999)
+    if ($count > 999) {
         $count = round($count * 1 / 1000, PHP_ROUND_HALF_UP) . 'k';
+    }
 
     return $count;
 }
@@ -53,8 +54,9 @@ function getNameWeek($week, $short = false)
         'sun' => 'Воскресенье'
     ];
 
-    if ($short)
+    if ($short) {
         return isset($array[$week]) ? Str::limit($array[$week], 2, '') : $week;
+    }
 
     return isset($array[$week]) ? $array[$week] : $week;
 }
@@ -91,8 +93,9 @@ function showWorkDays($days)
 
     $result = $array[$first];
 
-    if ($last)
+    if ($last) {
         $result .= '-' . $array[$last];
+    }
 
     return $result;
 }
@@ -101,8 +104,9 @@ function convertIntToTimeString($int)
 {
     $hours = (string)floor($int / 60);
     $minutes = (string)$int % 60;
-    if ($minutes == '0')
+    if ($minutes == '0') {
         $minutes = '00';
+    }
 
     return "$hours:$minutes";
 }
@@ -115,15 +119,20 @@ function convertIntMinSecToString(int $number)
 function generateRoute($item, $urlsPages = null)
 {
     if (!$urlsPages) {
-        $urlsPages = \Cache::remember('urls_pages_' . config('app.locale_id'), now()->addHours(5), function () {
-            return Page::getSlugAllStaticPages()->toArray();
-        });
+        $urlsPages = \Cache::remember(
+            'urls_pages_' . config('app.locale_id'),
+            now()->addHours(5),
+            function () {
+                return Page::getSlugAllStaticPages()->toArray();
+            }
+        );
     }
 
-    if (!$item->link && $item->trans)
+    if (!$item->link && $item->trans) {
         $link = $item->trans->link ?? $item->trans->link;
-    else
+    } else {
         $link = $item->link;
+    }
 
     /**
      * Get urls pages by group
@@ -133,7 +142,9 @@ function generateRoute($item, $urlsPages = null)
             case 'page':
                 $pageSlug = PageTrans::getByPageId($item->page_id)->value('slug');
                 $params = [
-                    count(config('app.locales')) > 1 ? ($item->lang_id ? config('app.locales.' . $item->lang_id . '.slug') : config('app.locale')) : null,
+                    count(config('app.locales')) > 1 ? ($item->lang_id ? config(
+                        'app.locales.' . $item->lang_id . '.slug'
+                    ) : config('app.locale')) : null,
                     $pageSlug
                 ];
                 $link = '/' . implode('/', $params);
@@ -161,25 +172,30 @@ function placeholder($width = 150, $height = null, $text = null, $bg = null, $co
 //    else
     $placeholder = 'https://via.placeholder.com/' . $width;
 
-    if ($height && $height != $width)
+    if ($height && $height != $width) {
         $placeholder .= 'x' . $height;
+    }
 
-    if ($color)
+    if ($color) {
         $placeholder .= '/' . $color;
+    }
 
-    if ($bg)
+    if ($bg) {
         $placeholder .= '/' . $bg;
+    }
 
-    if ($text)
+    if ($text) {
         $placeholder .= '?text=' . $text;
+    }
 
     return $placeholder;
 }
 
 function getUserAvatar($folder, $avatar, array $size = [30, 30])
 {
-    if (!$avatar)
+    if (!$avatar) {
         return placeholder($size[0], $size[1]);
+    }
 
     return asset('storage/' . $folder . '/' . $avatar);
 }
@@ -189,11 +205,13 @@ function lazyObj($src, $loading = 'img/loading.jpg', $error = 'img/loading.jpg')
     $data = [
         'src' => $src,
     ];
-    if ($loading)
+    if ($loading) {
         $data['loading'] = asset($loading);
+    }
 
-    if ($error)
+    if ($error) {
         $data['error'] = asset($error);
+    }
 
     return $data;
 }

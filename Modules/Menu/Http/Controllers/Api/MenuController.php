@@ -79,8 +79,9 @@ class MenuController extends AdminController
 
         $this->menuService->addUpdateTrans($menu, $request->get('items'));
 
-        if ($request->get('show_page'))
+        if ($request->get('show_page')) {
             $this->menuService->showOn($menu->id, $request->get('show_page'));
+        }
 
         \DB::commit();
 
@@ -101,8 +102,9 @@ class MenuController extends AdminController
             'targets'   => $this->targets
         ];
 
-        if (!$item)
+        if (!$item) {
             $item = new Menu();
+        }
 
         return (new MenuFormResource($item))->additional($additional);
     }
@@ -164,7 +166,9 @@ class MenuController extends AdminController
         $defaultAction = MenuSettings::RESIZE;
         $action = $request->get('resize', $defaultAction);
         $blur = $request->get('blur') >= 0 && $request->get('blur') <= 100 ? $request->get('blur') : null;
-        $brightness = $request->get('brightness') >= -100 && $request->get('brightness') <= 100 ? $request->get('brightness') : null;
+        $brightness = $request->get('brightness') >= -100 && $request->get('brightness') <= 100 ? $request->get(
+            'brightness'
+        ) : null;
 
         $data = [
             'action'     => in_array($action, MenuSettings::resizeMethods()) ? $action : $defaultAction,
@@ -181,11 +185,14 @@ class MenuController extends AdminController
             ];
         }
 
-        MenuSettings::updateOrCreate([
-            'name' => 'sizes',
-        ], [
-            'data' => $data
-        ]);
+        MenuSettings::updateOrCreate(
+            [
+                'name' => 'sizes',
+            ],
+            [
+                'data' => $data
+            ]
+        );
 
         return true;
     }

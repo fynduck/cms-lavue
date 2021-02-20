@@ -108,12 +108,14 @@ class ArticleTrans extends Model
     {
         $lang_id = is_null($lang_id) ? config('app.locale_id') : $lang_id;
         $query = ArticleTrans::where('lang_id', $lang_id);
-        if ($active)
+        if ($active) {
             $query->where('active', 1);
-        if (is_array($id))
+        }
+        if (is_array($id)) {
             $query->whereIn('article_id', $id);
-        else
+        } else {
             $query->where('article_id', $id);
+        }
         $query->select('title', 'article_id');
 
         return $query->pluck('title', 'article_id');
@@ -130,12 +132,14 @@ class ArticleTrans extends Model
     {
         $lang_id = is_null($lang_id) ? config('app.locale_id') : $lang_id;
         $query = ArticleTrans::where('lang_id', $lang_id);
-        if ($active)
+        if ($active) {
             $query->where('active', 1);
-        if (is_array($id))
+        }
+        if (is_array($id)) {
             $query->whereIn('article_id', $id);
-        else
+        } else {
             $query->where('article_id', $id);
+        }
 
         return $query->pluck('slug', 'article_id');
     }

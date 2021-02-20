@@ -37,8 +37,9 @@ class LanguageListResource extends JsonResource
     {
         $old_image = null;
 
-        if ($this->image)
+        if ($this->image) {
             $old_image = asset('storage/' . Language::FOLDER_IMG . '/' . $this->image);
+        }
 
         return $old_image;
     }

@@ -24,7 +24,7 @@
                 </b-col>
                 <b-col sm="6" md="3" lg="2" class="text-right" v-if="canCreate">
                     <b-button v-b-modal.menu-settings variant="info">{{ $t('Menu.settings') }}</b-button>
-                    <router-link class="btn btn-primary" :to="{name: `${routeName}.create`}"
+                    <router-link class="btn btn-success" :to="{name: `${routeName}.create`}"
                                  :title="$t('Menu.add_menu')">
                         <fa :icon="['fas', 'plus']"/>
                     </router-link>
@@ -45,6 +45,12 @@
                  :sort-desc.sync="sortDesc"
                  @sort-changed="changeSort"
         >
+            <template #table-busy>
+                <div class="text-center text-success my-2">
+                    <b-spinner class="align-middle"></b-spinner>
+                    <strong>Loading...</strong>
+                </div>
+            </template>
             <template v-slot:cell(image)="row">
                 <img :src="row.item.show_img" alt="" width="40">
             </template>
@@ -57,7 +63,7 @@
             </template>
             <template v-slot:cell(actions)="row">
                 <b-button-group>
-                    <router-link class="btn btn-primary" v-if="row.item.permissions.edit"
+                    <router-link class="btn btn-success" v-if="row.item.permissions.edit"
                                  :to="{name: `${routeName}.edit`, params: {id: row.item.id}}">
                         <fa :icon="['fas', 'pencil-alt']"/>
                     </router-link>

@@ -27,7 +27,7 @@ class PageListResource extends JsonResource
             'socials'      => $this->socials,
             'seo_complete' => SeoCalculator::collectionCalcSeo($this),
             'link'         => $this->generateLink(),
-            'permissions' => [
+            'permissions'  => [
                 'edit'    => checkModulePermission('page', 'edit'),
                 'destroy' => !$this->method ?? checkModulePermission('page', 'destroy')
             ]
@@ -37,8 +37,9 @@ class PageListResource extends JsonResource
     private function generateLink()
     {
         $link = url($this->slug);
-        if (count(config('app.locales')) > 1)
+        if (count(config('app.locales')) > 1) {
             $link = url(config('app.locales.' . $this->lang_id . '.slug'), $this->slug);
+        }
 
         return $link;
     }

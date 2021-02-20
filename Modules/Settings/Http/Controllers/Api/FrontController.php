@@ -27,15 +27,19 @@ class FrontController
         }
 
         $defaultSettings = Settings::whereIn('key', $defaultKeys)
-            ->where(function ($query) {
-                $query->where('lang', config('app.locale_id'))
-                    ->orWhere('lang', 0);
-            })->get(['key', 'value'])
-            ->each(function ($item) {
-                if ($item->key == 'logo' && $item->value) {
-                    $item->value = asset('storage/' . Settings::FOLDER_IMG . '/' . $item->value);
+            ->where(
+                function ($query) {
+                    $query->where('lang', config('app.locale_id'))
+                        ->orWhere('lang', 0);
                 }
-            });
+            )->get(['key', 'value'])
+            ->each(
+                function ($item) {
+                    if ($item->key == 'logo' && $item->value) {
+                        $item->value = asset('storage/' . Settings::FOLDER_IMG . '/' . $item->value);
+                    }
+                }
+            );
 
         return response()->json($defaultSettings);
     }

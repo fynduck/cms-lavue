@@ -24,18 +24,26 @@ use UniSharp\LaravelFilemanager\Lfm;
  **/
 Route::get('get-app-data', [FrontController::class, 'getAppData'])->name('app-data');
 
-Route::prefix('admin')->group(function () {
-    Route::get('get-app-data', [DashboardController::class, 'getAppData'])->name('app-admin-data');
+Route::prefix('admin')->group(
+    function () {
+        Route::get('get-app-data', [DashboardController::class, 'getAppData'])->name('app-admin-data');
 
-    Route::middleware(['auth:api', 'admin'])->group(function () {
-        Route::namespace('Api')->group(function () {
-            Route::get('live-select', [AdminSearch::class, 'liveSelect'])->name('admin-live-select-list');
-            Route::options('trans-slug', [DashboardController::class, 'transSlug'])->name('trans-slug-list');
-        });
+        Route::middleware(['auth:api', 'admin'])->group(
+            function () {
+                Route::namespace('Api')->group(
+                    function () {
+                        Route::get('live-select', [AdminSearch::class, 'liveSelect'])->name('admin-live-select-list');
+                        Route::options('trans-slug', [DashboardController::class, 'transSlug'])->name('trans-slug-list');
+                    }
+                );
 
-        Route::prefix('filemanager')
-            ->group(function () {
-                Lfm::routes();
-            });
-    });
-});
+                Route::prefix('filemanager')
+                    ->group(
+                        function () {
+                            Lfm::routes();
+                        }
+                    );
+            }
+        );
+    }
+);

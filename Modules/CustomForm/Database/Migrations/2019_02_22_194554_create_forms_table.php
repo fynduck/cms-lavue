@@ -13,17 +13,20 @@ class CreateFormsTable extends Migration
      */
     public function up()
     {
-        Schema::create('forms', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('form_name');
-            $table->string('action');
-            $table->enum('method', ['post', 'get']);
-            $table->tinyInteger('file')->nullable();
-            $table->string('form_class')->nullable();
-            $table->string('form_id')->nullable();
-            $table->string('send_emails')->nullable();
-            $table->timestamps();
-        });
+        Schema::create(
+            'forms',
+            function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('form_name');
+                $table->string('action');
+                $table->enum('method', ['post', 'get']);
+                $table->tinyInteger('file')->nullable();
+                $table->string('form_class')->nullable();
+                $table->string('form_id')->nullable();
+                $table->string('send_emails')->nullable();
+                $table->timestamps();
+            }
+        );
     }
 
     /**

@@ -30,8 +30,9 @@ class MenuResource extends JsonResource
 
     private function image()
     {
-        if ($this->image)
+        if ($this->image) {
             return (new MenuService())->linkImage($this->image);
+        }
 
         return null;
     }

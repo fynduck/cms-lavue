@@ -43,9 +43,11 @@ class SettingsDatabaseSeeder extends Seeder
             ]
         );
 
-         $this->call([
-             SeedSocialsTableSeeder::class,
-             PaginationTableSeeder::class
-         ]);
+        $this->call(
+            [
+                SeedSocialsTableSeeder::class,
+                PaginationTableSeeder::class
+            ]
+        );
     }
 }

@@ -19,8 +19,9 @@ class LanguageObserver
             Language::where('id', '<>', $language->id)->where('default', 1)->where('active', 1)->update(['default' => 0]);
         } else {
             $default = Language::where('default', 1)->where('active', 1)->first();
-            if (!$default)
+            if (!$default) {
                 Language::first()->update(['default' => 1]);
+            }
         }
 
 

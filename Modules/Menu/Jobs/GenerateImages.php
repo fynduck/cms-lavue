@@ -37,7 +37,6 @@ class GenerateImages implements ShouldQueue
     {
         if ($this->menu) {
             $this->generateMenuImages($this->menu);
-
         } else {
             $menus = Menu::where('image', '!=', '')->get();
 

@@ -23,7 +23,7 @@
                     </b-form-checkbox>
                 </b-col>
                 <b-col sm="6" lg="2" class="text-right" v-if="canCreate">
-                    <router-link class="btn btn-primary" :to="{name: `${routeName}.create`}" :title="$t('Page.add_page')">
+                    <router-link class="btn btn-success" :to="{name: `${routeName}.create`}" :title="$t('Page.add_page')">
                         <fa :icon="['fas', 'plus']"/>
                     </router-link>
                 </b-col>
@@ -49,6 +49,12 @@
                  :sort-desc.sync="sortDesc"
                  @sort-changed="changeSort"
         >
+            <template #table-busy>
+                <div class="text-center text-success my-2">
+                    <b-spinner class="align-middle"></b-spinner>
+                    <strong>Loading...</strong>
+                </div>
+            </template>
             <template v-slot:cell(slug)="row">
                 <a :href="row.item.link" target="_blank">{{ row.item.slug }}</a>
             </template>
@@ -73,7 +79,7 @@
             </template>
             <template v-slot:cell(actions)="row">
                 <b-button-group>
-                    <router-link class="btn btn-primary" v-if="row.item.permissions.edit"
+                    <router-link class="btn btn-success" v-if="row.item.permissions.edit"
                                  :to="{name: `${routeName}.edit`, params: {id: row.item.id}}">
                         <fa :icon="['fas', 'pencil-alt']"/>
                     </router-link>

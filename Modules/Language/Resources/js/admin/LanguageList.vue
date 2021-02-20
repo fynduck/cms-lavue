@@ -20,7 +20,7 @@
                     </b-form-checkbox>
                 </b-col>
                 <b-col sm="6" md="3" class="text-right" v-if="canCreate">
-                    <router-link class="btn btn-primary" :to="{name: `${routeName}.create`}"
+                    <router-link class="btn btn-success" :to="{name: `${routeName}.create`}"
                                  :title="$t('Language.add_language')">
                         <fa :icon="['fas', 'plus']"/>
                     </router-link>
@@ -52,7 +52,7 @@
             </template>
             <template v-slot:cell(actions)="row">
                 <b-button-group>
-                    <router-link class="btn btn-primary" v-if="row.item.permissions.edit"
+                    <router-link class="btn btn-success" v-if="row.item.permissions.edit"
                                  :to="{name: `${routeName}.edit`, params: {id: row.item.id}}">
                         <fa :icon="['fas', 'pencil-alt']"/>
                     </router-link>

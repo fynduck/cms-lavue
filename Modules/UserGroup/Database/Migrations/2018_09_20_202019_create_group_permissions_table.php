@@ -13,17 +13,20 @@ class CreateGroupPermissionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('group_permissions', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('group_id');
-            $table->unsignedInteger('permission_id');
-            $table->timestamps();
+        Schema::create(
+            'group_permissions',
+            function (Blueprint $table) {
+                $table->increments('id');
+                $table->unsignedInteger('group_id');
+                $table->unsignedInteger('permission_id');
+                $table->timestamps();
 
-            $table->foreign('group_id')->references('id')->on('user_groups')
-                ->onUpdate('cascade')->onDelete('cascade');
-            $table->foreign('permission_id')->references('id')->on('permissions')
-                ->onUpdate('cascade')->onDelete('cascade');
-        });
+                $table->foreign('group_id')->references('id')->on('user_groups')
+                    ->onUpdate('cascade')->onDelete('cascade');
+                $table->foreign('permission_id')->references('id')->on('permissions')
+                    ->onUpdate('cascade')->onDelete('cascade');
+            }
+        );
     }
 
     /**

@@ -50,11 +50,15 @@ class SettingsServiceProvider extends ServiceProvider
      */
     protected function registerConfig()
     {
-        $this->publishes([
-            __DIR__.'/../Config/config.php' => config_path('settings.php'),
-        ], 'config');
+        $this->publishes(
+            [
+                __DIR__ . '/../Config/config.php' => config_path('settings.php'),
+            ],
+            'config'
+        );
         $this->mergeConfigFrom(
-            __DIR__.'/../Config/config.php', 'settings'
+            __DIR__ . '/../Config/config.php',
+            'settings'
         );
     }
 
@@ -67,15 +71,27 @@ class SettingsServiceProvider extends ServiceProvider
     {
         $viewPath = resource_path('views/modules/settings');
 
-        $sourcePath = __DIR__.'/../Resources/views';
+        $sourcePath = __DIR__ . '/../Resources/views';
 
-        $this->publishes([
-            $sourcePath => $viewPath
-        ],'views');
+        $this->publishes(
+            [
+                $sourcePath => $viewPath
+            ],
+            'views'
+        );
 
-        $this->loadViewsFrom(array_merge(array_map(function ($path) {
-            return $path . '/modules/settings';
-        }, \Config::get('view.paths')), [$sourcePath]), 'settings');
+        $this->loadViewsFrom(
+            array_merge(
+                array_map(
+                    function ($path) {
+                        return $path . '/modules/settings';
+                    },
+                    \Config::get('view.paths')
+                ),
+                [$sourcePath]
+            ),
+            'settings'
+        );
     }
 
     /**
@@ -90,7 +106,7 @@ class SettingsServiceProvider extends ServiceProvider
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, 'settings');
         } else {
-            $this->loadTranslationsFrom(__DIR__ .'/../Resources/lang', 'settings');
+            $this->loadTranslationsFrom(__DIR__ . '/../Resources/lang', 'settings');
         }
     }
 

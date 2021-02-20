@@ -37,7 +37,6 @@ class GenerateImages implements ShouldQueue
     {
         if ($this->article) {
             $this->generateArticleImages($this->article);
-
         } else {
             $articles = Article::where('image', '!=', '')->get();
 

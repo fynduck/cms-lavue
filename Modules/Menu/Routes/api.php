@@ -15,8 +15,10 @@ use Illuminate\Support\Facades\Route;
 use Modules\Menu\Http\Controllers\Api\FrontController;
 use Modules\Menu\Http\Controllers\Api\MenuController;
 
-Route::middleware(['auth:api'])->prefix('admin')->group(function () {
-    Route::apiResource('menu', MenuController::class);
-    Route::post('menu-settings', [MenuController::class, 'saveSettings'])->name('menu.settings.store');
-});
+Route::middleware(['auth:api'])->prefix('admin')->group(
+    function () {
+        Route::apiResource('menu', MenuController::class);
+        Route::post('menu-settings', [MenuController::class, 'saveSettings'])->name('menu.settings.store');
+    }
+);
 Route::get('get-menu', [FrontController::class, 'getMenu'])->name('get-menu');

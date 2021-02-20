@@ -13,6 +13,8 @@ use Modules\UserGroup\Http\Controllers\UserGroupController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::middleware(['auth:api'])->prefix('admin')->group(function () {
-    Route::apiResource('user-group', UserGroupController::class);
-});
+Route::middleware(['auth:api'])->prefix('admin')->group(
+    function () {
+        Route::apiResource('user-group', UserGroupController::class);
+    }
+);

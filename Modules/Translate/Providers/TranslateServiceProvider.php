@@ -43,11 +43,15 @@ class TranslateServiceProvider extends ServiceProvider
      */
     protected function registerConfig()
     {
-        $this->publishes([
-            __DIR__.'/../Config/config.php' => config_path('translate.php'),
-        ], 'config');
+        $this->publishes(
+            [
+                __DIR__ . '/../Config/config.php' => config_path('translate.php'),
+            ],
+            'config'
+        );
         $this->mergeConfigFrom(
-            __DIR__.'/../Config/config.php', 'translate'
+            __DIR__ . '/../Config/config.php',
+            'translate'
         );
     }
 
@@ -60,15 +64,27 @@ class TranslateServiceProvider extends ServiceProvider
     {
         $viewPath = resource_path('views/modules/translate');
 
-        $sourcePath = __DIR__.'/../Resources/views';
+        $sourcePath = __DIR__ . '/../Resources/views';
 
-        $this->publishes([
-            $sourcePath => $viewPath
-        ],'views');
+        $this->publishes(
+            [
+                $sourcePath => $viewPath
+            ],
+            'views'
+        );
 
-        $this->loadViewsFrom(array_merge(array_map(function ($path) {
-            return $path . '/modules/translate';
-        }, \Config::get('view.paths')), [$sourcePath]), 'translate');
+        $this->loadViewsFrom(
+            array_merge(
+                array_map(
+                    function ($path) {
+                        return $path . '/modules/translate';
+                    },
+                    \Config::get('view.paths')
+                ),
+                [$sourcePath]
+            ),
+            'translate'
+        );
     }
 
     /**
@@ -83,7 +99,7 @@ class TranslateServiceProvider extends ServiceProvider
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, 'translate');
         } else {
-            $this->loadTranslationsFrom(__DIR__ .'/../Resources/lang', 'translate');
+            $this->loadTranslationsFrom(__DIR__ . '/../Resources/lang', 'translate');
         }
     }
 

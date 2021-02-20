@@ -47,11 +47,15 @@ class LanguageServiceProvider extends ServiceProvider
      */
     protected function registerConfig()
     {
-        $this->publishes([
-            __DIR__ . '/../Config/config.php' => config_path('language.php'),
-        ], 'config');
+        $this->publishes(
+            [
+                __DIR__ . '/../Config/config.php' => config_path('language.php'),
+            ],
+            'config'
+        );
         $this->mergeConfigFrom(
-            __DIR__ . '/../Config/config.php', 'language'
+            __DIR__ . '/../Config/config.php',
+            'language'
         );
     }
 
@@ -66,13 +70,25 @@ class LanguageServiceProvider extends ServiceProvider
 
         $sourcePath = __DIR__ . '/../Resources/views';
 
-        $this->publishes([
-            $sourcePath => $viewPath
-        ], 'views');
+        $this->publishes(
+            [
+                $sourcePath => $viewPath
+            ],
+            'views'
+        );
 
-        $this->loadViewsFrom(array_merge(array_map(function ($path) {
-            return $path . '/modules/language';
-        }, \Config::get('view.paths')), [$sourcePath]), 'language');
+        $this->loadViewsFrom(
+            array_merge(
+                array_map(
+                    function ($path) {
+                        return $path . '/modules/language';
+                    },
+                    \Config::get('view.paths')
+                ),
+                [$sourcePath]
+            ),
+            'language'
+        );
     }
 
     /**

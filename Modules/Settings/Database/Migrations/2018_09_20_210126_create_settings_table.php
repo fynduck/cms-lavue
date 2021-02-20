@@ -13,14 +13,17 @@ class CreateSettingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('settings', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('key');
-            $table->unsignedTinyInteger('lang');
-            $table->text('value');
+        Schema::create(
+            'settings',
+            function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('key');
+                $table->unsignedTinyInteger('lang');
+                $table->text('value');
 
-            $table->index(['key', 'lang']);
-        });
+                $table->index(['key', 'lang']);
+            }
+        );
     }
 
     /**

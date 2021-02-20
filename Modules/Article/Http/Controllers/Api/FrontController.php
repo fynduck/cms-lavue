@@ -29,15 +29,20 @@ class FrontController extends Controller
             ->where('active', 1);
 
         if (!$request->get('limit')) {
-            $perPage = Cache::remember('articles_pagination_' . $type, 30, function () use ($type) {
-                return Pagination::where('on', $type)->where('for', 'items')->value('value');
-            });
+            $perPage = Cache::remember(
+                'articles_pagination_' . $type,
+                30,
+                function () use ($type) {
+                    return Pagination::where('on', $type)->where('for', 'items')->value('value');
+                }
+            );
         } else {
             $perPage = $request->get('limit');
         }
 
-        if ($request->get('show_home'))
+        if ($request->get('show_home')) {
             $query->where('no_show_home', '<>', 1);
+        }
 
         if ($type == Article::PROMOTIONS) {
             if ($request->get('past')) {
@@ -47,7 +52,6 @@ class FrontController extends Controller
                 $query->betweenDate(now())
                     ->orderByRaw('ISNULL(date_to), date_to ASC');
             }
-
         } else {
             $query->orderBy('date', 'desc');
         }

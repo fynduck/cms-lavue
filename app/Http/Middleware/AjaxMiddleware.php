@@ -10,14 +10,15 @@ class AjaxMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Closure $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure $next
      * @return mixed
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->ajax())
+        if ($request->ajax()) {
             return $next($request);
+        }
 
         return abort(404);
     }

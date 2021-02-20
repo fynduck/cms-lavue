@@ -14,6 +14,8 @@ use Modules\Module\Http\Controllers\Api\ModuleController;
 |
 */
 
-Route::middleware(['auth:api'])->prefix('admin')->group(function () {
-    Route::apiResource('module', ModuleController::class);
-});
+Route::middleware(['auth:api'])->prefix('admin')->group(
+    function () {
+        Route::apiResource('module', ModuleController::class);
+    }
+);

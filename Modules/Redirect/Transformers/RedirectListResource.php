@@ -15,11 +15,11 @@ class RedirectListResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'           => $this->id,
-            'from'         => $this->from,
-            'to'           => $this->to,
-            'status_code'  => $this->status_code,
-            'active'       => $this->active,
+            'id'          => $this->id,
+            'from'        => $this->from,
+            'to'          => $this->to,
+            'status_code' => $this->status_code,
+            'active'      => $this->active,
             'permissions' => [
                 'edit'    => checkModulePermission('redirect', 'edit'),
                 'destroy' => checkModulePermission('redirect', 'destroy')

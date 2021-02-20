@@ -15,7 +15,7 @@ module.exports = {
         apiUrl: process.env.API_URL || process.env.APP_URL + '/api',
         appName: process.env.APP_NAME || 'CMS-lava',
         appLocale: process.env.APP_LOCALE || 'en',
-        appTheme: typeof process.env.THEME !== "undefined" ? process.env.THEME : 'default'
+        appTheme: process.env.THEME || 'default'
     },
 
     head: {
@@ -43,6 +43,9 @@ module.exports = {
         {src: '~static/fontawesome/css/all.min.css', mode: 'client'}
     ],
 
+    purgeCSS: {
+        enabled: true
+    },
     plugins: [
         '~plugins/i18n',
         '~plugins/axios',
@@ -52,17 +55,26 @@ module.exports = {
 
     modules: [
         '@nuxtjs/router',
-        'nuxt-moment'
+        'nuxt-moment',
+        '@nuxtjs/style-resources'
     ],
+
+    styleResources: {
+        stylus: [
+            '~assets/stylus/theme/' + process.env.THEME + '/_variables.styl',
+            '../Modules/*/Resources/stylus/theme/' + process.env.THEME + '/*.styl'
+        ]
+    },
 
     build: {
         extractCSS: true,
+        cssSourceMap: false,
         optimization: {
             splitChunks: {
                 cacheGroups: {
                     styles: {
                         name: 'styles',
-                        test: /\.(css|vue)$/,
+                        test: /\.(css|vue|styl)$/,
                         chunks: 'all',
                         enforce: true
                     }

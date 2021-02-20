@@ -29,7 +29,9 @@ use Illuminate\Database\Eloquent\Model;
 class MenuShow extends Model
 {
     protected $fillable = [
-        'menu_id', 'show_on', 'show_type'
+        'menu_id',
+        'show_on',
+        'show_type'
     ];
 
     public function menu()

@@ -8,12 +8,14 @@ class RedirectService
 {
     public function checkHasRedirect($old_url, $params, $langPrefix = null)
     {
-        if (!$langPrefix)
+        if (!$langPrefix) {
             $langPrefix = config('app.locale_prefix');
+        }
 
         $hasRedirect = $this->requestHasRedirect($old_url);
-        if ($hasRedirect)
+        if ($hasRedirect) {
             return ['redirectTo' => $hasRedirect->to, 'status' => $hasRedirect->status_code];
+        }
 
         /**
          * Check by slug redirect

@@ -18,11 +18,11 @@ class CreateFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'form_name'              => 'required',
-            'method'                 => 'required',
-            'action'                 => 'required',
-            'fields.*.type'          => 'required',
-            'fields.*.name'          => 'required',
+            'form_name'                => 'required',
+            'method'                   => 'required',
+            'action'                   => 'required',
+            'fields.*.type'            => 'required',
+            'fields.*.name'            => 'required',
             'fields.*.options.*.title' => 'sometimes|required',
             'fields.*.options.*.value' => 'sometimes|required',
         ];

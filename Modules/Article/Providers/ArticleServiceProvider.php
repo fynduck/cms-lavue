@@ -30,13 +30,18 @@ class ArticleServiceProvider extends ServiceProvider
         $this->registerViews();
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
 
-        Validator::extendImplicit('article_image', function ($attribute, $value, $parameters, $validator) {
-            $checkType = in_array(request()->get('type'), [Article::ARTICLES, Article::NEWS]);
-            if (!$value && $checkType && !request()->get('old_image'))
-                return false;
+        Validator::extendImplicit(
+            'article_image',
+            function ($attribute, $value, $parameters, $validator) {
+                $checkType = in_array(request()->get('type'), [Article::ARTICLES, Article::NEWS]);
+                if (!$value && $checkType && !request()->get('old_image')) {
+                    return false;
+                }
 
-            return true;
-        }, 'Поле :attribute обязательно для заполнения.');
+                return true;
+            },
+            'Поле :attribute обязательно для заполнения.'
+        );
 
         Article::observe(ArticleObserver::class);
         ArticleSettings::observe(ArticleSettingsObserver::class);
@@ -59,11 +64,15 @@ class ArticleServiceProvider extends ServiceProvider
      */
     protected function registerConfig()
     {
-        $this->publishes([
-            __DIR__ . '/../Config/config.php' => config_path('article.php'),
-        ], 'config');
+        $this->publishes(
+            [
+                __DIR__ . '/../Config/config.php' => config_path('article.php'),
+            ],
+            'config'
+        );
         $this->mergeConfigFrom(
-            __DIR__ . '/../Config/config.php', 'article'
+            __DIR__ . '/../Config/config.php',
+            'article'
         );
     }
 
@@ -78,13 +87,25 @@ class ArticleServiceProvider extends ServiceProvider
 
         $sourcePath = __DIR__ . '/../Resources/views';
 
-        $this->publishes([
-            $sourcePath => $viewPath
-        ], 'views');
+        $this->publishes(
+            [
+                $sourcePath => $viewPath
+            ],
+            'views'
+        );
 
-        $this->loadViewsFrom(array_merge(array_map(function ($path) {
-            return $path . '/modules/article';
-        }, \Config::get('view.paths')), [$sourcePath]), 'article');
+        $this->loadViewsFrom(
+            array_merge(
+                array_map(
+                    function ($path) {
+                        return $path . '/modules/article';
+                    },
+                    \Config::get('view.paths')
+                ),
+                [$sourcePath]
+            ),
+            'article'
+        );
     }
 
     /**

@@ -26,10 +26,12 @@ class FriendService
     {
         return Friend::where('user_id', $user_id)
             ->where('friend_id', $friend_id)
-            ->orWhere(function ($query) use ($user_id, $friend_id) {
-                $query->where('friend_id', $user_id)
-                    ->where('user_id', $friend_id);
-            })->latest()->first();
+            ->orWhere(
+                function ($query) use ($user_id, $friend_id) {
+                    $query->where('friend_id', $user_id)
+                        ->where('user_id', $friend_id);
+                }
+            )->latest()->first();
     }
 
     public function confirmFriendsRequest(Request $request)
@@ -42,7 +44,8 @@ class FriendService
             $friend->save();
 
             $ids = [
-                $friend->user_id, $friend->friend_id
+                $friend->user_id,
+                $friend->friend_id
             ];
             $dataRoom = [
                 'ids' => $ids

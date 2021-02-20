@@ -35,6 +35,7 @@ class FieldOption extends Model
         'value',
         'title',
         'option_class',
-        'option_id'
+        'option_id',
+        'priority'
     ];
 }

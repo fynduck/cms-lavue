@@ -11,7 +11,7 @@
                     </b-input-group>
                 </b-col>
                 <b-col sm="5" class="text-right" v-if="canCreate">
-                    <router-link class="btn btn-primary" :to="{name: `${routeName}.create`}" :title="$t('CustomForm.add_form')">
+                    <router-link class="btn btn-success" :to="{name: `${routeName}.create`}" :title="$t('CustomForm.add_form')">
                         <fa :icon="['fas', 'plus']"/>
                     </router-link>
                 </b-col>
@@ -37,7 +37,7 @@
             </template>
             <template v-slot:cell(actions)="row">
                 <b-button-group>
-                    <router-link class="btn btn-primary" v-if="row.item.permissions.edit"
+                    <router-link class="btn btn-success" v-if="row.item.permissions.edit"
                                  :to="{name: `${routeName}.edit`, params: {id: row.item.id}}">
                         <fa :icon="['fas', 'pencil-alt']"/>
                     </router-link>

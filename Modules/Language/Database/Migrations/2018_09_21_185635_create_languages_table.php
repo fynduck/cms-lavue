@@ -13,19 +13,22 @@ class CreateLanguagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('languages', function (Blueprint $table) {
-            $table->increments('id');
-            $table->char('country_iso', 2);
-            $table->char('slug', 3);
-            $table->string('name');
-            $table->string('image')->nullable();
-            $table->boolean('active')->nullable();
-            $table->unsignedTinyInteger('default')->nullable()->index();
-            $table->unsignedInteger('priority')->index();
-            $table->timestamps();
+        Schema::create(
+            'languages',
+            function (Blueprint $table) {
+                $table->increments('id');
+                $table->char('country_iso', 2);
+                $table->char('slug', 3);
+                $table->string('name');
+                $table->string('image')->nullable();
+                $table->boolean('active')->nullable();
+                $table->unsignedTinyInteger('default')->nullable()->index();
+                $table->unsignedInteger('priority')->index();
+                $table->timestamps();
 
-            $table->index(['slug', 'active']);
-        });
+                $table->index(['slug', 'active']);
+            }
+        );
     }
 
     /**
