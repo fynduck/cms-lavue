@@ -24,22 +24,28 @@ trait ArticleTrait
      */
     public function scopeFilter($query, Request $request)
     {
-        if ($request->get('q'))
-            $query->where(function ($q) use ($request) {
-                $q->where('title', 'LIKE', '%' . $request->get('q') . '%')
-                    ->orWhere('description', 'LIKE', '%' . $request->get('q') . '%');
-            });
+        if ($request->get('q')) {
+            $query->where(
+                function ($q) use ($request) {
+                    $q->where('title', 'LIKE', '%' . $request->get('q') . '%')
+                        ->orWhere('description', 'LIKE', '%' . $request->get('q') . '%');
+                }
+            );
+        }
 
-        if ($request->get('active'))
+        if ($request->get('active')) {
             $query->where('active', 1);
+        }
 
-        if ($request->get('lang_id'))
+        if ($request->get('lang_id')) {
             $query->where('lang_id', config('app.locale_id'));
+        }
 
         if ($request->get('sortBy')) {
             $sort = 'ASC';
-            if ($request->get('sortDesc'))
+            if ($request->get('sortDesc')) {
                 $sort = 'DESC';
+            }
             $query->orderBy($request->get('sortBy'), $sort);
         }
     }
@@ -58,11 +64,13 @@ trait ArticleTrait
         $query = Article::leftJoin('article_trans', 'articles.id', '=', 'article_trans.article_id')
             ->where('lang_id', $lang_id);
 
-        if ($active)
+        if ($active) {
             $query->where('active', $active);
+        }
 
-        if ($type)
+        if ($type) {
             $query->where('type', $type);
+        }
 
         return $query->orderBy('priority')->orderBy('date', 'DESC');
     }
@@ -91,18 +99,30 @@ trait ArticleTrait
             ->where('slug', $slug)
             ->where('lang_id', $lang_id)
             ->where('active', 1)
-            ->select('articles.*', 'article_trans.title', 'article_trans.description', 'article_trans.short_desc', 'article_trans.meta_title', 'article_trans.meta_description', 'article_trans.meta_keywords');
+            ->select(
+                'articles.*',
+                'article_trans.title',
+                'article_trans.description',
+                'article_trans.short_desc',
+                'article_trans.meta_title',
+                'article_trans.meta_description',
+                'article_trans.meta_keywords'
+            );
     }
 
     public function scopeBetweenDate($query, $date)
     {
-        return $query->where(function ($q) use ($date) {
-            $q->whereNull('date_from')
-                ->orWhere('date_from', '<=', $date);
-        })->where(function ($q) use ($date) {
-            $q->whereNull('date_to')
-                ->orWhere('date_to', '>=', $date);
-        });
+        return $query->where(
+            function ($q) use ($date) {
+                $q->whereNull('date_from')
+                    ->orWhere('date_from', '<=', $date);
+            }
+        )->where(
+            function ($q) use ($date) {
+                $q->whereNull('date_to')
+                    ->orWhere('date_to', '>=', $date);
+            }
+        );
     }
 
     public function scopeDiscount($query)

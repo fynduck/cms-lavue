@@ -34,8 +34,9 @@ class RegisterController extends Controller
      */
     protected function registered(Request $request, User $user)
     {
-        if ($user instanceof MustVerifyEmail)
+        if ($user instanceof MustVerifyEmail) {
             return response()->json(['verifyEmail' => true]);
+        }
 
         return response()->json($user);
     }
@@ -48,11 +49,14 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        return Validator::make($data, [
-            'name'     => 'required|max:255',
-            'email'    => 'required|email|max:255|unique:users',
-            'password' => 'required|min:6|confirmed',
-        ]);
+        return Validator::make(
+            $data,
+            [
+                'name'     => 'required|max:255',
+                'email'    => 'required|email|max:255|unique:users',
+                'password' => 'required|min:6|confirmed',
+            ]
+        );
     }
 
     /**
@@ -64,13 +68,15 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         $username = $data['name'] . '_' . Str::random(2);
-        return User::create([
-            'username' => Str::slug($username, '_'),
-            'name'     => $data['name'],
-            'email'    => $data['email'],
-            'birthday' => now()->toDateTime(),
-            'password' => bcrypt($data['password']),
-            'group_id' => UserGroup::whereName(UserGroup::USERS)->value('id'),
-        ]);
+        return User::create(
+            [
+                'username' => Str::slug($username, '_'),
+                'name'     => $data['name'],
+                'email'    => $data['email'],
+                'birthday' => now()->toDateTime(),
+                'password' => bcrypt($data['password']),
+                'group_id' => UserGroup::whereName(UserGroup::USERS)->value('id'),
+            ]
+        );
     }
 }

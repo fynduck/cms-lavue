@@ -24,37 +24,45 @@ class VerificationController extends Controller
     /**
      * Mark the user's email address as verified.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Modules\User\Entities\User $user
+     * @param \Illuminate\Http\Request $request
+     * @param \Modules\User\Entities\User $user
      * @return \Illuminate\Http\JsonResponse
      */
     public function verify(Request $request, User $user)
     {
-        if (! URL::hasValidSignature($request)) {
-            return response()->json([
-                'status' => trans('passwords.invalid'),
-            ], 400);
+        if (!URL::hasValidSignature($request)) {
+            return response()->json(
+                [
+                    'status' => trans('passwords.invalid'),
+                ],
+                400
+            );
         }
 
         if ($user->hasVerifiedEmail()) {
-            return response()->json([
-                'status' => trans('passwords.already_verified'),
-            ], 400);
+            return response()->json(
+                [
+                    'status' => trans('passwords.already_verified'),
+                ],
+                400
+            );
         }
 
         $user->markEmailAsVerified();
 
         event(new Verified($user));
 
-        return response()->json([
-            'status' => trans('passwords.verified'),
-        ]);
+        return response()->json(
+            [
+                'status' => trans('passwords.verified'),
+            ]
+        );
     }
 
     /**
      * Resend the email verification notification.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function resend(Request $request)
@@ -64,15 +72,19 @@ class VerificationController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (is_null($user)) {
-            throw ValidationException::withMessages([
-                'email' => [trans('passwords.user')],
-            ]);
+            throw ValidationException::withMessages(
+                [
+                    'email' => [trans('passwords.user')],
+                ]
+            );
         }
 
         if ($user->hasVerifiedEmail()) {
-            throw ValidationException::withMessages([
-                'email' => [trans('passwords.already_verified')],
-            ]);
+            throw ValidationException::withMessages(
+                [
+                    'email' => [trans('passwords.already_verified')],
+                ]
+            );
         }
 
         $user->sendEmailVerificationNotification();

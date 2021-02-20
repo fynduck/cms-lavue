@@ -61,12 +61,12 @@ class PageClientResource extends JsonResource
 
         return [
             'meta'      => [
-                'meta_title'         => $this->generateMeta('meta_title', ['title']),
-                'meta_description'   => $this->generateMeta('meta_description', ['description', 'description_footer']),
-                'meta_keywords'      => $this->generateMeta('meta_keywords')
+                'meta_title'       => $this->generateMeta('meta_title', ['title']),
+                'meta_description' => $this->generateMeta('meta_description', ['description', 'description_footer']),
+                'meta_keywords'    => $this->generateMeta('meta_keywords')
             ],
             'page_lang' => $pageLang,
-            's' => config('app.locale_id')
+            's'         => config('app.locale_id')
         ];
     }
 }

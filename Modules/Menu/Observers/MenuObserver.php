@@ -18,8 +18,9 @@ class MenuObserver
     {
         foreach (config('app.locales') as $locale) {
             Cache::forget('site_menus_' . $locale->id);
-            foreach (Menu::positions() as $position => $title)
+            foreach (Menu::positions() as $position => $title) {
                 Cache::forget("menu_{$position}_" . $locale->id);
+            }
         }
     }
 
@@ -33,8 +34,9 @@ class MenuObserver
     {
         foreach (config('app.locales') as $locale) {
             Cache::forget('site_menus_' . $locale->id);
-            foreach (Menu::positions() as $position => $title)
+            foreach (Menu::positions() as $position => $title) {
                 Cache::forget("menu_{$position}_" . $locale->id);
+            }
         }
     }
 

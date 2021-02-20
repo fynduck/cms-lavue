@@ -12,7 +12,6 @@ class ArticleResource extends JsonResource
     public function __construct($resource)
     {
         if ($resource instanceof ArticleTrans) {
-
             $resource->id = $resource->article_id;
             $resource->date = $resource->getArticle->date;
             $resource->date_to = $resource->getArticle->date_to;

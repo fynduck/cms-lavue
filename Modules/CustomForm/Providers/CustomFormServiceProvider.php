@@ -43,11 +43,15 @@ class CustomFormServiceProvider extends ServiceProvider
      */
     protected function registerConfig()
     {
-        $this->publishes([
-            __DIR__.'/../Config/config.php' => config_path('customform.php'),
-        ], 'config');
+        $this->publishes(
+            [
+                __DIR__ . '/../Config/config.php' => config_path('customform.php'),
+            ],
+            'config'
+        );
         $this->mergeConfigFrom(
-            __DIR__.'/../Config/config.php', 'customform'
+            __DIR__ . '/../Config/config.php',
+            'customform'
         );
     }
 
@@ -60,15 +64,27 @@ class CustomFormServiceProvider extends ServiceProvider
     {
         $viewPath = resource_path('views/modules/customform');
 
-        $sourcePath = __DIR__.'/../Resources/views';
+        $sourcePath = __DIR__ . '/../Resources/views';
 
-        $this->publishes([
-            $sourcePath => $viewPath
-        ],'views');
+        $this->publishes(
+            [
+                $sourcePath => $viewPath
+            ],
+            'views'
+        );
 
-        $this->loadViewsFrom(array_merge(array_map(function ($path) {
-            return $path . '/modules/customform';
-        }, \Config::get('view.paths')), [$sourcePath]), 'customform');
+        $this->loadViewsFrom(
+            array_merge(
+                array_map(
+                    function ($path) {
+                        return $path . '/modules/customform';
+                    },
+                    \Config::get('view.paths')
+                ),
+                [$sourcePath]
+            ),
+            'customform'
+        );
     }
 
     /**
@@ -83,7 +99,7 @@ class CustomFormServiceProvider extends ServiceProvider
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, 'customform');
         } else {
-            $this->loadTranslationsFrom(__DIR__ .'/../Resources/lang', 'customform');
+            $this->loadTranslationsFrom(__DIR__ . '/../Resources/lang', 'customform');
         }
     }
 

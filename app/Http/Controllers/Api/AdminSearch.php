@@ -33,14 +33,15 @@ class AdminSearch extends AdminController
                 $aux = $searchIn[$single];
                 unset($searchIn);
                 $searchIn[$single] = $aux;
-            } else
+            } else {
                 unset($searchIn);
-
+            }
         } elseif ($request->get('searchIn')) {
             $search_in = explode(',', $request->get('searchIn'));
             foreach ($searchIn as $key => $value) {
-                if (!in_array($key, $search_in))
+                if (!in_array($key, $search_in)) {
                     unset($searchIn[$key]);
+                }
             }
         }
 
@@ -51,36 +52,42 @@ class AdminSearch extends AdminController
             if (is_array($selected)) {
                 foreach ($selected as $item) {
                     $item = explode('_', $item);
-                    if (array_key_exists(1, $item))
+                    if (array_key_exists(1, $item)) {
                         $data['selected'][$item[0]][] = $item[1];
+                    }
                 }
             } else {
                 $item = explode('_', $selected);
-                if (array_key_exists(1, $item))
+                if (array_key_exists(1, $item)) {
                     $data['selected'][$item[0]][] = $item[1];
+                }
             }
         }
         if (!empty($searchIn) && ($q || $data['selected'])) {
             $current = $query = false;
 
             foreach ($searchIn as $type => $value) {
-                if (!$q && !isset($data['selected'][$value]))
+                if (!$q && !isset($data['selected'][$value])) {
                     continue;
+                }
                 $typeName = \DB::raw("'$value' AS type");
-                if ($q)
+                if ($q) {
                     $limit = 5;
-                else
+                } else {
                     $limit = 0;
+                }
                 switch ($type) {
                     case 'pages':
-                        if (checkModule('Page'))
+                        if (checkModule('Page')) {
                             $current = (new PageService())->searchPage($limit, $typeName, $value, $q, $data['selected']);
+                        }
                         break;
                     case 'articles':
                     case 'news':
                     case 'promotions':
-                        if (checkModule('Article'))
+                        if (checkModule('Article')) {
                             $current = (new ArticleService())->searchArticles($limit, $typeName, $value, $q, $data['selected']);
+                        }
                         break;
                     default:
                         break;
@@ -88,12 +95,12 @@ class AdminSearch extends AdminController
                 if ($current) {
                     $current->limit($limit);
 
-                    if ($query)
+                    if ($query) {
                         $query->union($current);
-                    else
+                    } else {
                         $query = clone $current;
+                    }
                 }
-
             }
             //final
             if ($query) {
@@ -109,8 +116,9 @@ class AdminSearch extends AdminController
     private function searchIn(): array
     {
         $modules = [];
-        foreach (Module::allEnabled() as $moduleName => $module)
+        foreach (Module::allEnabled() as $moduleName => $module) {
             $modules[mb_strtolower(Str::plural($moduleName))] = mb_strtolower($moduleName);
+        }
 
         return $modules;
     }

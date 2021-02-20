@@ -20,12 +20,14 @@ class ArticleService
 {
     public static function parseArticle(&$item, string $page = '', string $size = 'xs')
     {
-        if (!$page)
+        if (!$page) {
             $page = cache('urls_pages_' . config('app.locale_id'))[$item->type];
+        }
 
         $item->img = 'https://via.placeholder.com/480/250';
-        if ($item->image)
+        if ($item->image) {
             $item->img = asset('storage/' . Article::FOLDER_IMG . '/' . $size . '/' . $item->image);
+        }
 
         $item->link = route('pages', [$page, $item->url]);
     }
@@ -49,23 +51,27 @@ class ArticleService
             'date_to'      => $request->get('date_to'),
         ];
 
-        if (!empty($imagesName['imageName']))
+        if (!empty($imagesName['imageName'])) {
             $data['image'] = $imagesName['imageName'];
+        }
 
         return Article::updateOrCreate(
             [
                 'id' => $id
             ],
-            $data);
+            $data
+        );
     }
 
     public function addUpdateTrans(int $id, array $items)
     {
         foreach ($items as $lang_id => $item) {
-            $itemLang = ArticleTrans::updateOrCreate([
-                'article_id' => $id,
-                'lang_id'    => $lang_id
-            ], [
+            $itemLang = ArticleTrans::updateOrCreate(
+                [
+                    'article_id' => $id,
+                    'lang_id'    => $lang_id
+                ],
+                [
                     'title'            => $item['title'],
                     'slug'             => $item['slug'],
                     'description'      => $item['description'],
@@ -77,8 +83,9 @@ class ArticleService
                 ]
             );
 
-            if (!$itemLang)
+            if (!$itemLang) {
                 return back()->withErrors(trans('admin.data_not_save'));
+            }
         }
     }
 
@@ -91,8 +98,10 @@ class ArticleService
         if ($selected && array_key_exists($value, $selected)) {
             $current->whereIn('article_id', $selected[$value]);
             $limit += count($selected[$value]);
-        } else if ($q) {
-            $current->where('title', 'like', '%' . $q . '%');
+        } else {
+            if ($q) {
+                $current->where('title', 'like', '%' . $q . '%');
+            }
         }
 
         return $current;
@@ -104,8 +113,9 @@ class ArticleService
             'imageName' => null
         ];
         $imgName = null;
-        if ($request->get('items')[config('app.fallback_locale_id')]['title'])
+        if ($request->get('items')[config('app.fallback_locale_id')]['title']) {
             $imgName = $request->get('items')[config('app.fallback_locale_id')]['title'];
+        }
 
         if ($request->get('image')) {
             if (!Str::contains($request->get('image'), Article::FOLDER_IMG)) {
@@ -116,9 +126,13 @@ class ArticleService
                 $brightness = 0;
                 $background = null;
 
-                $settings = Cache::remember('article_sizes', now()->addDay(), function () {
-                    return ArticleSettings::where('name', 'sizes')->first();
-                });
+                $settings = Cache::remember(
+                    'article_sizes',
+                    now()->addDay(),
+                    function () {
+                        return ArticleSettings::where('name', 'sizes')->first();
+                    }
+                );
                 if ($settings && !empty($settings->data['sizes'])) {
                     $sizes = $settings->data['sizes'];
                     $resizeMethod = $settings->data['action'];
@@ -147,9 +161,13 @@ class ArticleService
 
     public function settings()
     {
-        $settings = Cache::remember('article_sizes', now()->addDay(), function () {
-            return ArticleSettings::where('name', 'sizes')->first();
-        });
+        $settings = Cache::remember(
+            'article_sizes',
+            now()->addDay(),
+            function () {
+                return ArticleSettings::where('name', 'sizes')->first();
+            }
+        );
 
         $data = [];
         if ($settings && !empty($settings->data['sizes'])) {
@@ -178,15 +196,21 @@ class ArticleService
      */
     public function linkImage($image, $size = null, $first = false): string
     {
-        if (!$image)
+        if (!$image) {
             return asset('img/placeholder.jpg');
+        }
 
-        if (!$size && !$first)
+        if (!$size && !$first) {
             return asset('storage/' . Article::FOLDER_IMG . '/' . $image);
+        }
 
-        $settings = Cache::remember('article_sizes', now()->addDay(), function () {
-            return ArticleSettings::where('name', 'sizes')->first();
-        });
+        $settings = Cache::remember(
+            'article_sizes',
+            now()->addDay(),
+            function () {
+                return ArticleSettings::where('name', 'sizes')->first();
+            }
+        );
 
         if ($settings && !empty($settings->data['sizes'])) {
             if ($first) {
@@ -213,15 +237,20 @@ class ArticleService
     {
         $images = [];
 
-        $settings = Cache::remember('article_sizes', now()->addDay(), function () {
-            return ArticleSettings::where('name', 'sizes')->first();
-        });
+        $settings = Cache::remember(
+            'article_sizes',
+            now()->addDay(),
+            function () {
+                return ArticleSettings::where('name', 'sizes')->first();
+            }
+        );
 
-        if ($image && $settings  && !empty($settings->data['sizes'])) {
+        if ($image && $settings && !empty($settings->data['sizes'])) {
             foreach ($settings->data['sizes'] as $size => $sizes) {
                 $src = asset('storage/' . Article::FOLDER_IMG . '/' . $size . '/' . $image);
-                if ($srcset)
+                if ($srcset) {
                     $src .= ' ' . $sizes['width'] . 'w';
+                }
 
                 $images[] = $src;
             }

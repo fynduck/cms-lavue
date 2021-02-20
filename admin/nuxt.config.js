@@ -56,16 +56,21 @@ module.exports = {
         'nuxt-moment'
     ],
     bootstrapVue: {
+        bootstrapVueCSS: false,
         bootstrapCSS: false
+    },
+    purgeCSS: {
+        enabled: true
     },
     build: {
         extractCSS: true,
+        cssSourceMap: false,
         optimization: {
             splitChunks: {
                 cacheGroups: {
                     styles: {
                         name: 'styles',
-                        test: /\.(css|vue)$/,
+                        test: /\.(css|vue|styl)$/,
                         chunks: 'all',
                         enforce: true
                     }

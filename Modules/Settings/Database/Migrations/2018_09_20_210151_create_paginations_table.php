@@ -13,17 +13,20 @@ class CreatePaginationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('paginations', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('on')->index();
-            $table->string('for')->index();
-            $table->tinyInteger('value');
-            $table->unsignedInteger('user_id')->nullable();
-            $table->timestamps();
+        Schema::create(
+            'paginations',
+            function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('on')->index();
+                $table->string('for')->index();
+                $table->tinyInteger('value');
+                $table->unsignedInteger('user_id')->nullable();
+                $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users')
-                ->onUpdate('set null')->onDelete('set null');
-        });
+                $table->foreign('user_id')->references('id')->on('users')
+                    ->onUpdate('set null')->onDelete('set null');
+            }
+        );
     }
 
     /**

@@ -40,36 +40,36 @@ class CustomFormController extends AdminController
         ];
 
         $this->types = [
-            'text'     => trans('customform::admin.text'),
-            'number'   => trans('customform::admin.number'),
-            'email'    => trans('customform::admin.email'),
-            'checkbox' => trans('customform::admin.checkbox'),
-            'radio'    => trans('customform::admin.radio'),
-            'range'    => trans('customform::admin.range'),
-            'file'     => trans('customform::admin.file'),
-            'select'   => trans('customform::admin.select'),
-            'textarea' => trans('customform::admin.textarea')
+            'text'     => 'CustomForm.text',
+            'number'   => 'CustomForm.number',
+            'email'    => 'CustomForm.email',
+            'checkbox' => 'CustomForm.checkbox',
+            'radio'    => 'CustomForm.radio',
+            'range'    => 'CustomForm.range',
+            'file'     => 'CustomForm.file',
+            'select'   => 'CustomForm.select',
+            'textarea' => 'CustomForm.textarea'
         ];
 
         $this->validations = [
             [
-                'title' => trans('customform::admin.required'),
+                'title' => 'CustomForm.required',
                 'value' => 'required'
             ],
             [
-                'title' => trans('customform::admin.number'),
+                'title' => 'CustomForm.number',
                 'value' => 'numeric'
             ],
             [
-                'title' => trans('customform::admin.email'),
+                'title' => 'CustomForm.email',
                 'value' => 'email'
             ],
             [
-                'title' => trans('customform::admin.file'),
+                'title' => 'CustomForm.file',
                 'value' => 'file'
             ],
             [
-                'title' => trans('customform::admin.accepted'),
+                'title' => 'CustomForm.accepted',
                 'value' => 'accepted'
             ]
         ];
@@ -115,10 +115,11 @@ class CustomFormController extends AdminController
         ];
         $form = Form::find($id);
 
-        if (!$form)
+        if (!$form) {
             $form = new Form();
-        else
+        } else {
             $form->with(['getFields', 'getFields.getOptions', 'getShow']);
+        }
 
         return (new CustomFormResource($form))->additional($response);
     }
@@ -147,8 +148,9 @@ class CustomFormController extends AdminController
         if (!request()->get('field_id') && !request()->get('option_id')) {
             Form::destroy($id);
         } else {
-            if (request()->get('field_id'))
+            if (request()->get('field_id')) {
                 FormField::destroy(request()->get('field_id'));
+            }
 
             if (request()->get('option_id')) {
                 FieldOption::destroy(request()->get('option_id'));
@@ -177,43 +179,52 @@ class CustomFormController extends AdminController
         unset($data['id']);
         unset($data['created_at']);
         unset($data['updated_at']);
-        if ($request->get('form_name'))
+        if ($request->get('form_name')) {
             $data['form_name'] = $request->get('form_name');
+        }
 
         $newForm = Form::create($data);
 
         $formShow = FormShow::where('form_id', $form->id)
             ->get(['item_id', 'type'])
-            ->each(function ($item) use ($newForm) {
-                $item->form_id = $newForm->id;
-            })->toArray();
+            ->each(
+                function ($item) use ($newForm) {
+                    $item->form_id = $newForm->id;
+                }
+            )->toArray();
 
         FormShow::insert($formShow);
 
-        $formFields = FormField::where('form_id', $form->id)->get([
-            'type',
-            'block_class',
-            'name',
-            'label',
-            'placeholder',
-            'field_class',
-            'field_id',
-            'validate',
-        ]);
+        $formFields = FormField::where('form_id', $form->id)->get(
+            [
+                'type',
+                'block_class',
+                'name',
+                'label',
+                'placeholder',
+                'field_class',
+                'field_id',
+                'validate',
+            ]
+        );
 
         foreach ($formFields as $formField) {
             $dataField = $formField->toArray();
             $dataField['form_id'] = $newForm->id;
             $field = FormField::create($dataField);
 
-            $fieldOptions = FieldOption::where('field_id', $formField->id)->get([
-                'value',
-                'title',
-                'option_class',
-                'option_id'
-            ])->each(function ($item) use ($field) {
-                $item->field_id = $field->id;
-            })->toArray();
+            $fieldOptions = FieldOption::where('field_id', $formField->id)->get(
+                [
+                    'value',
+                    'title',
+                    'option_class',
+                    'option_id'
+                ]
+            )->each(
+                function ($item) use ($field) {
+                    $item->field_id = $field->id;
+                }
+            )->toArray();
 
             FieldOption::insert($fieldOptions);
         }

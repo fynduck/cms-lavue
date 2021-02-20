@@ -14,6 +14,8 @@ use Modules\Language\Http\Controllers\Api\LanguageController;
 |
 */
 
-Route::prefix('admin')->middleware(['auth:api'])->group(function () {
-    Route::apiResource('language', LanguageController::class);
-});
+Route::prefix('admin')->middleware(['auth:api'])->group(
+    function () {
+        Route::apiResource('language', LanguageController::class);
+    }
+);

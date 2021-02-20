@@ -22,7 +22,7 @@
                     </b-form-group>
                 </b-col>
                 <b-col md="2" class="text-right" v-if="canCreate">
-                    <router-link class="btn btn-primary" :to="{name: `${routeName}.create`}"
+                    <router-link class="btn btn-success" :to="{name: `${routeName}.create`}"
                                  :title="$t('User.add_user')">
                         <fa :icon="['fas', 'plus']"/>
                     </router-link>
@@ -36,9 +36,15 @@
                  stacked="sm"
                  :items="items"
                  :fields="fields">
+            <template #table-busy>
+                <div class="text-center text-success my-2">
+                    <b-spinner class="align-middle"></b-spinner>
+                    <strong>Loading...</strong>
+                </div>
+            </template>
             <template v-slot:cell(actions)="row">
                 <b-button-group>
-                    <router-link class="btn btn-primary" v-if="row.item.permissions.edit"
+                    <router-link class="btn btn-success" v-if="row.item.permissions.edit"
                                  :to="{name: `${routeName}.edit`, params: {id: row.item.id}}">
                         <fa :icon="['fas', 'pencil-alt']"/>
                     </router-link>

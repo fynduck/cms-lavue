@@ -37,7 +37,9 @@ class Page extends Model
     use PageTrait;
 
     protected $fillable = [
-        'socials', 'module', 'sql_products'
+        'socials',
+        'module',
+        'sql_products'
     ];
 
     protected $hidden = [

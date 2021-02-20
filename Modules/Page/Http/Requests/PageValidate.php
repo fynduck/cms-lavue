@@ -13,9 +13,11 @@ class PageValidate extends FormRequest
      */
     public function rules()
     {
-        return  [
+        return [
             'items.' . config('app.fallback_locale_id') . '.title' => 'required',
-            'items.' . config('app.fallback_locale_id') . '.url'   => 'required|sometimes|unique:page_trans,url,' . $this->route('page') . ',page_id,lang,' . config('app.locale_id'),
+            'items.' . config('app.fallback_locale_id') . '.url'   => 'required|sometimes|unique:page_trans,url,' . $this->route(
+                    'page'
+                ) . ',page_id,lang,' . config('app.locale_id'),
         ];
     }
 

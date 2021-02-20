@@ -24,32 +24,38 @@ trait UserTrait
     static function getAll($paginate = true)
     {
         $query = User::where('email', '<>', 'admin@admin.com')->orderBy('updated_at', 'DESC');
-        if ($paginate)
+        if ($paginate) {
             return $query->paginate(30);
+        }
 
         return $query->get();
     }
 
     public function scopeFilters($query, Request $request)
     {
-        if ($request->get('group'))
+        if ($request->get('group')) {
             $query->where('group_id', $request->get('group'));
+        }
 
         if ($request->get('q')) {
             $search = $request->get('q');
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'LIKE', "%{$search}%")
-                    ->orWhere('email', 'LIKE', "%{$search}%");
-            });
+            $query->where(
+                function ($q) use ($search) {
+                    $q->where('name', 'LIKE', "%{$search}%")
+                        ->orWhere('email', 'LIKE', "%{$search}%");
+                }
+            );
         }
     }
 
     public function getFriends()
     {
-        return Friend::where(function ($query) {
-            $query->where('user_id', $this->id)
-                ->orWhere('friend_id', $this->id);
-        });
+        return Friend::where(
+            function ($query) {
+                $query->where('user_id', $this->id)
+                    ->orWhere('friend_id', $this->id);
+            }
+        );
     }
 
     public function accessRoomIds()

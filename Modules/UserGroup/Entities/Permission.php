@@ -29,8 +29,9 @@ class Permission extends Model
 
     public function scopeOfAccess($query, $to, $access)
     {
-        if (is_array($to))
+        if (is_array($to)) {
             return $query->whereIn('name', $to)->where('rights', $access);
+        }
 
         return $query->where('name', $to)->where('rights', $access);
     }

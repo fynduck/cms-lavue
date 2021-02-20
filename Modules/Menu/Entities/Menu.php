@@ -102,10 +102,13 @@ class Menu extends Model
     public function activeChildren()
     {
         return $this->hasMany(Menu::class, 'parent_id')
-            ->whereHas('getTrans', function ($query) {
-                $query->where('lang_id', config('app.locale_id'))
-                    ->where('active', 1);
-            });
+            ->whereHas(
+                'getTrans',
+                function ($query) {
+                    $query->where('lang_id', config('app.locale_id'))
+                        ->where('active', 1);
+                }
+            );
     }
 
     public function scopePriority($query)

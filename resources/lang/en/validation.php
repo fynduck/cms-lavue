@@ -28,7 +28,8 @@ return [
         'string'  => 'Количество символов в поле :attribute должно быть между :min и :max.',
         'array'   => 'Количество элементов в поле :attribute должно быть между :min и :max.',
     ],
-    'boolean'              => 'Поле :attribute должно иметь значение логического типа.', // калька 'истина' или 'ложь' звучала бы слишком неестественно
+    'boolean'              => 'Поле :attribute должно иметь значение логического типа.',
+    // калька 'истина' или 'ложь' звучала бы слишком неестественно
     'confirmed'            => 'Поле :attribute не совпадает с подтверждением.',
     'date'                 => 'Поле :attribute не является датой.',
     'date_format'          => 'Поле :attribute не соответствует формату :format.',
@@ -96,7 +97,7 @@ return [
     |
     */
 
-    'custom'               => [
+    'custom' => [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
@@ -119,7 +120,7 @@ return [
     |
     */
 
-    'attributes'           => [
+    'attributes' => [
         'name' => 'Nume'
     ],
 

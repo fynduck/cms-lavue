@@ -33,14 +33,14 @@ class SendCustomFormEmail extends Mailable
         $subject = $this->subject($this->data['title']);
 
         foreach ($this->data as $key => $data) {
-
             if ($key != 'title') {
-                if ($data['type'] == 'email' && $data['value'])
+                if ($data['type'] == 'email' && $data['value']) {
                     $subject->replyTo($data['value']);
+                }
 
                 if ($data['type'] == 'file' && $data['value']) {
-                    list($type, $data['value']) = explode(';', $data['value']);
-                    list(, $data['value']) = explode(',', $data['value']);
+                    [$type, $data['value']] = explode(';', $data['value']);
+                    [, $data['value']] = explode(',', $data['value']);
                     $format = explode('/', $type)[1];
                     $fileName = $data['name'] ? $data['name'] : str_random() . '.' . $format;
                     $subject->attachData(base64_decode($data['value']), $fileName);

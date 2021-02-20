@@ -19,9 +19,13 @@ class UserController extends Controller
     {
         $this->middleware('admin');
 
-        $this->groups = \Cache::remember('list_user_groups', now()->addHour(), function () {
-            return UserGroup::whereAdmin(false)->get()->pluck('name', 'id');
-        });
+        $this->groups = \Cache::remember(
+            'list_user_groups',
+            now()->addHour(),
+            function () {
+                return UserGroup::whereAdmin(false)->get()->pluck('name', 'id');
+            }
+        );
     }
 
     /**
@@ -48,14 +52,16 @@ class UserController extends Controller
      */
     public function store(UpdateUserRequest $request)
     {
-        User::create([
-            'username' => $request->get('username'),
-            'name'     => $request->get('name'),
-            'email'    => $request->get('email'),
-            'group_id' => (int)$request->get('group_id') !== 1 ? $request->get('group_id') : 2,
-            'password' => bcrypt($request->get('password') ?? Str::random(15)),
-            'token'    => Str::random(64)
-        ]);
+        User::create(
+            [
+                'username' => $request->get('username'),
+                'name'     => $request->get('name'),
+                'email'    => $request->get('email'),
+                'group_id' => (int)$request->get('group_id') !== 1 ? $request->get('group_id') : 2,
+                'password' => bcrypt($request->get('password') ?? Str::random(15)),
+                'token'    => Str::random(64)
+            ]
+        );
 
         return true;
     }
@@ -69,8 +75,9 @@ class UserController extends Controller
     {
         $item = User::find($id);
 
-        if (!$item)
+        if (!$item) {
             $item = new User();
+        }
 
         $additional = [
             'groups' => $this->groups

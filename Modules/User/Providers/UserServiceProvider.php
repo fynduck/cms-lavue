@@ -32,25 +32,36 @@ class UserServiceProvider extends ServiceProvider
         $this->registerViews();
         $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
 
-        Blade::if('permission', function ($accessToType) {
-            if (auth()->user()->isAdmin())
-                return true;
+        Blade::if(
+            'permission',
+            function ($accessToType) {
+                if (auth()->user()->isAdmin()) {
+                    return true;
+                }
 
-            return auth()->user()->roles->groupPermission()->ofAccess(strtolower($accessToType[0]), $accessToType[1])->exists();
-        });
+                return auth()->user()->roles->groupPermission()->ofAccess(strtolower($accessToType[0]), $accessToType[1])->exists(
+                );
+            }
+        );
 
-        Validator::extendImplicit('current_password', function ($attribute, $value, $parameters, $validator) {
-            return Hash::check($value, auth()->user()->password);
-        }, trans('auth.old_password_did_not_match'));
+        Validator::extendImplicit(
+            'current_password',
+            function ($attribute, $value, $parameters, $validator) {
+                return Hash::check($value, auth()->user()->password);
+            },
+            trans('auth.old_password_did_not_match')
+        );
 
-        VerifyEmail::toMailUsing(function ($notifiable, $verificationUrl) {
-            return (new MailMessage)
-                ->greeting(trans('auth.greeting', ['name' => $notifiable->name]))
-                ->subject(trans('auth.verify_email'))
-                ->line(trans('auth.click_button_verify_email'))
-                ->action(trans('auth.verify_email'), $verificationUrl)
-                ->line(trans('auth.not_create_account_no_further_action'));
-        });
+        VerifyEmail::toMailUsing(
+            function ($notifiable, $verificationUrl) {
+                return (new MailMessage)
+                    ->greeting(trans('auth.greeting', ['name' => $notifiable->name]))
+                    ->subject(trans('auth.verify_email'))
+                    ->line(trans('auth.click_button_verify_email'))
+                    ->action(trans('auth.verify_email'), $verificationUrl)
+                    ->line(trans('auth.not_create_account_no_further_action'));
+            }
+        );
 
         User::observe(UserObserver::class);
     }
@@ -62,7 +73,6 @@ class UserServiceProvider extends ServiceProvider
      */
     public function register()
     {
-
         $this->app->register(RouteServiceProvider::class);
     }
 
@@ -73,11 +83,15 @@ class UserServiceProvider extends ServiceProvider
      */
     protected function registerConfig()
     {
-        $this->publishes([
-            __DIR__ . '/../Config/config.php' => config_path('user.php'),
-        ], 'config');
+        $this->publishes(
+            [
+                __DIR__ . '/../Config/config.php' => config_path('user.php'),
+            ],
+            'config'
+        );
         $this->mergeConfigFrom(
-            __DIR__ . '/../Config/config.php', 'user'
+            __DIR__ . '/../Config/config.php',
+            'user'
         );
     }
 
@@ -92,13 +106,25 @@ class UserServiceProvider extends ServiceProvider
 
         $sourcePath = __DIR__ . '/../Resources/views';
 
-        $this->publishes([
-            $sourcePath => $viewPath
-        ], 'views');
+        $this->publishes(
+            [
+                $sourcePath => $viewPath
+            ],
+            'views'
+        );
 
-        $this->loadViewsFrom(array_merge(array_map(function ($path) {
-            return $path . '/modules/user';
-        }, \Config::get('view.paths')), [$sourcePath]), 'user');
+        $this->loadViewsFrom(
+            array_merge(
+                array_map(
+                    function ($path) {
+                        return $path . '/modules/user';
+                    },
+                    \Config::get('view.paths')
+                ),
+                [$sourcePath]
+            ),
+            'user'
+        );
     }
 
     /**

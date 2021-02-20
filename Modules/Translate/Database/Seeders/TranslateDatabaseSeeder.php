@@ -15,7 +15,6 @@ class TranslateDatabaseSeeder extends Seeder
     public function run()
     {
         Model::unguard();
-
         // $this->call("OthersTableSeeder");
     }
 }

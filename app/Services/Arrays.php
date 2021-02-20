@@ -19,8 +19,9 @@ class Arrays
     {
         $results = [];
         if ($items) {
-            foreach ($items as $item)
+            foreach ($items as $item) {
                 $results[$item->{$key1}][$item->{$key2}] = $item;
+            }
         }
 
         return $results;

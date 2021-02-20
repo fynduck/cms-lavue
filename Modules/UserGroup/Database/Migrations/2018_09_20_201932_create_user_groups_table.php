@@ -13,12 +13,15 @@ class CreateUserGroupsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_groups', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->unsignedTinyInteger('admin')->default(0);
-            $table->timestamps();
-        });
+        Schema::create(
+            'user_groups',
+            function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('name');
+                $table->unsignedTinyInteger('admin')->default(0);
+                $table->timestamps();
+            }
+        );
     }
 
     /**

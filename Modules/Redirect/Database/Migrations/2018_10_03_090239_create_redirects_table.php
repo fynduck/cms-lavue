@@ -13,14 +13,17 @@ class CreateRedirectsTable extends Migration
      */
     public function up()
     {
-        Schema::create('redirects', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('from');
-            $table->string('to');
-            $table->integer('status_code');
-            $table->boolean('active');
-            $table->timestamps();
-        });
+        Schema::create(
+            'redirects',
+            function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('from');
+                $table->string('to');
+                $table->integer('status_code');
+                $table->boolean('active');
+                $table->timestamps();
+            }
+        );
     }
 
     /**

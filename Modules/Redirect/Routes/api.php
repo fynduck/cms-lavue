@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware(['auth:api'])->prefix('admin')->group(function () {
-    Route::apiResource('redirect', 'RedirectController');
-});
+Route::middleware(['auth:api'])->prefix('admin')->group(
+    function () {
+        Route::apiResource('redirect', 'RedirectController');
+    }
+);

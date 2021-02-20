@@ -30,15 +30,17 @@ class RouteServiceProvider extends ServiceProvider
     {
         $this->configureRateLimiting();
 
-        $this->routes(function () {
-            Route::prefix('api')
-                ->middleware('api')
-                ->group(module_path('userGroup', '/Routes/api.php'));
+        $this->routes(
+            function () {
+                Route::prefix('api')
+                    ->middleware('api')
+                    ->group(module_path('userGroup', '/Routes/api.php'));
 
-            Route::middleware('web')
-                ->prefix(config('app.locale_prefix'))
-                ->group(module_path('userGroup', '/Routes/web.php'));
-        });
+                Route::middleware('web')
+                    ->prefix(config('app.locale_prefix'))
+                    ->group(module_path('userGroup', '/Routes/web.php'));
+            }
+        );
     }
 
     /**
@@ -48,8 +50,11 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function configureRateLimiting()
     {
-        RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
-        });
+        RateLimiter::for(
+            'api',
+            function (Request $request) {
+                return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
+            }
+        );
     }
 }

@@ -51,11 +51,13 @@ function listOfMonth()
 
 function listYears($startYear = null, $endYear = null)
 {
-    if (is_null($startYear))
+    if (is_null($startYear)) {
         $startYear = now()->subYears(18)->year;
+    }
 
-    if (is_null($endYear))
+    if (is_null($endYear)) {
         $endYear = now()->subYears(100)->year;
+    }
 
     return range($startYear, $endYear);
 }

@@ -30,7 +30,10 @@ use Illuminate\Database\Eloquent\Model;
 class Social extends Model
 {
     protected $fillable = [
-        'name', 'url', 'class_icon', 'priority'
+        'name',
+        'url',
+        'class_icon',
+        'priority'
     ];
 
     public $timestamps = false;

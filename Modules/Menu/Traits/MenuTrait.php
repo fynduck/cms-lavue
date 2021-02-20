@@ -22,8 +22,9 @@ trait MenuTrait
         $query = Menu::leftJoin('menu_trans', 'menus.id', '=', 'menu_trans.menu_id')
             ->where('lang_id', $lang_id)
             ->whereIn('position', (array)$position);
-        if ($active)
+        if ($active) {
             $query->where('active', $active);
+        }
 
         return $query->whereNull('parent_id')->orderBy('priority')->orderBy('updated_at', 'DESC');
     }
@@ -35,20 +36,24 @@ trait MenuTrait
      */
     public function scopeFilter($query, Request $request)
     {
-        if ($request->get('q'))
-            $query->where(function ($q) use ($request) {
-                $q->where('title', 'LIKE', '%' . $request->get('q') . '%')
-                    ->orWhere('description', 'LIKE', '%' . $request->get('q') . '%');
-            });
+        if ($request->get('q')) {
+            $query->where(
+                function ($q) use ($request) {
+                    $q->where('title', 'LIKE', '%' . $request->get('q') . '%')
+                        ->orWhere('description', 'LIKE', '%' . $request->get('q') . '%');
+                }
+            );
+        }
 
-        if ($request->get('active'))
+        if ($request->get('active')) {
             $query->where('active', true);
+        }
 
-        if ($request->get('lang_id'))
+        if ($request->get('lang_id')) {
             $query->where('lang_id', $request->get('lang_id'));
+        }
 
         if ($request->get('sortBy')) {
-
             $query->orderBy($request->get('sortBy'), $request->get('sortDesc', 'ASC'));
         }
     }
@@ -67,10 +72,10 @@ trait MenuTrait
     public static function positions(): array
     {
         return [
-            self::TOP_MENU      => trans('menu::admin.top_menu'),
+            self::TOP_MENU     => trans('menu::admin.top_menu'),
             //            self::MAIN_MENU => trans('menu::admin.main_menu'),
-            self::CUSTOM_MENU   => trans('menu::admin.custom_menu'),
-            self::FOOTER_LINKS  => trans('menu::admin.footer_menus')
+            self::CUSTOM_MENU  => trans('menu::admin.custom_menu'),
+            self::FOOTER_LINKS => trans('menu::admin.footer_menus')
         ];
     }
 

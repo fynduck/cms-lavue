@@ -27,8 +27,9 @@ class DashboardController extends AdminController
     public function transSlug(Request $request)
     {
         $slug = '';
-        if ($request->get('txt'))
+        if ($request->get('txt')) {
             $slug = Str::slug($request->get('txt'));
+        }
 
         return response()->json($slug);
     }

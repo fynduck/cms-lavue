@@ -47,7 +47,8 @@ class FormField extends Model
         'placeholder',
         'field_class',
         'field_id',
-        'validate'
+        'validate',
+        'priority'
     ];
 
     public function getOptions()

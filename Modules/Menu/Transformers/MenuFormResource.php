@@ -36,8 +36,9 @@ class MenuFormResource extends JsonResource
     private function oldImage(): ?string
     {
         $old_image = null;
-        if ($this->image)
+        if ($this->image) {
             $old_image = (new MenuService())->linkImage($this->image, null, true);
+        }
 
         return $old_image;
     }
@@ -51,8 +52,9 @@ class MenuFormResource extends JsonResource
 
             if (count($items) != count(config('app.locales'))) {
                 $locales = config('app.locales');
-                foreach ($items as $lang_id => $item)
+                foreach ($items as $lang_id => $item) {
                     unset($locales[$lang_id]);
+                }
 
                 $items = $this->emptyItems($items->toArray(), $locales);
             }
@@ -63,8 +65,9 @@ class MenuFormResource extends JsonResource
 
     private function emptyItems(array $items = [], $locales = null)
     {
-        if (is_null($locales))
+        if (is_null($locales)) {
             $locales = config('app.locales');
+        }
 
         foreach ($locales as $lang_id => $locale) {
             $items[$lang_id] = [
@@ -83,8 +86,9 @@ class MenuFormResource extends JsonResource
     {
         $page_show = [];
         if ($this->getShow()->exists()) {
-            foreach ($this->getShow as $item)
+            foreach ($this->getShow as $item) {
                 $page_show[] = $item->show_type . '_' . $item->show_on;
+            }
         }
 
         return $page_show;

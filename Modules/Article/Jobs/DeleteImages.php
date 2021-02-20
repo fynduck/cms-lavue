@@ -37,7 +37,6 @@ class DeleteImages implements ShouldQueue
             $this->deleteArticleImages($this->article);
 
             Storage::delete(Article::FOLDER_IMG . '/' . $this->article->image);
-
         } else {
             $articles = Article::where('image', '!=', '')->get();
 

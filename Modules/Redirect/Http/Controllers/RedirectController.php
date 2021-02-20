@@ -35,7 +35,8 @@ class RedirectController extends AdminController
      */
     public function store(RedirectRequest $request)
     {
-        Redirect::create([
+        Redirect::create(
+            [
                 'from'        => $request->get('from'),
                 'to'          => $request->get('to'),
                 'status_code' => $request->get('status_code'),
@@ -50,8 +51,9 @@ class RedirectController extends AdminController
     {
         $item = Redirect::find($id);
 
-        if (!$item)
+        if (!$item) {
             $item = new Redirect();
+        }
 
         return (new RedirectFormResource($item));
     }

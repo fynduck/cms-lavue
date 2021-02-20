@@ -13,14 +13,17 @@ trait LanguageTrait
     {
         if ($request->get('q')) {
             $search = $request->get('q');
-            $query->where(function ($where) use ($search) {
-                $where->where('name', 'LIKE', "%$search%")
-                    ->orWhere('slug', 'LIKE', "%$search%");
-            });
+            $query->where(
+                function ($where) use ($search) {
+                    $where->where('name', 'LIKE', "%$search%")
+                        ->orWhere('slug', 'LIKE', "%$search%");
+                }
+            );
         }
 
-        if ($request->get('active'))
+        if ($request->get('active')) {
             $query->where('active', $request->get('active'));
+        }
     }
 
     /**
@@ -32,8 +35,9 @@ trait LanguageTrait
     static function lang($id, $active = false)
     {
         $request = Language::where('id', $id);
-        if ($active)
+        if ($active) {
             $request->where('active', 1);
+        }
 
         return $request->first();
     }
@@ -47,8 +51,9 @@ trait LanguageTrait
     static function langSlug($slug, $active = 1)
     {
         $request = Language::where('slug', $slug);
-        if ($active)
+        if ($active) {
             $request->where('active', 1);
+        }
 
         return $request->first();
     }
@@ -70,8 +75,9 @@ trait LanguageTrait
     static function firstLang($id)
     {
         $query = Language::orderBy('default', 'DESC')->orderBy('updated_at', 'DESC');
-        if ($id)
+        if ($id) {
             $query->where('id', '<>', $id);
+        }
 
         return $query->first();
     }

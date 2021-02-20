@@ -50,11 +50,15 @@ class PageServiceProvider extends ServiceProvider
      */
     protected function registerConfig()
     {
-        $this->publishes([
-            module_path($this->moduleName, 'Config/config.php') => config_path($this->moduleNameLower . '.php'),
-        ], 'config');
+        $this->publishes(
+            [
+                module_path($this->moduleName, 'Config/config.php') => config_path($this->moduleNameLower . '.php'),
+            ],
+            'config'
+        );
         $this->mergeConfigFrom(
-            module_path($this->moduleName, 'Config/config.php'), $this->moduleNameLower
+            module_path($this->moduleName, 'Config/config.php'),
+            $this->moduleNameLower
         );
     }
 
@@ -69,9 +73,12 @@ class PageServiceProvider extends ServiceProvider
 
         $sourcePath = module_path($this->moduleName, 'Resources/views');
 
-        $this->publishes([
-            $sourcePath => $viewPath
-        ], ['views', $this->moduleNameLower . '-module-views']);
+        $this->publishes(
+            [
+                $sourcePath => $viewPath
+            ],
+            ['views', $this->moduleNameLower . '-module-views']
+        );
 
         $this->loadViewsFrom(array_merge($this->getPublishableViewPaths(), [$sourcePath]), $this->moduleNameLower);
     }

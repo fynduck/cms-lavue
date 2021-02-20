@@ -87,8 +87,9 @@ class ArticleController extends AdminController
     {
         $item = Article::find($id);
 
-        if (!$item)
+        if (!$item) {
             $item = new Article();
+        }
 
         $additional = [
             'types' => $this->types
@@ -155,7 +156,9 @@ class ArticleController extends AdminController
         $defaultAction = ArticleSettings::RESIZE;
         $action = $request->get('resize', $defaultAction);
         $blur = $request->get('blur') >= 0 && $request->get('blur') <= 100 ? $request->get('blur') : null;
-        $brightness = $request->get('brightness') >= -100 && $request->get('brightness') <= 100 ? $request->get('brightness') : null;
+        $brightness = $request->get('brightness') >= -100 && $request->get('brightness') <= 100 ? $request->get(
+            'brightness'
+        ) : null;
 
         $data = [
             'action'     => in_array($action, ArticleSettings::resizeMethods()) ? $action : $defaultAction,
@@ -172,11 +175,14 @@ class ArticleController extends AdminController
             ];
         }
 
-        ArticleSettings::updateOrCreate([
-            'name' => 'sizes',
-        ], [
-            'data' => $data
-        ]);
+        ArticleSettings::updateOrCreate(
+            [
+                'name' => 'sizes',
+            ],
+            [
+                'data' => $data
+            ]
+        );
 
         return true;
     }
