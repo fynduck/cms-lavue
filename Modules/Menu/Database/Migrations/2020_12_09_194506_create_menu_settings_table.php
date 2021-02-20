@@ -13,12 +13,15 @@ class CreateMenuSettingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('menu_settings', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->json('data');
-            $table->timestamps();
-        });
+        Schema::create(
+            'menu_settings',
+            function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('name');
+                $table->json('data');
+                $table->timestamps();
+            }
+        );
     }
 
     /**

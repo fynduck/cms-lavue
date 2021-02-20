@@ -77,8 +77,9 @@ class PageTrans extends Model
     static function getTrans($id, $languagesActive = false)
     {
         $query = PageTrans::where('page_id', $id);
-        if ($languagesActive)
+        if ($languagesActive) {
             $query->whereIn('lang_id', array_keys(config('app.locales')));
+        }
 
         return $query->get();
     }
@@ -95,12 +96,14 @@ class PageTrans extends Model
     {
         $lang_id = $lang_id ?? config('app.locale_id');
         $query = PageTrans::where('lang_id', $lang_id);
-        if ($active)
+        if ($active) {
             $query->where('active', 1);
-        if (is_array($id))
+        }
+        if (is_array($id)) {
             $query->whereIn('page_id', $id);
-        else
+        } else {
             $query->where('page_id', $id);
+        }
         $query->select('title', 'page_id');
 
         return $query->pluck('title', 'page_id');
@@ -118,12 +121,14 @@ class PageTrans extends Model
     {
         $lang_id = $lang_id ?? config('app.locale_id');
         $query = PageTrans::where('lang_id', $lang_id);
-        if ($active)
+        if ($active) {
             $query->where('active', 1);
-        if (is_array($id))
+        }
+        if (is_array($id)) {
             $query->whereIn('page_id', $id);
-        else
+        } else {
             $query->where('page_id', $id);
+        }
 
         return $query->pluck('slug', 'page_id');
     }

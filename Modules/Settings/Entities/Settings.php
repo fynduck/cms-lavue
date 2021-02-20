@@ -27,8 +27,11 @@ class Settings extends Model
     const FOLDER_IMG = 'settings';
 
     protected $fillable = [
-        'key', 'value', 'lang'
+        'key',
+        'value',
+        'lang'
     ];
+
     /**
      * Get settings by key
      * @param $key (string or array)
@@ -39,14 +42,17 @@ class Settings extends Model
     {
         $lang = is_null($lang) ? config('app.locale_id') : $lang;
 
-        $query = Settings::where(function ($q) use ($lang) {
-            $q->orWhere('lang', $lang);
-            $q->orWhere('lang', 0);
-        });
-        if (is_array($key))
+        $query = Settings::where(
+            function ($q) use ($lang) {
+                $q->orWhere('lang', $lang);
+                $q->orWhere('lang', 0);
+            }
+        );
+        if (is_array($key)) {
             $query->whereIn('key', $key);
-        else
+        } else {
             $query->where('key', $key);
+        }
 
         return $query->pluck('value', 'key');
     }

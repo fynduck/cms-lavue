@@ -21,7 +21,8 @@ class ArticlePaginationTableSeeder extends Seeder
             [
                 'on'  => 'articles',
                 'for' => 'items'
-            ], [
+            ],
+            [
                 'value'   => 9,
                 'user_id' => 1
             ]

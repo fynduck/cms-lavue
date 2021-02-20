@@ -41,10 +41,10 @@ class ConfirmedEmail extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject('Confirm Email')
-                    ->greeting('Welcome to ' . config('app.name'))
-                    ->action('Confirm Your Email', route('confirmation-email', $notifiable->token))
-                    ->line('Thank you for using our application!');
+            ->subject('Confirm Email')
+            ->greeting('Welcome to ' . config('app.name'))
+            ->action('Confirm Your Email', route('confirmation-email', $notifiable->token))
+            ->line('Thank you for using our application!');
     }
 
     /**

@@ -7,8 +7,8 @@
  */
 
 return [
-    'data_save'         => 'Данные сохранены',
-    'data_not_save'     => 'Данные не сохранены',
-    'data_delete'       => 'Данные удалины',
-    'data_not_deletes'  => 'Данные не удалины',
+    'data_save'        => 'Данные сохранены',
+    'data_not_save'    => 'Данные не сохранены',
+    'data_delete'      => 'Данные удалины',
+    'data_not_deletes' => 'Данные не удалины',
 ];

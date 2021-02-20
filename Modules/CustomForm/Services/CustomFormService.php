@@ -9,6 +9,7 @@
 namespace Modules\CustomForm\Services;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Modules\CustomForm\Entities\FieldOption;
 use Modules\CustomForm\Entities\Form;
 use Modules\CustomForm\Entities\FormField;
@@ -30,12 +31,14 @@ class CustomFormService
                 'form_class'  => $request->get('form_class'),
                 'form_id'     => $request->get('form_id'),
                 'send_emails' => implode(';', $request->get('send_emails')),
-            ]);
+            ]
+        );
 
-        if (!$form)
+        if (!$form) {
             return response()->json(['message' => 'form not save']);
+        }
 
-        foreach ($request->get('fields') as $item) {
+        foreach ($request->get('fields') as $key => $item) {
             $field = FormField::updateOrCreate(
                 [
                     'id' => isset($item['id']) ? $item['id'] : 0
@@ -44,19 +47,21 @@ class CustomFormService
                     'form_id'     => $form->id,
                     'type'        => $item['type'],
                     'block_class' => $item['block_class'],
-                    'name'        => mb_strtolower(\Str::slug($item['name'])),
+                    'name'        => mb_strtolower(Str::slug($item['name'])),
                     'label'       => $item['label'],
                     'placeholder' => $item['placeholder'],
                     'field_class' => $item['field_class'],
                     'field_id'    => $item['field_id'],
                     'validate'    => $item['validate'] ? implode('|', $item['validate']) : null,
+                    'priority'    => $key
                 ]
             );
 
-            if (!$field)
+            if (!$field) {
                 return response()->json(['message' => 'form field not save']);
+            }
 
-            foreach ($item['options'] as $option) {
+            foreach ($item['options'] as $key => $option) {
                 $field_option = FieldOption::updateOrCreate(
                     [
                         'id' => $option['id'] ?? 0
@@ -66,26 +71,29 @@ class CustomFormService
                         'value'        => $option['value'],
                         'title'        => $option['title'],
                         'option_class' => $option['option_class'],
-                        'option_id'    => $option['option_id']
+                        'option_id'    => $option['option_id'],
+                        'priority'     => $key
                     ]
                 );
 
-                if (!$field_option)
+                if (!$field_option) {
                     return response()->json(['message' => 'form field option not save']);
+                }
             }
         }
 
         FormShow::where('form_id', $form->id)->delete();
         if ($request->get('show_on')) {
-
             foreach ($request->get('show_on') as $item) {
                 $explode = explode('_', $item);
                 if (isset($explode[1])) {
-                    FormShow::create([
-                        'form_id' => $form->id,
-                        'item_id' => $explode[1],
-                        'type'    => $explode[0]
-                    ]);
+                    FormShow::create(
+                        [
+                            'form_id' => $form->id,
+                            'item_id' => $explode[1],
+                            'type'    => $explode[0]
+                        ]
+                    );
                 }
             }
         }
@@ -141,12 +149,13 @@ class CustomFormService
             'id' => $form['id']
         ];
         foreach ($fields as $field) {
-            if ($field['type'] == 'checkbox' && !\Str::contains($field['validate'], 'accepted'))
+            if ($field['type'] == 'checkbox' && !\Str::contains($field['validate'], 'accepted')) {
                 $formFields[$field['name']] = [];
-            elseif ($field['type'] == 'file')
+            } elseif ($field['type'] == 'file') {
                 $formFields[$field['name']] = $formFields['file_name'] = '';
-            else
+            } else {
                 $formFields[$field['name']] = '';
+            }
         }
 
         return $formFields;
@@ -161,8 +170,9 @@ class CustomFormService
     {
         $validateFields = [];
         foreach ($fields as $field) {
-            if ($field->validate)
+            if ($field->validate) {
                 $validateFields[$field->name] = $field->validate;
+            }
         }
 
         return $validateFields;
@@ -178,8 +188,9 @@ class CustomFormService
                 $emailData[$field->name]['title'] = $field->placeholder ? $field->placeholder : $field->name;
 
                 $value = $formData[$field->name];
-                if ($field->getOptions->count())
+                if ($field->getOptions->count()) {
                     $value = $field->getOptions()->where('value', $formData[$field->name])->value('title');
+                }
 
                 $emailData[$field->name]['value'] = $value;
                 $emailData[$field->name]['type'] = $field->type;

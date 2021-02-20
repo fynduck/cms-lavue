@@ -21,7 +21,8 @@ class PaginationTableSeeder extends Seeder
             [
                 'on'  => 'articles',
                 'for' => 'items'
-            ], [
+            ],
+            [
                 'value'   => 3,
                 'user_id' => 1
             ]
@@ -31,7 +32,8 @@ class PaginationTableSeeder extends Seeder
             [
                 'on'  => 'articles',
                 'for' => 'relate_articles'
-            ], [
+            ],
+            [
                 'value'   => 4,
                 'user_id' => 1
             ]
@@ -41,7 +43,8 @@ class PaginationTableSeeder extends Seeder
             [
                 'on'  => 'promotions',
                 'for' => 'items'
-            ], [
+            ],
+            [
                 'value'   => 2,
                 'user_id' => 1
             ]
@@ -51,7 +54,8 @@ class PaginationTableSeeder extends Seeder
             [
                 'on'  => 'category',
                 'for' => 'items'
-            ], [
+            ],
+            [
                 'value'   => 6,
                 'user_id' => 1
             ]
@@ -61,7 +65,8 @@ class PaginationTableSeeder extends Seeder
             [
                 'on'  => 'product',
                 'for' => 'relate_products'
-            ], [
+            ],
+            [
                 'value'   => 6,
                 'user_id' => 1
             ]
@@ -71,7 +76,8 @@ class PaginationTableSeeder extends Seeder
             [
                 'on'  => 'other',
                 'for' => 'products'
-            ], [
+            ],
+            [
                 'value'   => 6,
                 'user_id' => 1
             ]
@@ -81,7 +87,8 @@ class PaginationTableSeeder extends Seeder
             [
                 'on'  => 'home_promo',
                 'for' => 'products'
-            ], [
+            ],
+            [
                 'value'   => 6,
                 'user_id' => 1
             ]
@@ -91,7 +98,8 @@ class PaginationTableSeeder extends Seeder
             [
                 'on'  => 'home_hit',
                 'for' => 'products'
-            ], [
+            ],
+            [
                 'value'   => 6,
                 'user_id' => 1
             ]

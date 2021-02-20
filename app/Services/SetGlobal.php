@@ -19,8 +19,9 @@ class SetGlobal
 {
     public static function generateRoute($data, $items)
     {
-        foreach ($items as $item)
+        foreach ($items as $item) {
             $item->link = generateRoute($data['urlsPages'], $item);
+        }
 
         return $items;
     }
@@ -36,8 +37,9 @@ class SetGlobal
     public static function setBreadcrumbs(&$data, $url, $title, $setTitlePage = true)
     {
         $data['breadcrumbs'][] = ['url' => $url, 'title' => $title];
-        if ($setTitlePage)
+        if ($setTitlePage) {
             $data['current_title_page'] = $title;
+        }
     }
 
     /**
@@ -57,27 +59,34 @@ class SetGlobal
 
         if ($page_id && checkModule('Banner')) {
             $banners = Banner::getByPageId($page_id, $page_type)
-                ->where(function ($from) {
-                    $from->whereNull('date_from')
-                        ->orWhere('date_from', '<=', now()->toDateString());
-                })
-                ->where(function ($to) {
-                    $to->whereNull('date_to')
-                        ->orWhere('date_to', '>=', now()->toDateString());
-                })
+                ->where(
+                    function ($from) {
+                        $from->whereNull('date_from')
+                            ->orWhere('date_from', '<=', now()->toDateString());
+                    }
+                )
+                ->where(
+                    function ($to) {
+                        $to->whereNull('date_to')
+                            ->orWhere('date_to', '>=', now()->toDateString());
+                    }
+                )
                 ->get();
 
             $banners = self::generateRoute($data, $banners);
             $banners = Arrays::setTwoKeys($banners, 'type', 'id');
-            if (isset($banners['top']))
+            if (isset($banners['top'])) {
                 $data['bannersTop'] = $banners['top'];
-            if (isset($banners['content']))
+            }
+            if (isset($banners['content'])) {
                 $data['bannersContent'] = $banners['content'];
-            if (isset($banners['left']))
+            }
+            if (isset($banners['left'])) {
                 $data['bannersLeft'] = $banners['left'];
-            if (isset($banners['right']))
+            }
+            if (isset($banners['right'])) {
                 $data['bannersRight'] = $banners['right'];
-
+            }
         }
     }
 
@@ -138,8 +147,9 @@ class SetGlobal
             if (isset($urls[$locale->id]) && $data['page']->lang != $locale->id) {
                 $data['languagesMenu'][$locale->id]['name'] = $locale->name;
                 $linkParams[] = $locale->slug;
-                if ($urls[$locale->id])
+                if ($urls[$locale->id]) {
                     $linkParams[] = $urls[$locale->id];
+                }
 
                 $data['languagesMenu'][$locale->id]['link'] = url(implode('/', $linkParams));
             }
@@ -159,8 +169,9 @@ class SetGlobal
 
         if ($slugs && checkModule('Redirect')) {
             $responseRedirect = (new RedirectService())->checkHasRedirect(implode('/', $slugs), $params, $langPrefix);
-            if ($responseRedirect)
+            if ($responseRedirect) {
                 return redirect($responseRedirect['redirectTo'], $responseRedirect['status']);
+            }
         }
 
         /**
@@ -192,7 +203,8 @@ class SetGlobal
     public function setViews($request, string $nameCookie, int $id, string $type, bool $ctr = true)
     {
         $view = $request->cookie($nameCookie . $id);
-        if (!$view && checkModule('Statistics'))
+        if (!$view && checkModule('Statistics')) {
             (new StatisticService())->log($request, $type, [$id], $ctr);
+        }
     }
 }

@@ -9,8 +9,9 @@ use Modules\User\Entities\User;
  */
 function checkModule(string $module): bool
 {
-    if (array_key_exists($module, Module::allEnabled()))
+    if (array_key_exists($module, Module::allEnabled())) {
         return true;
+    }
 
     return false;
 }
@@ -24,11 +25,16 @@ function checkModule(string $module): bool
  */
 function checkModulePermission($permission, $type, User $user = null): bool
 {
-    if (!auth()->check() && !$user)
+    if (!auth()->check() && !$user) {
         return false;
+    }
 
-    if (auth()->check())
-        return auth()->user()->isAdmin() ? true : auth()->user()->roles->groupPermission()->ofAccess(strtolower($permission), $type)->exists();
-    else
+    if (auth()->check()) {
+        return auth()->user()->isAdmin() ? true : auth()->user()->roles->groupPermission()->ofAccess(
+            strtolower($permission),
+            $type
+        )->exists();
+    } else {
         return $user->roles->groupPermission()->ofAccess(strtolower($permission), $type)->exists();
+    }
 }

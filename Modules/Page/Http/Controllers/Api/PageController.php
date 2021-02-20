@@ -71,8 +71,9 @@ class PageController extends AdminController
     {
         $item = Page::find($id);
 
-        if (!$item)
+        if (!$item) {
             $item = new Page();
+        }
 
         return (new PageFormResource($item));
     }

@@ -24,8 +24,9 @@ class FrontController extends Controller
     {
         setlocale(LC_ALL, config('app.faker_locale') . '.utf8');
 
-        if (!$segment2)
+        if (!$segment2) {
             return $this->articles($data, $method, $segment2);
+        }
 
         return $this->article($data, $method, $segment2);
     }
@@ -67,26 +68,32 @@ class FrontController extends Controller
             $urlsPage = ArticleTrans::getSlugs($data['item']->id);
             SetGlobal::setLanguagesMenu($data, $urlsPage, false);
 
-            $data['labels'] = json_encode([
-                'days'    => trans('global.days'),
-                'hours'   => trans('global.hours'),
-                'minutes' => trans('global.minutes'),
-                'seconds' => trans('global.seconds')
-            ]);
+            $data['labels'] = json_encode(
+                [
+                    'days'    => trans('global.days'),
+                    'hours'   => trans('global.hours'),
+                    'minutes' => trans('global.minutes'),
+                    'seconds' => trans('global.seconds')
+                ]
+            );
 
-            if ($method != 'articles')
+            if ($method != 'articles') {
                 return view('article::show_news', $data);
+            }
 
-            $perPage = Cache::remember('relate_article_per_page', now()->addDay(), function () {
-                return Pagination::where('on', 'articles')->where('for', 'relate_articles')->value('value');
-            });
+            $perPage = Cache::remember(
+                'relate_article_per_page',
+                now()->addDay(),
+                function () {
+                    return Pagination::where('on', 'articles')->where('for', 'relate_articles')->value('value');
+                }
+            );
             $data['relate_articles'] = Article::getAll('articles', 1)
                 ->where('article_id', '<>', $data['item']->id)
                 ->limit($perPage ?? 6)->get();
 
             return view('article::show_article', $data);
         } else {
-
             return (new SetGlobal())->page404($data, [$data['page']->url, $url]);
         }
     }

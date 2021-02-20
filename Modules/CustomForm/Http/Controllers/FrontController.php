@@ -27,12 +27,14 @@ class FrontController extends Controller
     public function getForm($page_type, $item_id, $form_id = null)
     {
         $query = FormShow::where('type', $page_type)->where('item_id', $item_id);
-        if ($form_id)
+        if ($form_id) {
             $query->where('form_id', $form_id);
+        }
 
         $onPageForm = $query->first();
-        if (!$onPageForm)
+        if (!$onPageForm) {
             return [];
+        }
 
         $additional = [
             'trans' => [
@@ -47,18 +49,22 @@ class FrontController extends Controller
     public function saveCallBack(Request $request)
     {
         $form = Form::find($request->get('id'));
-        if (!$form || !$form->getFields)
+        if (!$form || !$form->getFields) {
             return response()->json(['message' => ['form not found']], 404);
+        }
 
         $validator = Validator::make($request->get('fields'), $this->customFormService->generateFieldValidate($form->getFields));
 
-        if ($validator->fails())
+        if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
+        }
 
-        FormSent::create([
-            'form_id'   => $form->id,
-            'form_data' => json_encode($request->all())
-        ]);
+        FormSent::create(
+            [
+                'form_id'   => $form->id,
+                'form_data' => json_encode($request->all())
+            ]
+        );
 
         $emailData = $this->customFormService->generateDataEmail($form, $request->get('fields'));
 

@@ -13,14 +13,17 @@ class CreateSocialsTable extends Migration
      */
     public function up()
     {
-        Schema::create('socials', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->string('url');
-            $table->string('class_icon');
-            $table->tinyInteger('priority');
-            $table->timestamps();
-        });
+        Schema::create(
+            'socials',
+            function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('name');
+                $table->string('url');
+                $table->string('class_icon');
+                $table->tinyInteger('priority');
+                $table->timestamps();
+            }
+        );
     }
 
     /**

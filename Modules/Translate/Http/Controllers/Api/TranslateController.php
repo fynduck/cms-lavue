@@ -30,8 +30,9 @@ class TranslateController extends AdminController
 
         $path = resource_path('lang/' . $locale);
         $files = File::allFiles($path);
-        foreach ($files as $file)
+        foreach ($files as $file) {
             $data['files'][] = str_replace('.php', '', $file->getFilename());
+        }
 
         $file_name = $request->get('file_name', $data['files'][0]);
         $translates = trans($file_name, [], $locale);
@@ -55,8 +56,9 @@ class TranslateController extends AdminController
     protected function store(Request $request)
     {
         $content = '';
-        if ($request->get('items'))
+        if ($request->get('items')) {
             $content = $this->arrayToString($request->get('items'));
+        }
 
         $file = $request->get('file_name');
         $locale = $request->get('locale');
@@ -65,8 +67,9 @@ class TranslateController extends AdminController
 
         $path = resource_path('lang/' . $locale . '/' . $file . '.php');
 
-        if (!File::exists($path))
+        if (!File::exists($path)) {
             File::makeDirectory($path, 0775);
+        }
 
         file_put_contents($path, $content);
 
@@ -84,8 +87,9 @@ class TranslateController extends AdminController
 
             if (is_array($value)) {
                 $content .= "'$key' => [\n" . $this->arrayToString($value) . "],\n";
-            } else
+            } else {
                 $content .= "'$key' => '$value',\n";
+            }
         }
 
         return $content;

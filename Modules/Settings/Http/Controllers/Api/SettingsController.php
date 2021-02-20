@@ -52,16 +52,19 @@ class SettingsController extends Controller
                             ->save();
                     }
                 }
-                $item = Settings::updateOrCreate([
-                    'key'  => $key,
-                    'lang' => $lang
-                ], [
+                $item = Settings::updateOrCreate(
+                    [
+                        'key'  => $key,
+                        'lang' => $lang
+                    ],
+                    [
                         'value' => $value,
                     ]
                 );
 
-                if (!$item)
+                if (!$item) {
                     return response()->json(trans('Settings::admin.data_not_save'));
+                }
             }
         }
 
@@ -77,8 +80,9 @@ class SettingsController extends Controller
     public function css(): JsonResponse
     {
         $css = '';
-        if (File::exists(base_path('front/static/css/custom.css')))
+        if (File::exists(base_path('front/static/css/custom.css'))) {
             $css = file_get_contents(base_path('front/static/css/custom.css'));
+        }
 
         return response()->json($css);
     }
@@ -102,11 +106,12 @@ class SettingsController extends Controller
         $configs = [];
         foreach ($config as $conf) {
             $aux = explode('=', $conf);
-            if ($aux[0] && !empty($aux[1]))
+            if ($aux[0] && !empty($aux[1])) {
                 $configs[] = [
                     'key'   => $aux[0],
                     'value' => $aux[1]
                 ];
+            }
         }
 
         return response()->json($configs);
@@ -120,8 +125,9 @@ class SettingsController extends Controller
     {
         $data = [];
         // replace space in string
-        foreach ($request->all() as $item)
+        foreach ($request->all() as $item) {
             $data[$item['key']] = str_replace(' ', '_', trim($item['value']));
+        }
 
         $config = file_get_contents(base_path('.env'));
         $config = explode("\n", $config);
@@ -129,10 +135,11 @@ class SettingsController extends Controller
         foreach ($config as $conf) {
             $aux = explode('=', $conf);
 
-            if ($aux[0] && !empty($aux[1] && array_key_exists($aux[0], $data)))
+            if ($aux[0] && !empty($aux[1] && array_key_exists($aux[0], $data))) {
                 $newConfigs[] = $aux[0] . '=' . $data[$aux[0]];
-            else
+            } else {
                 $newConfigs[] = $conf;
+            }
         }
 
         return file_put_contents(base_path('.env'), implode("\n", $newConfigs));
@@ -183,7 +190,6 @@ class SettingsController extends Controller
         SettingsService::addUpdatePagination($request);
 
         return PaginateResource::collection(Pagination::all());
-
     }
 
     public function sitemap()

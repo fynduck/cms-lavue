@@ -11,13 +11,15 @@ class FrontController extends Controller
     public function findPage($slug): PageClientResource
     {
         $response = null;
-        if ($slug != 'home')
+        if ($slug != 'home') {
             $page = Page::getPageBySlug($slug);
-        else
+        } else {
             $page = Page::getDefault();
+        }
 
-        if (!$page || ($page->module && !checkModule($page->module)))
+        if (!$page || ($page->module && !checkModule($page->module))) {
             $page = Page::getPageByMethod('not_found');
+        }
 
         return new PageClientResource($page);
     }

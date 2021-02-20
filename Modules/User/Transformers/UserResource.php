@@ -21,9 +21,11 @@ class UserResource extends JsonResource
             'username'    => $this->username,
             'admin'       => $this->isAdmin(),
             'avatar'      => $this->avatar ? getUserAvatar($this->avatarPath() . '/' . User::MD, $this->avatar) : null,
-            'permissions' => $this->roles->groupPermission()->get(['name', 'rights'])->mapToGroups(function ($item) {
-                return [$item['name'] => $item['rights']];
-            })
+            'permissions' => $this->roles->groupPermission()->get(['name', 'rights'])->mapToGroups(
+                function ($item) {
+                    return [$item['name'] => $item['rights']];
+                }
+            )
         ];
     }
 }

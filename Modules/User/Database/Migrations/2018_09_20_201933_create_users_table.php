@@ -13,24 +13,27 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('username')->unique();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->string('avatar')->nullable();
-            $table->unsignedInteger('group_id')->nullable();
-            $table->string('password');
-            $table->string('slug')->nullable()->unique();
-            $table->string('token')->nullable();
-            $table->rememberToken();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->softDeletes();
-            $table->timestamps();
+        Schema::create(
+            'users',
+            function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('username')->unique();
+                $table->string('name');
+                $table->string('email')->unique();
+                $table->string('avatar')->nullable();
+                $table->unsignedInteger('group_id')->nullable();
+                $table->string('password');
+                $table->string('slug')->nullable()->unique();
+                $table->string('token')->nullable();
+                $table->rememberToken();
+                $table->timestamp('email_verified_at')->nullable();
+                $table->softDeletes();
+                $table->timestamps();
 
-            $table->foreign('group_id')->references('id')->on('user_groups')
-                ->onUpdate('set null')->onDelete('set null');
-        });
+                $table->foreign('group_id')->references('id')->on('user_groups')
+                    ->onUpdate('set null')->onDelete('set null');
+            }
+        );
     }
 
     /**

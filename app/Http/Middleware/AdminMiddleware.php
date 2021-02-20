@@ -24,14 +24,12 @@ class AdminMiddleware
     public function handle(Request $request, Closure $next, $right = 'view')
     {
         if (!auth()->check()) {
-
-            if ($request->ajax())
+            if ($request->ajax()) {
                 return response('Permission denied', 401);
+            }
 
             abort(401);
-
         } elseif (auth()->user()->isAdmin()) {
-
             return $next($request);
         } elseif (auth()->user()->roles->groupPermission && $right) {
             $currentRoute = $request->route()->getName();
@@ -61,13 +59,15 @@ class AdminMiddleware
             } elseif (count($explodeWithLine)) {
                 $isList = array_pop($explodeWithLine);
 
-                if ($isList === 'list')
+                if ($isList === 'list') {
                     $listPermission = implode('-', $explodeWithLine);
+                }
             }
 
             if (!$listPermission) {
-                if (auth()->user()->roles->groupPermission->where('name', $explodeRoute[0])->where('rights', $right)->count())
+                if (auth()->user()->roles->groupPermission->where('name', $explodeRoute[0])->where('rights', $right)->count()) {
                     return $next($request);
+                }
 //            } else {
 //                return $next($request);
 //                if (auth()->user()->roles->groupPermission->where('name', $listPermission)->where('rights', 'index')->count())
@@ -76,6 +76,6 @@ class AdminMiddleware
         }
 
 //        if ($request->ajax())
-            return response('Permission denied', 403);
+        return response('Permission denied', 403);
     }
 }

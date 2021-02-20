@@ -13,21 +13,24 @@ class CreateArticlesTable extends Migration
      */
     public function up()
     {
-        Schema::create('articles', function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamp('date')->default(\Carbon\Carbon::now());
-            $table->timestamp('date_from')->nullable();
-            $table->timestamp('date_to')->nullable();
-            $table->double('discount', 4, 2)->nullable();
-            $table->string('image')->nullable();
-            $table->unsignedTinyInteger('socials');
-            $table->unsignedInteger('priority')->unsigned();
-            $table->string('type');
-            $table->unsignedTinyInteger('no_show_home')->nullable();
-            $table->timestamps();
+        Schema::create(
+            'articles',
+            function (Blueprint $table) {
+                $table->increments('id');
+                $table->timestamp('date')->default(\Carbon\Carbon::now());
+                $table->timestamp('date_from')->nullable();
+                $table->timestamp('date_to')->nullable();
+                $table->double('discount', 4, 2)->nullable();
+                $table->string('image')->nullable();
+                $table->unsignedTinyInteger('socials');
+                $table->unsignedInteger('priority')->unsigned();
+                $table->string('type');
+                $table->unsignedTinyInteger('no_show_home')->nullable();
+                $table->timestamps();
 
-            $table->index(['date_from', 'date_to']);
-        });
+                $table->index(['date_from', 'date_to']);
+            }
+        );
     }
 
     /**

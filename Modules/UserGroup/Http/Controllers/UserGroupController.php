@@ -67,17 +67,21 @@ class UserGroupController extends AdminController
                 if ($value) {
                     if ($name === 'unisharp') {
                         foreach ($this->fileManagerRights[$right] as $item) {
-                            $permission = Permission::firstOrCreate([
-                                'name'   => $name,
-                                'rights' => $item
-                            ]);
+                            $permission = Permission::firstOrCreate(
+                                [
+                                    'name'   => $name,
+                                    'rights' => $item
+                                ]
+                            );
                             $syncIds[] = $permission->id;
                         }
                     } else {
-                        $permission = Permission::firstOrCreate([
-                            'name'   => $name,
-                            'rights' => $right
-                        ]);
+                        $permission = Permission::firstOrCreate(
+                            [
+                                'name'   => $name,
+                                'rights' => $right
+                            ]
+                        );
                         $syncIds[] = $permission->id;
                     }
                 }
@@ -92,7 +96,6 @@ class UserGroupController extends AdminController
         $itemAdd->groupPermission()->sync($syncIds);
 
         return true;
-
     }
 
     /**
@@ -109,9 +112,11 @@ class UserGroupController extends AdminController
         if (!$item) {
             $item = new UserGroup();
         } else {
-            $additional['rights'] = $item->groupPermission->mapToGroups(function ($item) {
-                return [$item['name'] => $item['rights']];
-            })->toArray();
+            $additional['rights'] = $item->groupPermission->mapToGroups(
+                function ($item) {
+                    return [$item['name'] => $item['rights']];
+                }
+            )->toArray();
         }
 
         //admin routes
@@ -136,50 +141,60 @@ class UserGroupController extends AdminController
                 $action = 'index';
 
                 if (count($nameParse) > 2) {
-                    if (array_key_exists(2, $nameParse))
+                    if (array_key_exists(2, $nameParse)) {
                         $action = $nameParse[2];
-                    else
+                    } else {
                         $action = 'view';
+                    }
 
-                    if ($action == 'show' && $nameParse[0] != 'unisharp')
+                    if ($action == 'show' && $nameParse[0] != 'unisharp') {
                         continue;
+                    }
 
-                    if (in_array($action, $actionAdd))
+                    if (in_array($action, $actionAdd)) {
                         $action = 'create';
-                    if (in_array($action, $actionEdit))
+                    }
+                    if (in_array($action, $actionEdit)) {
                         $action = 'update';
+                    }
 
                     //filemanager route
                     if ($nameParse[0] == 'unisharp') {
-                        if (!in_array($action, $fileManagerPermissions))
+                        if (!in_array($action, $fileManagerPermissions)) {
                             continue;
+                        }
 
                         $additional['routes'][$nameParse[0]][$action] = false;
-
                     } elseif ($action) {
                         $additional['routes'][$nameParse[0]][$action] = false;
                     }
-
                 } elseif (count($nameParse) > 1 && !in_array($nameParse[0], $exclude)) {
-
-                    if (array_key_exists(1, $nameParse))
+                    if (array_key_exists(1, $nameParse)) {
                         $action = $nameParse[1];
-                    else
+                    } else {
                         $action = 'view';
+                    }
 
-                    if ($action == 'show')
+                    if ($action == 'show') {
                         continue;
+                    }
 
-                    if (in_array($action, $actionAdd))
+                    if (in_array($action, $actionAdd)) {
                         $action = 'create';
-                    if (in_array($action, $actionEdit))
+                    }
+                    if (in_array($action, $actionEdit)) {
                         $action = 'edit';
+                    }
 
                     $additional['routes'][$nameParse[0]][$action] = false;
                 }
 
-                if (!empty($additional['rights'][$nameParse[0]]) && array_search($action, $additional['rights'][$nameParse[0]]) !== false)
+                if (!empty($additional['rights'][$nameParse[0]]) && array_search(
+                        $action,
+                        $additional['rights'][$nameParse[0]]
+                    ) !== false) {
                     $additional['routes'][$nameParse[0]][$action] = true;
+                }
             }
         }
 
@@ -201,17 +216,21 @@ class UserGroupController extends AdminController
                 if ($value) {
                     if ($name === 'unisharp') {
                         foreach ($this->fileManagerRights[$right] as $item) {
-                            $permission = Permission::firstOrCreate([
-                                'name'   => $name,
-                                'rights' => $item
-                            ]);
+                            $permission = Permission::firstOrCreate(
+                                [
+                                    'name'   => $name,
+                                    'rights' => $item
+                                ]
+                            );
                             $syncIds[] = $permission->id;
                         }
                     } else {
-                        $permission = Permission::firstOrCreate([
-                            'name'   => $name,
-                            'rights' => $right
-                        ]);
+                        $permission = Permission::firstOrCreate(
+                            [
+                                'name'   => $name,
+                                'rights' => $right
+                            ]
+                        );
                         $syncIds[] = $permission->id;
                     }
                 }

@@ -18,14 +18,16 @@ class LanguageDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        Language::create([
-            'id'          => 1,
-            'country_iso' => 'RU',
-            'slug'        => 'ru',
-            'name'        => 'Русский',
-            'active'      => 1,
-            'default'     => 1,
-            'priority'        => 1,
-        ]);
+        Language::create(
+            [
+                'id'          => 1,
+                'country_iso' => 'RU',
+                'slug'        => 'ru',
+                'name'        => 'Русский',
+                'active'      => 1,
+                'default'     => 1,
+                'priority'    => 1,
+            ]
+        );
     }
 }

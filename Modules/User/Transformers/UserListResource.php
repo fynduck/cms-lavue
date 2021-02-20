@@ -15,10 +15,10 @@ class UserListResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'           => $this->id,
-            'name'         => $this->name,
-            'email'        => $this->email,
-            'group'        => $this->roles->name,
+            'id'          => $this->id,
+            'name'        => $this->name,
+            'email'       => $this->email,
+            'group'       => $this->roles->name,
             'permissions' => [
                 'edit'    => checkModulePermission('user', 'edit'),
                 'destroy' => checkModulePermission('user', 'destroy')

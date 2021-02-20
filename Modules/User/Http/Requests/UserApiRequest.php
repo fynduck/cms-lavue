@@ -13,7 +13,6 @@ class UserApiRequest extends FormRequest
      */
     public function rules()
     {
-
         $rules = [
             'name' => 'sometimes|required|max:255'
         ];

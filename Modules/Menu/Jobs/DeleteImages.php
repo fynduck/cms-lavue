@@ -37,7 +37,6 @@ class DeleteImages implements ShouldQueue
             $this->deleteMenuImages($this->menu);
 
             Storage::delete(Menu::FOLDER_IMG . '/' . $this->menu->image);
-
         } else {
             $menus = Menu::where('image', '!=', '')->get();
 

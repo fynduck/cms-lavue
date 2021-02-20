@@ -19,27 +19,31 @@ class SettingsService
     public static function addUpdateSocials($items)
     {
         foreach ($items as $item) {
-
-            $social = Social::updateOrCreate([
-                'name' => $item['name'],
-            ], [
+            $social = Social::updateOrCreate(
+                [
+                    'name' => $item['name'],
+                ],
+                [
                     'url'        => $item['url'],
                     'class_icon' => $item['class_icon'],
                     'priority'   => $item['priority'],
                 ]
             );
 
-            if ($social == false)
+            if ($social == false) {
                 return back()->withErrors(trans('admin.data_not_save'));
+            }
         }
     }
 
     public static function addUpdatePagination(Request $request)
     {
         foreach ($request->all() as $item) {
-            Pagination::updateOrCreate([
-                'id' => $item['id'] ?? null,
-            ], [
+            Pagination::updateOrCreate(
+                [
+                    'id' => $item['id'] ?? null,
+                ],
+                [
                     'on'      => $item['on'],
                     'for'     => $item['for'],
                     'value'   => $item['value'],
@@ -52,21 +56,24 @@ class SettingsService
     public static function formatShowSettings(): array
     {
         $settings = [];
-        Settings::all()->each(function ($item) use (&$settings) {
-            $value = $item['value'];
-            if ($item['key'] == 'logo' && $item['value']) {
-                $value = asset('storage/' . Settings::FOLDER_IMG . '/' . $item['value']);
+        Settings::all()->each(
+            function ($item) use (&$settings) {
+                $value = $item['value'];
+                if ($item['key'] == 'logo' && $item['value']) {
+                    $value = asset('storage/' . Settings::FOLDER_IMG . '/' . $item['value']);
+                }
+                $settings[$item['lang']][$item['key']] = $value;
             }
-            $settings[$item['lang']][$item['key']] = $value;
-        });
+        );
 
         $check = $settings;
         unset($check[0]);
 
         if (count($check) != count(config('app.locales'))) {
             $locales = config('app.locales');
-            foreach ($check as $lang_id => $item)
+            foreach ($check as $lang_id => $item) {
                 unset($locales[$lang_id]);
+            }
 
             foreach ($locales as $lang_id => $locale) {
                 $settings[$lang_id] = (object)[];

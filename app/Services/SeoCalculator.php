@@ -23,12 +23,15 @@ class SeoCalculator
         $fieldsCompleted = 0;
         if ($category) {
             foreach ($category as $item) {
-                if ($item->meta_title != '')
+                if ($item->meta_title != '') {
                     $fieldsCompleted++;
-                if ($item->meta_description != '')
+                }
+                if ($item->meta_description != '') {
                     $fieldsCompleted++;
-                if ($item->meta_keywords != '')
+                }
+                if ($item->meta_keywords != '') {
                     $fieldsCompleted++;
+                }
             }
         }
 
@@ -38,12 +41,15 @@ class SeoCalculator
     static function collectionCalcSeo($collection)
     {
         $fieldsCompleted = 0;
-        if ($collection->meta_title != '')
+        if ($collection->meta_title != '') {
             $fieldsCompleted++;
-        if ($collection->meta_description != '')
+        }
+        if ($collection->meta_description != '') {
             $fieldsCompleted++;
-        if ($collection->meta_keywords != '')
+        }
+        if ($collection->meta_keywords != '') {
             $fieldsCompleted++;
+        }
 
         return intval((100 * $fieldsCompleted) / 3);
     }

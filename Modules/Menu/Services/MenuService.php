@@ -35,9 +35,10 @@ class MenuService
             $page_id = explode('_', $request->get('to_page'))[1];
         }
 
-        return Menu::updateOrCreate([
-            'id' => $id
-        ],
+        return Menu::updateOrCreate(
+            [
+                'id' => $id
+            ],
             [
                 'parent_id'  => $request->get('parent_id'),
                 'target'     => $request->get('target'),
@@ -56,11 +57,12 @@ class MenuService
     public function addUpdateTrans(Menu $menu, array $items)
     {
         foreach ($items as $lang_id => $item) {
-
-            $menuTrans = MenuTrans::updateOrCreate([
-                'menu_id' => $menu->id,
-                'lang_id' => $lang_id
-            ], [
+            $menuTrans = MenuTrans::updateOrCreate(
+                [
+                    'menu_id' => $menu->id,
+                    'lang_id' => $lang_id
+                ],
+                [
                     'title'            => $item['title'],
                     'additional_title' => $item['additional_title'],
                     'link'             => $item['link'],
@@ -70,8 +72,9 @@ class MenuService
                 ]
             );
 
-            if (!$menuTrans)
+            if (!$menuTrans) {
                 $menu->delete();
+            }
         }
     }
 
@@ -82,11 +85,13 @@ class MenuService
         foreach ($show_on as $item) {
             $item = explode('_', $item);
 
-            MenuShow::create([
-                'menu_id'   => $id,
-                'show_on'   => $item[1],
-                'show_type' => $item[0],
-            ]);
+            MenuShow::create(
+                [
+                    'menu_id'   => $id,
+                    'show_on'   => $item[1],
+                    'show_type' => $item[0],
+                ]
+            );
         }
     }
 
@@ -101,15 +106,19 @@ class MenuService
             'imageName' => null
         ];
         $imgName = null;
-        if ($request->get('items')[config('app.fallback_locale_id')]['title'])
+        if ($request->get('items')[config('app.fallback_locale_id')]['title']) {
             $imgName = $request->get('items')[config('app.fallback_locale_id')]['title'];
+        }
 
         if ($request->get('image')) {
             if (!Str::contains($request->get('image'), Menu::FOLDER_IMG)) {
-
-                $settings = Cache::remember('menu_sizes', now()->addDay(), function () {
-                    return MenuSettings::where('name', 'sizes')->first();
-                });
+                $settings = Cache::remember(
+                    'menu_sizes',
+                    now()->addDay(),
+                    function () {
+                        return MenuSettings::where('name', 'sizes')->first();
+                    }
+                );
                 $sizes = null;
                 $resizeMethod = null;
                 $greyscale = false;
@@ -145,9 +154,13 @@ class MenuService
 
     public function settings()
     {
-        $settings = Cache::remember('menu_sizes', now()->addDay(), function () {
-            return MenuSettings::where('name', 'sizes')->first();
-        });
+        $settings = Cache::remember(
+            'menu_sizes',
+            now()->addDay(),
+            function () {
+                return MenuSettings::where('name', 'sizes')->first();
+            }
+        );
 
         $data = [];
         if ($settings && !empty($settings->data['sizes'])) {
@@ -176,15 +189,21 @@ class MenuService
      */
     public function linkImage($image, $size = null, $first = false): string
     {
-        if (!$image)
+        if (!$image) {
             return asset('img/placeholder.jpg');
+        }
 
-        if (!$size && !$first)
+        if (!$size && !$first) {
             return asset('storage/' . Menu::FOLDER_IMG . '/' . $image);
+        }
 
-        $settings = Cache::remember('menu_sizes', now()->addDay(), function () {
-            return MenuSettings::where('name', 'sizes')->first();
-        });
+        $settings = Cache::remember(
+            'menu_sizes',
+            now()->addDay(),
+            function () {
+                return MenuSettings::where('name', 'sizes')->first();
+            }
+        );
 
         if ($settings && !empty($settings->data['sizes'])) {
             if ($first) {

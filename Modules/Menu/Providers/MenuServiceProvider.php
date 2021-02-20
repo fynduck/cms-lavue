@@ -43,11 +43,15 @@ class MenuServiceProvider extends ServiceProvider
      */
     protected function registerConfig()
     {
-        $this->publishes([
-            module_path('Menu', 'Config/config.php') => config_path('menu.php'),
-        ], 'config');
+        $this->publishes(
+            [
+                module_path('Menu', 'Config/config.php') => config_path('menu.php'),
+            ],
+            'config'
+        );
         $this->mergeConfigFrom(
-            module_path('Menu', 'Config/config.php'), 'menu'
+            module_path('Menu', 'Config/config.php'),
+            'menu'
         );
     }
 
@@ -62,13 +66,25 @@ class MenuServiceProvider extends ServiceProvider
 
         $sourcePath = module_path('Menu', 'Resources/views');
 
-        $this->publishes([
-            $sourcePath => $viewPath
-        ],'views');
+        $this->publishes(
+            [
+                $sourcePath => $viewPath
+            ],
+            'views'
+        );
 
-        $this->loadViewsFrom(array_merge(array_map(function ($path) {
-            return $path . '/modules/menu';
-        }, \Config::get('view.paths')), [$sourcePath]), 'menu');
+        $this->loadViewsFrom(
+            array_merge(
+                array_map(
+                    function ($path) {
+                        return $path . '/modules/menu';
+                    },
+                    \Config::get('view.paths')
+                ),
+                [$sourcePath]
+            ),
+            'menu'
+        );
     }
 
     /**

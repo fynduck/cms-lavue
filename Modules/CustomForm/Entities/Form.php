@@ -49,8 +49,9 @@ class Form extends Model
 
     public function scopeFilter($query, $request)
     {
-        if ($request->get('q'))
+        if ($request->get('q')) {
             $query->where('form_name', 'LIKE', '%' . $request->get('q') . '%');
+        }
     }
 
     public function getFields()

@@ -43,11 +43,15 @@ class RedirectServiceProvider extends ServiceProvider
      */
     protected function registerConfig()
     {
-        $this->publishes([
-            __DIR__.'/../Config/config.php' => config_path('redirect.php'),
-        ], 'config');
+        $this->publishes(
+            [
+                __DIR__ . '/../Config/config.php' => config_path('redirect.php'),
+            ],
+            'config'
+        );
         $this->mergeConfigFrom(
-            __DIR__.'/../Config/config.php', 'redirect'
+            __DIR__ . '/../Config/config.php',
+            'redirect'
         );
     }
 
@@ -60,15 +64,27 @@ class RedirectServiceProvider extends ServiceProvider
     {
         $viewPath = resource_path('views/modules/redirect');
 
-        $sourcePath = __DIR__.'/../Resources/views';
+        $sourcePath = __DIR__ . '/../Resources/views';
 
-        $this->publishes([
-            $sourcePath => $viewPath
-        ],'views');
+        $this->publishes(
+            [
+                $sourcePath => $viewPath
+            ],
+            'views'
+        );
 
-        $this->loadViewsFrom(array_merge(array_map(function ($path) {
-            return $path . '/modules/redirect';
-        }, \Config::get('view.paths')), [$sourcePath]), 'redirect');
+        $this->loadViewsFrom(
+            array_merge(
+                array_map(
+                    function ($path) {
+                        return $path . '/modules/redirect';
+                    },
+                    \Config::get('view.paths')
+                ),
+                [$sourcePath]
+            ),
+            'redirect'
+        );
     }
 
     /**
@@ -83,7 +99,7 @@ class RedirectServiceProvider extends ServiceProvider
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, 'redirect');
         } else {
-            $this->loadTranslationsFrom(__DIR__ .'/../Resources/lang', 'redirect');
+            $this->loadTranslationsFrom(__DIR__ . '/../Resources/lang', 'redirect');
         }
     }
 

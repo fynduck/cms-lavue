@@ -46,18 +46,21 @@ class LanguageController extends AdminController
 
         $defaultLang = Language::where('default', 1)->where('active', 1)->value('slug');
 
-        if (!File::exists(resource_path('lang/' . $request->get('slug'))))
+        if (!File::exists(resource_path('lang/' . $request->get('slug')))) {
             File::copyDirectory(resource_path('lang/' . $defaultLang), resource_path('lang/' . $request->get('slug')));
+        }
 
-        Language::create([
-            'name'        => $request->get('name'),
-            'country_iso' => $request->get('country_iso'),
-            'slug'        => $request->get('slug'),
-            'active'      => $request->get('active') ?? 0,
-            'default'     => $request->get('default') ?? 0,
-            'priority'    => $request->get('priority') ?? 0,
-            'image'       => $image
-        ]);
+        Language::create(
+            [
+                'name'        => $request->get('name'),
+                'country_iso' => $request->get('country_iso'),
+                'slug'        => $request->get('slug'),
+                'active'      => $request->get('active') ?? 0,
+                'default'     => $request->get('default') ?? 0,
+                'priority'    => $request->get('priority') ?? 0,
+                'image'       => $image
+            ]
+        );
 
         return true;
     }
@@ -70,8 +73,9 @@ class LanguageController extends AdminController
     {
         $item = Language::find($id);
 
-        if (!$item)
+        if (!$item) {
             $item = new Language();
+        }
 
         return (new LanguageListResource($item));
     }
@@ -82,7 +86,6 @@ class LanguageController extends AdminController
 
         $image = null;
         if ($request->get('image')) {
-
             if (!Str::contains($request->get('image'), Language::FOLDER_IMG)) {
                 $image = UploadFile::file($request->get('image'))
                     ->setFolder(Language::FOLDER_IMG)
@@ -92,8 +95,9 @@ class LanguageController extends AdminController
             }
         }
 
-        if ($language->slug != $request->get('slug') && !File::exists(resource_path('lang/' . $request->get('slug'))))
+        if ($language->slug != $request->get('slug') && !File::exists(resource_path('lang/' . $request->get('slug')))) {
             File::moveDirectory(resource_path('lang/' . $language->slug), resource_path('lang/' . $request->get('slug')));
+        }
 
         $language->name = $request->get('name');
         $language->country_iso = $request->get('country_iso');
@@ -101,8 +105,9 @@ class LanguageController extends AdminController
         $language->active = $request->get('active');
         $language->default = $request->get('default');
         $language->priority = $request->get('priority');
-        if ($image)
+        if ($image) {
             $language->image = $image;
+        }
 
         $language->save();
 

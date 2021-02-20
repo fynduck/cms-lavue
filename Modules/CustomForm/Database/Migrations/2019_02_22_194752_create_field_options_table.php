@@ -13,18 +13,22 @@ class CreateFieldOptionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('field_options', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('field_id')->index();
-            $table->string('value');
-            $table->string('title');
-            $table->string('option_class')->nullable();
-            $table->string('option_id')->nullable();
-            $table->timestamps();
+        Schema::create(
+            'field_options',
+            function (Blueprint $table) {
+                $table->increments('id');
+                $table->unsignedInteger('field_id')->index();
+                $table->string('value');
+                $table->string('title');
+                $table->string('option_class')->nullable();
+                $table->string('option_id')->nullable();
+                $table->unsignedInteger('priority')->nullable()->default(0);
+                $table->timestamps();
 
-            $table->foreign('field_id')->references('id')->on('form_fields')
-                ->onUpdate('cascade')->onDelete('cascade');
-        });
+                $table->foreign('field_id')->references('id')->on('form_fields')
+                    ->onUpdate('cascade')->onDelete('cascade');
+            }
+        );
     }
 
     /**

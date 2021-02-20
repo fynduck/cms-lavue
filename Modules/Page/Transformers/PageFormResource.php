@@ -33,8 +33,9 @@ class PageFormResource extends JsonResource
 
             if (count($items) != count(config('app.locales'))) {
                 $locales = config('app.locales');
-                foreach ($items as $lang_id => $item)
+                foreach ($items as $lang_id => $item) {
                     unset($locales[$lang_id]);
+                }
 
                 $items = $this->emptyItems($items->toArray(), $locales);
             }
@@ -45,8 +46,9 @@ class PageFormResource extends JsonResource
 
     private function emptyItems(array $items = [], $locales = null)
     {
-        if (is_null($locales))
+        if (is_null($locales)) {
             $locales = config('app.locales');
+        }
 
         foreach ($locales as $lang_id => $locale) {
             $items[$lang_id] = [

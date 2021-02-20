@@ -13,18 +13,21 @@ class CreateFormShowsTable extends Migration
      */
     public function up()
     {
-        Schema::create('form_shows', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('form_id')->index();
-            $table->unsignedInteger('item_id');
-            $table->string('type');
-            $table->timestamps();
+        Schema::create(
+            'form_shows',
+            function (Blueprint $table) {
+                $table->increments('id');
+                $table->unsignedInteger('form_id')->index();
+                $table->unsignedInteger('item_id');
+                $table->string('type');
+                $table->timestamps();
 
-            $table->index(['item_id', 'type']);
+                $table->index(['item_id', 'type']);
 
-            $table->foreign('form_id')->references('id')->on('forms')
-                ->onUpdate('cascade')->onDelete('cascade');
-        });
+                $table->foreign('form_id')->references('id')->on('forms')
+                    ->onUpdate('cascade')->onDelete('cascade');
+            }
+        );
     }
 
     /**

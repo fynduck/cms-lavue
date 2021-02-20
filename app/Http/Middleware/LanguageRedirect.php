@@ -1,4 +1,6 @@
-<?php namespace App\Http\Middleware;
+<?php
+
+namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Routing\Redirector;
@@ -30,13 +32,18 @@ class LanguageRedirect
         $isAjax = $request->ajax();
         $isFm = $request->is('admin/filemanager*');
         $enableLang = checkModule('Language');
-        if ($isPost || $isAjax || $isFm || !$enableLang)
+        if ($isPost || $isAjax || $isFm || !$enableLang) {
             return $next($request);
+        }
 
-        $languages = Cache::remember('languages', now()->addDay(), function () {
-            return Language::where('active', 1)
-                ->get(['id', 'slug', 'country_iso', 'default', 'name', 'image']);
-        });
+        $languages = Cache::remember(
+            'languages',
+            now()->addDay(),
+            function () {
+                return Language::where('active', 1)
+                    ->get(['id', 'slug', 'country_iso', 'default', 'name', 'image']);
+            }
+        );
 
         // Make sure current locale exists.
         $urlLocale = $request->segment(1);
@@ -70,26 +77,30 @@ class LanguageRedirect
         $locales = [];
         $locale = $fallback = false;
         foreach ($languages as $lang) {
-            if ($lang->slug == $urlLocale)
+            if ($lang->slug == $urlLocale) {
                 $locale = $lang;
+            }
             $locales[$lang->id] = $lang;
-            if ($lang->default == 1)
+            if ($lang->default == 1) {
                 $fallback = $lang;
+            }
         }
 
         if (!$locale) {
-            if ($fallback)
+            if ($fallback) {
                 $locale = $fallback;
-            else
+            } else {
                 $locale = $fallback = reset($locales);
+            }
         }
 
         $this->app->config->set('app.fallback_locale', $fallback->slug);
         $this->app->config->set('app.fallback_locale_id', $fallback->id);
         $this->app->setLocale($locale->slug);
         $this->app->config->set('app.locale_id', $locale->id);
-        if (config('app.fallback_locale') != $fallback->slug)
+        if (config('app.fallback_locale') != $fallback->slug) {
             $this->app->config->set('app.locale_prefix', $locale->slug);
+        }
 
         $this->app->config->set('app.locales', $locales);
 
