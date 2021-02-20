@@ -83,7 +83,8 @@ module.exports = {
         },
         extend(config, ctx) {
             config.resolve.alias["vue"] = "vue/dist/vue.common";
-        }
+        },
+        babel: { compact: true }
     },
 
     hooks: {
