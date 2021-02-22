@@ -5,7 +5,7 @@ namespace Modules\CustomForm\Emails;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Str;
 
 class SendCustomFormEmail extends Mailable
 {
@@ -42,7 +42,7 @@ class SendCustomFormEmail extends Mailable
                     [$type, $data['value']] = explode(';', $data['value']);
                     [, $data['value']] = explode(',', $data['value']);
                     $format = explode('/', $type)[1];
-                    $fileName = $data['name'] ? $data['name'] : str_random() . '.' . $format;
+                    $fileName = $data['name'] ? $data['name'] : Str::random() . '.' . $format;
                     $subject->attachData(base64_decode($data['value']), $fileName);
 
                     unset($this->data[$key]);
