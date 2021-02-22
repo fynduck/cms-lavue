@@ -14,5 +14,5 @@
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('get-form/{page_type}/{page_id}/{form_id?}', 'FrontController@getForm')->name('get-form');
-Route::post('call-back', 'FrontController@saveCallBack')->name('send-call-back');
+//Route::get('get-form/{page_type}/{page_id}/{form_id?}', 'FrontController@getForm')->name('get-form');
+//Route::post('call-back', 'FrontController@saveCallBack')->name('send-call-back');

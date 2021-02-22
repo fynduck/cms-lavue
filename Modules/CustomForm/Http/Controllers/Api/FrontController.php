@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\CustomForm\Http\Controllers;
+namespace Modules\CustomForm\Http\Controllers\Api;
 
 use Http\Client\Exception;
 use Illuminate\Http\Request;
@@ -68,25 +68,24 @@ class FrontController extends Controller
 
         $emailData = $this->customFormService->generateDataEmail($form, $request->get('fields'));
 
+        $emails = [];
         if ($form->send_emails) {
             $emails = explode(',', $form->send_emails);
         } else {
-            $settings = Settings::getByKey(['email_rss']);
-            $emails = explode(',', $settings['email_rss']);
+            $emailRss = Settings::whereKey('email_rss')->value('value');
+            if ($emailRss) {
+                $emails = explode(',', $emailRss);
+            }
         }
 
         foreach ($emails as $email) {
             try {
                 Mail::to($email)->send(new SendCustomFormEmail($emailData));
-            } catch (Exception $exception) {
+            } catch (\Exception $exception) {
                 return $exception->getMessage();
             }
         }
 
-        $response = [
-            'message' => trans('global.message-sends')
-        ];
-
-        return response()->json($response);
+        return response()->json(true);
     }
 }

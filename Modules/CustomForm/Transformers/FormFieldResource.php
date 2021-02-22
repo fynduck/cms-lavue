@@ -3,6 +3,7 @@
 namespace Modules\CustomForm\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Str;
 use Modules\Language\Entities\Language;
 
 class FormFieldResource extends JsonResource
@@ -22,12 +23,28 @@ class FormFieldResource extends JsonResource
             'field_class' => $this->field_class,
             'field_id'    => $this->field_id,
             'name'        => $this->name,
-            'value'       => $this->type == 'checkbox' && !\Str::contains($this->validate, 'accepted') ? [] : '',
+            'value'       => $this->type == 'checkbox' && !Str::contains($this->validate, 'accepted') ? [] : '',
             'file_name'   => '',
             'label'       => $this->label,
             'placeholder' => $this->placeholder,
-            'validate'    => $this->validate ? explode('|', $this->validate) : [],
-            'options'     => FormFieldOptionResource::collection($this->getOptions),
+            'validate'    => $this->checkValidate(),
+            'options'     => FormFieldOptionResource::collection($this->getOptions->sortBy('priority')),
         ];
+    }
+
+    private function checkValidate()
+    {
+        if (!$this->validate) {
+            return [];
+        }
+
+        $validates = [];
+        foreach (explode(';', $this->validate) as $validate) {
+            if (!in_array($validate, ['numeric', 'email', 'file', 'accepted'])) {
+                $validates[] = $validate;
+            }
+        }
+
+        return $validates;
     }
 }

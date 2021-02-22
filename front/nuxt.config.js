@@ -6,7 +6,7 @@ module.exports = {
     server: {
         port: 9000
     },
-    //mode: 'spa',
+    // mode: 'spa',
 
     srcDir: __dirname,
     buildDir: '.nuxt/front',
@@ -47,6 +47,7 @@ module.exports = {
         enabled: true
     },
     plugins: [
+        '~components/global',
         '~plugins/i18n',
         '~plugins/axios',
         {src: '~plugins/bootstrap', mode: 'client'},
