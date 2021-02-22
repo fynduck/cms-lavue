@@ -55,4 +55,50 @@ class FormField extends Model
     {
         return $this->hasMany(FieldOption::class, 'field_id');
     }
+
+    public static function types()
+    {
+        return [
+            'text'     => 'CustomForm.text',
+            'number'   => 'CustomForm.number',
+            'tel'      => 'CustomForm.telephone',
+            'email'    => 'CustomForm.email',
+            'checkbox' => 'CustomForm.checkbox',
+            'radio'    => 'CustomForm.radio',
+            'range'    => 'CustomForm.range',
+            'file'     => 'CustomForm.file',
+            'select'   => 'CustomForm.select',
+            'textarea' => 'CustomForm.textarea'
+        ];
+    }
+
+    public static function validations()
+    {
+        return [
+            [
+                'title' => 'CustomForm.required',
+                'value' => 'required'
+            ],
+            [
+                'title' => 'CustomForm.number',
+                'value' => 'numeric'
+            ],
+            [
+                'title' => 'CustomForm.email',
+                'value' => 'email'
+            ],
+            [
+                'title' => 'CustomForm.telephone',
+                'value' => '(\+?\d[- .]*){7,13}'
+            ],
+            [
+                'title' => 'CustomForm.file',
+                'value' => 'file'
+            ],
+            [
+                'title' => 'CustomForm.accepted',
+                'value' => 'accepted'
+            ]
+        ];
+    }
 }

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Modules\CustomForm\Entities\FormField;
 
 class CreateFormFieldsTable extends Migration
 {
@@ -18,7 +19,7 @@ class CreateFormFieldsTable extends Migration
             function (Blueprint $table) {
                 $table->increments('id');
                 $table->unsignedInteger('form_id')->index();
-                $table->enum('type', ['text', 'number', 'email', 'checkbox', 'radio', 'select', 'range', 'textarea', 'file']);
+                $table->enum('type', array_keys(FormField::types()));
                 $table->string('block_class')->nullable();
                 $table->string('name');
                 $table->string('label')->nullable();

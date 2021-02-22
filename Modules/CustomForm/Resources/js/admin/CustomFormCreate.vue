@@ -44,7 +44,7 @@
                     <label for="action">{{ $t('CustomForm.action') }}</label>
                     <select name="action" id="action" :class="['form-control', errors.action ? 'is-invalid' : '']"
                             v-model="form.action">
-                        <option v-for="(title, action) in actions" :value="action">{{ title }}</option>
+                        <option v-for="(title, action) in actions" :value="action">{{ $t(title) }}</option>
                     </select>
                 </div>
                 <div class="form-group col-md-5">
@@ -166,9 +166,8 @@
                                     <li class="list-group-item">
                                         <div class="row">
                                             <div class="form-group col-md-6">
-                                                <label :for="`option_title_${option_key}`">{{
-                                                        $t('CustomForm.text')
-                                                    }}</label>
+                                                <label :for="`option_title_${option_key}`">
+                                                    {{ $t('CustomForm.text') }}</label>
                                                 <input type="text"
                                                        :class="['form-control', errors[`fields.${key}.options.${option_key}.title`] ? 'is-invalid': '']"
                                                        v-model="option.title" name="title"
@@ -187,17 +186,16 @@
                                     <li class="list-group-item">
                                         <div class="row">
                                             <div class="form-group col-md-6">
-                                                <label :for="`option_class_${option_key}`">{{
-                                                        $t('CustomForm.option_class')
-                                                    }}</label>
+                                                <label :for="`option_class_${option_key}`">
+                                                    {{ $t('CustomForm.option_class') }}
+                                                </label>
                                                 <input type="text" class="form-control" v-model="option.option_class"
                                                        name="option_class"
                                                        :id="`option_class_${option_key}`" placeholder="custom_input">
                                             </div>
                                             <div class="form-group col-md-6">
-                                                <label :for="`option_id_${option_key}`">{{
-                                                        $t('CustomForm.option_id')
-                                                    }}</label>
+                                                <label :for="`option_id_${option_key}`">
+                                                    {{ $t('CustomForm.option_id') }}</label>
                                                 <input type="text" class="form-control" v-model="option.option_id"
                                                        name="option_id"
                                                        :id="`option_id_${option_key}`" placeholder="custom_input">

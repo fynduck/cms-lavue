@@ -52,7 +52,7 @@ class CustomFormService
                     'placeholder' => $item['placeholder'],
                     'field_class' => $item['field_class'],
                     'field_id'    => $item['field_id'],
-                    'validate'    => $item['validate'] ? implode('|', $item['validate']) : null,
+                    'validate'    => $item['validate'] ? implode(';', $item['validate']) : null,
                     'priority'    => $key
                 ]
             );
@@ -171,11 +171,27 @@ class CustomFormService
         $validateFields = [];
         foreach ($fields as $field) {
             if ($field->validate) {
-                $validateFields[$field->name] = $field->validate;
+                foreach (explode(';', $field->validate) as $item) {
+                    if (in_array($item, ['numeric', 'email', 'file', 'accepted', 'required'])) {
+                        $this->setValidateData($validateFields, $field->name, $item);
+                    } else {
+                        $this->setValidateData($validateFields, $field->name, 'regex:/' . $item . '/');
+                    }
+                }
             }
         }
 
         return $validateFields;
+    }
+
+    private function setValidateData(array &$validateFields, string $name, string $validate)
+    {
+
+        if (array_key_exists($name, $validateFields)) {
+            $validateFields[$name] .= '|' . $validate;
+        } else {
+            $validateFields[$name] = $validate;
+        }
     }
 
     public function generateDataEmail($form, $formData)

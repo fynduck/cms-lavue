@@ -8,7 +8,7 @@
                          :title="$t('Menu.cancel')">
                 <fa :icon="['fas', 'reply']"/>
             </router-link>
-            <button :class="{'btn btn-primary submit_absolute': true, 'btn-loading': submit}" type="submit"
+            <button :class="{'btn btn-success submit_absolute': true, 'btn-loading': submit}" type="submit"
                     :title="$t('Menu.save')"
                     :disabled="submit">
                 <fa :icon="['fas', 'save']"/>
@@ -124,7 +124,7 @@
                 <router-link class="btn btn-light" :to="{name: 'menu.index'}" :title="$t('Menu.cancel')">
                     <fa :icon="['fas', 'reply']"/>
                 </router-link>
-                <button :class="{'btn btn-primary': true, 'btn-loading': submit}" type="submit" :title="$t('Menu.save')"
+                <button :class="{'btn btn-success': true, 'btn-loading': submit}" type="submit" :title="$t('Menu.save')"
                         :disabled="submit">
                     <fa :icon="['fas', 'save']"/>
                 </button>
