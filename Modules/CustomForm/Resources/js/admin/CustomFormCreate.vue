@@ -61,7 +61,7 @@
                                    :source="admin_search"
                                    :label="$t('CustomForm.show_on')"
                                    :no_result="$t('CustomForm.no_results')"
-                                   v-if="!loading"
+                                   v-if="loaded_data"
                     ></custom-select>
                 </div>
                 <div class="col-md-6">
@@ -86,6 +86,7 @@
                             <strong>{{ $t('CustomForm.field') }}</strong>
                             <b-badge variant="dark">&#8470;{{ key + 1 }}</b-badge>
                         </div>
+                        <em>{{ field.label || field.placeholder}}</em>
                         <fa :icon="['fas', 'trash-alt']" class="trash" @click="confirmDelete(key)"/>
                     </div>
                     <ul class="list-group list-group-flush">
@@ -159,8 +160,8 @@
                                         <strong>{{ $t('CustomForm.option') }}</strong>
                                         <b-badge variant="dark">&#8470;{{ option_key + 1 }}</b-badge>
                                     </div>
-                                    <fa :icon="['fas', 'trash-alt']" class="trash"
-                                        @click="confirmDelete(key, option_key)"/>
+                                    <em>{{ option.title }}</em>
+                                    <fa :icon="['fas', 'trash-alt']" class="trash" @click="confirmDelete(key, option_key)"/>
                                 </div>
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item">
@@ -288,6 +289,7 @@ export default {
                     }
                 ]
             },
+            loaded_data: false,
             actions: [],
             methods: [],
             types_field: [],
@@ -367,12 +369,16 @@ export default {
                 })
                 if (response.data.data) {
                     this.form = response.data.data;
+                    this.$nextTick(() => {
+                        this.loaded_data = true;
+                    })
                 } else {
                     this.$nextTick(() => {
                         this.form.action = Object.keys(this.actions)[0];
                         this.form.method = Object.keys(this.methods)[0];
                         this.form.fields[0].type = Object.keys(this.types_field)[0];
                         this.loading = false;
+                        this.loaded_data = true;
                     });
                 }
             }).catch((error) => {

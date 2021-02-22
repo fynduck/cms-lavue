@@ -166,7 +166,7 @@ class CustomFormService
      * @param $fields
      * @return array
      */
-    public function generateFieldValidate($fields)
+    public function generateFieldValidate($fields, array $requestFields)
     {
         $validateFields = [];
         foreach ($fields as $field) {
@@ -181,16 +181,28 @@ class CustomFormService
             }
         }
 
+        $this->removePatternIfNotRequiredAndValueIsNull($validateFields, $requestFields);
+
         return $validateFields;
     }
 
     private function setValidateData(array &$validateFields, string $name, string $validate)
     {
-
         if (array_key_exists($name, $validateFields)) {
             $validateFields[$name] .= '|' . $validate;
         } else {
             $validateFields[$name] = $validate;
+        }
+    }
+
+    private function removePatternIfNotRequiredAndValueIsNull(array &$validateFields, array $requestFields)
+    {
+        foreach ($validateFields as $name => $validateField) {
+            if (Str::contains($validateField, 'regex') &&
+                !Str::contains($validateField, 'required') &&
+                empty($requestFields[$name])) {
+                unset($validateFields[$name]);
+            }
         }
     }
 
