@@ -24,7 +24,7 @@ class FormResource extends JsonResource
             'action'      => $this->action,
             'method'      => $this->method,
             'send_emails' => $this->send_emails,
-            'fields'      => FormFieldResource::collection($this->getFields)
+            'fields'      => FormFieldResource::collection($this->getFields->sortBy('priority'))
         ];
     }
 }

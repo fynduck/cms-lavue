@@ -76,7 +76,8 @@ module.exports = {
                     }
                 }
             }
-        }
+        },
+        babel: { compact: true }
     },
 
     hooks: {

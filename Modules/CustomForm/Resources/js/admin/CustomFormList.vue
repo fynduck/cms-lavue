@@ -29,6 +29,12 @@
                  :sort-desc.sync="sortDesc"
                  @sort-changed="changeSort"
         >
+            <template #table-busy>
+                <div class="text-center text-success my-2">
+                    <b-spinner class="align-middle"></b-spinner>
+                    <strong>Loading...</strong>
+                </div>
+            </template>
             <template v-slot:cell(index)="row">
                 {{ row.index + 1 }}
             </template>

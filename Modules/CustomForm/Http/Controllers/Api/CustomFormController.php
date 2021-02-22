@@ -22,56 +22,17 @@ class CustomFormController extends AdminController
 
     protected $methods = [];
 
-    protected $types = [];
-
-    protected $validations = [];
-
     public function __construct()
     {
         $this->middleware('admin');
 
         $this->actions = [
-            route('send-call-back') => 'Feedback'
+            str_replace('/api', '', route('send-call-back', [], false)) => 'CustomForm.feedback'
         ];
 
         $this->methods = [
             'post' => 'POST',
             'get'  => 'GET',
-        ];
-
-        $this->types = [
-            'text'     => 'CustomForm.text',
-            'number'   => 'CustomForm.number',
-            'email'    => 'CustomForm.email',
-            'checkbox' => 'CustomForm.checkbox',
-            'radio'    => 'CustomForm.radio',
-            'range'    => 'CustomForm.range',
-            'file'     => 'CustomForm.file',
-            'select'   => 'CustomForm.select',
-            'textarea' => 'CustomForm.textarea'
-        ];
-
-        $this->validations = [
-            [
-                'title' => 'CustomForm.required',
-                'value' => 'required'
-            ],
-            [
-                'title' => 'CustomForm.number',
-                'value' => 'numeric'
-            ],
-            [
-                'title' => 'CustomForm.email',
-                'value' => 'email'
-            ],
-            [
-                'title' => 'CustomForm.file',
-                'value' => 'file'
-            ],
-            [
-                'title' => 'CustomForm.accepted',
-                'value' => 'accepted'
-            ]
         ];
     }
 
@@ -110,8 +71,8 @@ class CustomFormController extends AdminController
         $response = [
             'actions'     => $this->actions,
             'methods'     => $this->methods,
-            'types_field' => $this->types,
-            'validations' => $this->validations,
+            'types_field' => FormField::types(),
+            'validations' => FormField::validations(),
         ];
         $form = Form::find($id);
 

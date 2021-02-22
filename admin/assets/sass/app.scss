@@ -27,3 +27,9 @@
         height: 10px;
     }
 }
+
+.vs__selected {
+    background-color: $success !important;
+    border-color: $success !important;
+    color: $white !important;
+}
