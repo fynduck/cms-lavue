@@ -53,7 +53,9 @@ class FrontController extends Controller
             return response()->json(['message' => ['form not found']], 404);
         }
 
-        $validator = Validator::make($request->get('fields'), $this->customFormService->generateFieldValidate($form->getFields, $request->get('fields')));
+        $rulesAndAttributes = $this->customFormService->generateFieldValidate($form->getFields, $request->get('fields'));
+
+        $validator = Validator::make($request->get('fields'), $rulesAndAttributes['rules'], [], $rulesAndAttributes['attributes']);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
