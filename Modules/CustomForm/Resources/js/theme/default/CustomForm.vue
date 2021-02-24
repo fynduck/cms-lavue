@@ -69,8 +69,8 @@
                 <div>{{ success }}</div>
             </div>
             <div class="text-center my-3">
-                <button class="btn-custom" type="submit">
-                    <span v-show="!loading">{{ $t('CustomForm.send') }}</span>
+                <button :class="{'btn-custom': true, 'btn-loading': loading}" type="submit">
+                    {{ $t('CustomForm.send') }}
                 </button>
             </div>
         </form>
@@ -159,6 +159,7 @@ export default {
         },
         onSubmit() {
             this.loading = true;
+            this.errorsValidate = {};
             axios({
                 method: this.form.method,
                 url: this.form.action,

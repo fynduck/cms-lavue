@@ -24,7 +24,11 @@ class CreateFormsTable extends Migration
                 $table->string('form_class')->nullable();
                 $table->string('form_id')->nullable();
                 $table->string('send_emails')->nullable();
+                $table->unsignedInteger('lang_id')->nullable();
                 $table->timestamps();
+
+                $table->foreign('lang_id')->references('id')->on('languages')
+                    ->onUpdate('set null')->onDelete('set null');
             }
         );
     }

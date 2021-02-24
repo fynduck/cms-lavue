@@ -44,7 +44,8 @@ class Form extends Model
         'file',
         'form_class',
         'form_id',
-        'send_emails'
+        'send_emails',
+        'lang_id'
     ];
 
     public function scopeFilter($query, $request)

@@ -4,7 +4,7 @@ namespace Modules\CustomForm\Http\Controllers\Api;
 
 use App\Http\Controllers\AdminController;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 use Modules\CustomForm\Entities\FieldOption;
 use Modules\CustomForm\Entities\Form;
 use Modules\CustomForm\Entities\FormField;
@@ -14,13 +14,15 @@ use Modules\CustomForm\Services\CustomFormService;
 use Modules\CustomForm\Transformers\CustomFormCompletedResource;
 use Modules\CustomForm\Transformers\CustomFormListResource;
 use Modules\CustomForm\Transformers\CustomFormResource;
-use Modules\CustomForm\Transformers\FormResource;
+use Modules\Language\Entities\Language;
 
 class CustomFormController extends AdminController
 {
     protected $actions = [];
 
     protected $methods = [];
+
+    protected $languages = [];
 
     public function __construct()
     {
@@ -34,6 +36,14 @@ class CustomFormController extends AdminController
             'post' => 'POST',
             'get'  => 'GET',
         ];
+
+        $this->languages = Cache::remember(
+            'languages_name_id',
+            now()->addDay(),
+            function () {
+                return Language::pluck('name', 'id');
+            }
+        );
     }
 
     /**
@@ -45,7 +55,11 @@ class CustomFormController extends AdminController
     {
         $forms = Form::filter($request)->paginate(30);
 
-        return CustomFormListResource::collection($forms);
+        $additional = [
+            'languages' => $this->languages
+        ];
+
+        return CustomFormListResource::collection($forms)->additional($additional);
     }
 
     /**
@@ -71,6 +85,7 @@ class CustomFormController extends AdminController
         $response = [
             'actions'     => $this->actions,
             'methods'     => $this->methods,
+            'languages'   => $this->languages,
             'types_field' => FormField::types(),
             'validations' => FormField::validations(),
         ];
@@ -137,6 +152,7 @@ class CustomFormController extends AdminController
         $form = Form::findOrFail($form_id);
 
         $data = $form->toArray();
+        $data['lang_id'] = $request->get('lang_id') ?? $data['lang_id'];
         unset($data['id']);
         unset($data['created_at']);
         unset($data['updated_at']);

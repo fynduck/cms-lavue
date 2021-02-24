@@ -40,18 +40,25 @@
                 </div>
             </div>
             <div class="row">
-                <div class="form-group col-md-7">
+                <div class="form-group col-md-5">
                     <label for="action">{{ $t('CustomForm.action') }}</label>
                     <select name="action" id="action" :class="['form-control', errors.action ? 'is-invalid' : '']"
                             v-model="form.action">
                         <option v-for="(title, action) in actions" :value="action">{{ $t(title) }}</option>
                     </select>
                 </div>
-                <div class="form-group col-md-5">
+                <div class="form-group col-md-4">
                     <label for="method">{{ $t('CustomForm.method') }}</label>
                     <select name="method" id="method" :class="['form-control', errors.method ? 'is-invalid': '']"
                             v-model="form.method">
                         <option v-for="(title, method) in methods" :value="method">{{ title }}</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="languages">{{ $t('CustomForm.languages') }}</label>
+                    <select name="lang" id="languages" :class="['form-control', errors.lang ? 'is-invalid': '']"
+                            v-model="form.lang_id">
+                        <option v-for="(lang, id) in languages" :value="id">{{ lang }}</option>
                     </select>
                 </div>
             </div>
@@ -61,7 +68,7 @@
                                    :source="admin_search"
                                    :label="$t('CustomForm.show_on')"
                                    :no_result="$t('CustomForm.no_results')"
-                                   v-if="!loading"
+                                   v-if="loaded_data"
                     ></custom-select>
                 </div>
                 <div class="col-md-6">
@@ -86,6 +93,7 @@
                             <strong>{{ $t('CustomForm.field') }}</strong>
                             <b-badge variant="dark">&#8470;{{ key + 1 }}</b-badge>
                         </div>
+                        <em>{{ field.label || field.placeholder }}</em>
                         <fa :icon="['fas', 'trash-alt']" class="trash" @click="confirmDelete(key)"/>
                     </div>
                     <ul class="list-group list-group-flush">
@@ -159,8 +167,8 @@
                                         <strong>{{ $t('CustomForm.option') }}</strong>
                                         <b-badge variant="dark">&#8470;{{ option_key + 1 }}</b-badge>
                                     </div>
-                                    <fa :icon="['fas', 'trash-alt']" class="trash"
-                                        @click="confirmDelete(key, option_key)"/>
+                                    <em>{{ option.title }}</em>
+                                    <fa :icon="['fas', 'trash-alt']" class="trash" @click="confirmDelete(key, option_key)"/>
                                 </div>
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item">
@@ -274,6 +282,7 @@ export default {
                 method: '',
                 send_emails: [],
                 show_on: [],
+                lang_id: null,
                 fields: [
                     {
                         type: '',
@@ -288,8 +297,10 @@ export default {
                     }
                 ]
             },
+            loaded_data: false,
             actions: [],
             methods: [],
+            languages: [],
             types_field: [],
             validations: [],
             errors: {},
@@ -358,6 +369,7 @@ export default {
             axios.get(this.source).then((response) => {
                 this.actions = response.data.actions;
                 this.methods = response.data.methods;
+                this.languages = response.data.languages;
                 this.types_field = response.data.types_field;
                 response.data.validations.forEach((item, key) => {
                     this.validations.push({
@@ -367,12 +379,16 @@ export default {
                 })
                 if (response.data.data) {
                     this.form = response.data.data;
+                    this.$nextTick(() => {
+                        this.loaded_data = true;
+                    })
                 } else {
                     this.$nextTick(() => {
                         this.form.action = Object.keys(this.actions)[0];
                         this.form.method = Object.keys(this.methods)[0];
                         this.form.fields[0].type = Object.keys(this.types_field)[0];
                         this.loading = false;
+                        this.loaded_data = true;
                     });
                 }
             }).catch((error) => {

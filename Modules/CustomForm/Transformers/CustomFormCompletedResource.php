@@ -16,7 +16,7 @@ class CustomFormCompletedResource extends JsonResource
     {
         return [
             'form_title' => $this->form_id ? $this->form->form_name : null,
-            'form_data'  => $this->form_data
+            'form_data'  => json_decode($this->form_data)
         ];
     }
 }

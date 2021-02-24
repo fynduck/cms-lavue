@@ -24,21 +24,11 @@ export default {
         SkeletonArticle,
         ArticleItem
     },
-    // head() {
-    //     return {
-    //         link: [
-    //             {rel: 'preload', href: `/css/theme/${process.env.appTheme}/articles.css`, as: 'style'},
-    //             {rel: 'stylesheet', href: `/css/theme/${process.env.appTheme}/articles.css`}
-    //         ]
-    //     }
-    // },
     props: {
         type: {
             type: String,
             required: true
         }
-    },
-    mounted() {
     },
     async fetch() {
         this.loading = true;
@@ -89,4 +79,3 @@ export default {
     }
 }
 </script>
-<!--<style lang="stylus" src="../../../stylus/theme/default/articles.styl"/>-->
