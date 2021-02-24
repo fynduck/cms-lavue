@@ -40,18 +40,25 @@
                 </div>
             </div>
             <div class="row">
-                <div class="form-group col-md-7">
+                <div class="form-group col-md-5">
                     <label for="action">{{ $t('CustomForm.action') }}</label>
                     <select name="action" id="action" :class="['form-control', errors.action ? 'is-invalid' : '']"
                             v-model="form.action">
                         <option v-for="(title, action) in actions" :value="action">{{ $t(title) }}</option>
                     </select>
                 </div>
-                <div class="form-group col-md-5">
+                <div class="form-group col-md-4">
                     <label for="method">{{ $t('CustomForm.method') }}</label>
                     <select name="method" id="method" :class="['form-control', errors.method ? 'is-invalid': '']"
                             v-model="form.method">
                         <option v-for="(title, method) in methods" :value="method">{{ title }}</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="languages">{{ $t('CustomForm.languages') }}</label>
+                    <select name="lang" id="languages" :class="['form-control', errors.lang ? 'is-invalid': '']"
+                            v-model="form.lang_id">
+                        <option v-for="(lang, id) in languages" :value="id">{{ lang }}</option>
                     </select>
                 </div>
             </div>
@@ -86,7 +93,7 @@
                             <strong>{{ $t('CustomForm.field') }}</strong>
                             <b-badge variant="dark">&#8470;{{ key + 1 }}</b-badge>
                         </div>
-                        <em>{{ field.label || field.placeholder}}</em>
+                        <em>{{ field.label || field.placeholder }}</em>
                         <fa :icon="['fas', 'trash-alt']" class="trash" @click="confirmDelete(key)"/>
                     </div>
                     <ul class="list-group list-group-flush">
@@ -275,6 +282,7 @@ export default {
                 method: '',
                 send_emails: [],
                 show_on: [],
+                lang_id: null,
                 fields: [
                     {
                         type: '',
@@ -292,6 +300,7 @@ export default {
             loaded_data: false,
             actions: [],
             methods: [],
+            languages: [],
             types_field: [],
             validations: [],
             errors: {},
@@ -360,6 +369,7 @@ export default {
             axios.get(this.source).then((response) => {
                 this.actions = response.data.actions;
                 this.methods = response.data.methods;
+                this.languages = response.data.languages;
                 this.types_field = response.data.types_field;
                 response.data.validations.forEach((item, key) => {
                     this.validations.push({

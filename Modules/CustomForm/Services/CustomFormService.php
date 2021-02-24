@@ -30,6 +30,7 @@ class CustomFormService
                 'file'        => $request->get('file'),
                 'form_class'  => $request->get('form_class'),
                 'form_id'     => $request->get('form_id'),
+                'lang_id'     => $request->get('lang_id'),
                 'send_emails' => implode(';', $request->get('send_emails')),
             ]
         );
@@ -164,34 +165,41 @@ class CustomFormService
     /**
      * Generate validator for form
      * @param $fields
+     * @param array $requestFields
      * @return array
      */
     public function generateFieldValidate($fields, array $requestFields)
     {
-        $validateFields = [];
+        $rulesAndAttributes = [
+            'rules'      => [],
+            'attributes' => [],
+        ];
+        $rulesAndAttributes['rules'] = [];
         foreach ($fields as $field) {
             if ($field->validate) {
                 foreach (explode(';', $field->validate) as $item) {
                     if (in_array($item, ['numeric', 'email', 'file', 'accepted', 'required'])) {
-                        $this->setValidateData($validateFields, $field->name, $item);
+                        $this->setValidateData($rulesAndAttributes['rules'], $field->name, $item);
                     } else {
-                        $this->setValidateData($validateFields, $field->name, 'regex:/' . $item . '/');
+                        $this->setValidateData($rulesAndAttributes['rules'], $field->name, 'regex:/' . $item . '/');
                     }
                 }
             }
+
+            $rulesAndAttributes['attributes'][$field->name] = $field->label ?? $field->placeholder;
         }
 
-        $this->removePatternIfNotRequiredAndValueIsNull($validateFields, $requestFields);
+        $this->removePatternIfNotRequiredAndValueIsNull($rulesAndAttributes['rules'], $requestFields);
 
-        return $validateFields;
+        return $rulesAndAttributes;
     }
 
-    private function setValidateData(array &$validateFields, string $name, string $validate)
+    private function setValidateData(array &$rules, string $name, string $validate)
     {
-        if (array_key_exists($name, $validateFields)) {
-            $validateFields[$name] .= '|' . $validate;
+        if (array_key_exists($name, $rules)) {
+            $rules[$name] .= '|' . $validate;
         } else {
-            $validateFields[$name] = $validate;
+            $rules[$name] = $validate;
         }
     }
 

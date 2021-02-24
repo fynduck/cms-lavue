@@ -24,6 +24,7 @@ class CustomFormResource extends JsonResource
             'method'      => $this->method,
             'send_emails' => $this->send_emails ? explode(';', $this->send_emails) : [],
             'show_on'     => $this->listShow(),
+            'lang_id'     => $this->lang_id,
             'fields'      => FormFieldResource::collection($this->getFields)
         ];
     }

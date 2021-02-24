@@ -3,6 +3,8 @@
 namespace Modules\CustomForm\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Cache;
+use Modules\Language\Entities\Language;
 
 class CustomFormListResource extends JsonResource
 {
@@ -14,12 +16,21 @@ class CustomFormListResource extends JsonResource
      */
     public function toArray($request)
     {
+        $languages = Cache::remember(
+            'languages_name_id',
+            now()->addDay(),
+            function () {
+                return Language::pluck('name', 'id');
+            }
+        );
+
         return [
             'id'          => $this->id,
             'form_name'   => $this->form_name,
             'action'      => $this->action,
             'method'      => $this->method,
             'send_emails' => explode(';', $this->send_emails),
+            'lang'        => $languages[$this->lang_id] ?? '',
             'permissions' => [
                 'edit'    => checkModulePermission('CustomForm', 'edit'),
                 'destroy' => checkModulePermission('CustomForm', 'destroy')
