@@ -2,7 +2,7 @@
 
 namespace Modules\CustomForm\Http\Controllers\Api;
 
-use Http\Client\Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Mail;
@@ -26,9 +26,18 @@ class FrontController extends Controller
 
     public function getForm($page_type, $item_id, $form_id = null)
     {
-        $query = FormShow::where('type', $page_type)->where('item_id', $item_id);
+        $query = FormShow::with('getForm.getFields.getOptions')
+            ->where('type', $page_type)
+            ->where('item_id', $item_id);
         if ($form_id) {
             $query->where('form_id', $form_id);
+        } else {
+            $query->whereHas(
+                'getForm',
+                function (Builder $query) {
+                    $query->where('lang_id', config('app.locale_id'));
+                }
+            );
         }
 
         $onPageForm = $query->first();
@@ -55,7 +64,12 @@ class FrontController extends Controller
 
         $rulesAndAttributes = $this->customFormService->generateFieldValidate($form->getFields, $request->get('fields'));
 
-        $validator = Validator::make($request->get('fields'), $rulesAndAttributes['rules'], [], $rulesAndAttributes['attributes']);
+        $validator = Validator::make(
+            $request->get('fields'),
+            $rulesAndAttributes['rules'],
+            [],
+            $rulesAndAttributes['attributes']
+        );
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);

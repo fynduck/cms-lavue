@@ -30,6 +30,7 @@ class CustomFormService
                 'file'        => $request->get('file'),
                 'form_class'  => $request->get('form_class'),
                 'form_id'     => $request->get('form_id'),
+                'lang_id'     => $request->get('lang_id'),
                 'send_emails' => implode(';', $request->get('send_emails')),
             ]
         );
