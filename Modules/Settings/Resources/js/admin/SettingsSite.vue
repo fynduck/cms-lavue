@@ -135,11 +135,8 @@ export default {
                     message = response.data;
                 }
 
-                this.$bvToast.toast(message, {
-                    title: this.$t('Settings.status'),
-                    variant: 'info',
-                    solid: true
-                })
+                this.$toast.global.success(message)
+
                 if (typeof response.data !== 'string') {
                     this.items = response.data;
                 }

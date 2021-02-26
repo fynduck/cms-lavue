@@ -74,19 +74,11 @@
             saveCss() {
                 this.submit = true;
                 axios.post(this.source, {css: this.css}).then(() => {
-                    this.$bvToast.toast(this.$t('Settings.data_save'), {
-                        title: this.$t('Settings.status'),
-                        variant: 'info',
-                        solid: true
-                    })
+                    this.$toast.global.success(this.$t('Settings.data_save'))
 
                     this.submit = false;
-                }).catch(error => {
-                    this.$bvToast.toast(this.$t('Settings.data_not_save'), {
-                        title: this.$t('Settings.status'),
-                        variant: 'danger',
-                        solid: true
-                    })
+                }).catch(() => {
+                    this.$toast.global.error(this.$t('Settings.data_not_save'))
                     this.submit = false;
                 })
             },

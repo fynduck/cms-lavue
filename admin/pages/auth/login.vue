@@ -5,7 +5,7 @@
                 <form @submit.prevent="login" @keydown="form.onKeydown($event)">
                     <!-- Email -->
                     <div class="form-group row">
-                        <label class="col-md-3 col-form-label text-md-right">{{ $t('email') }}</label>
+                        <label class="col-md-3 col-form-label text-md-right">{{ $t('your_email') }}</label>
                         <div class="col-md-7">
                             <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" type="email"
                                    name="email" class="form-control">

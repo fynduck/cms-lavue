@@ -106,11 +106,7 @@ export default {
         },
         changeStatus(item) {
             axios.put(this.source + '/' + item.name, {status: !item.active}).then(response => {
-                this.$bvToast.toast(this.$t('Module.status_saved'), {
-                    title: this.$t('Module.status'),
-                    variant: 'info',
-                    solid: true
-                })
+                this.$toast.global.success(this.$t('Module.status_saved'))
             }).catch(error => {
                 console.log(error)
             })
@@ -124,20 +120,11 @@ export default {
             this.confirmWindow.openConfirm = false;
             if (name) {
                 this.loading = true;
-                axios.delete(`${this.source}/${name}`).then((response) => {
-                    this.$bvToast.toast(this.$t('Module.data_delete'), {
-                        title: this.$t('Module.status'),
-                        variant: 'info',
-                        solid: true
-                    })
+                axios.delete(`${this.source}/${name}`).then(() => {
+                    this.$toast.global.success(this.$t('Module.data_delete'))
                     this.getItems();
                     this.loading = false;
-                }).catch((error) => {
-                    this.$bvToast.toast(error, {
-                        title: this.$t('Module.status'),
-                        variant: 'info',
-                        solid: true
-                    })
+                }).catch(() => {
                 });
             }
         }

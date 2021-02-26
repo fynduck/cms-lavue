@@ -63,6 +63,9 @@ module.exports = {
     styleResources: {
         stylus: [
             '~assets/stylus/theme/' + process.env.THEME + '/_variables.styl',
+            '~assets/stylus/theme/' + process.env.THEME + '/_breakpoints.styl',
+            '~assets/stylus/_keyframes.styl',
+            '~assets/stylus/_blanks.styl',
             '../Modules/*/Resources/stylus/theme/' + process.env.THEME + '/*.styl'
         ]
     },

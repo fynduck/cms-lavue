@@ -176,12 +176,8 @@
                     method: this.sourceActionMethod.method,
                     url: this.sourceActionMethod.action,
                     data: this.item
-                }).then(response => {
-                    this.$bvToast.toast(this.$t('Page.data_save'), {
-                        title: this.$t('Page.status'),
-                        variant: 'info',
-                        solid: true
-                    })
+                }).then(() => {
+                    this.$toast.global.success(this.$t('Page.data_save'))
 
                     setTimeout(() => {
                         this.$router.push({

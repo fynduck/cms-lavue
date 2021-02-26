@@ -42,7 +42,7 @@ module.exports = {
     ],
 
     plugins: [
-        '~components/global',
+        {src: '~components/global', mode: 'client'},
         '~plugins/i18n',
         '~plugins/vform',
         '~plugins/axios',
@@ -53,11 +53,45 @@ module.exports = {
     modules: [
         '@nuxtjs/router',
         'bootstrap-vue/nuxt',
-        'nuxt-moment'
+        'nuxt-moment',
+        '@nuxtjs/toast'
     ],
     bootstrapVue: {
         bootstrapVueCSS: false,
         bootstrapCSS: false
+    },
+    toast: {
+        position: 'top-right',
+        register: [
+            {
+                name: 'success',
+                message: message => message,
+                options: {
+                    theme: 'outline',
+                    className: 'rounded py-3 px-4',
+                    iconPack: 'fontawesome',
+                    type: 'success',
+                    duration: 2000,
+                    icon: {
+                        name: 'check-circle'
+                    }
+                }
+            },
+            {
+                name: 'error',
+                message: message => message,
+                options: {
+                    theme: 'outline',
+                    className: 'rounded py-3 px-4',
+                    iconPack: 'fontawesome',
+                    type: 'error',
+                    duration: 4000,
+                    icon: {
+                        name: 'exclamation'
+                    }
+                }
+            }
+        ]
     },
     purgeCSS: {
         enabled: true
@@ -77,7 +111,7 @@ module.exports = {
                 }
             }
         },
-        babel: { compact: true }
+        babel: {compact: true}
     },
 
     hooks: {

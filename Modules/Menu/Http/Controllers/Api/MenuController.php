@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\DB;
 use Modules\Language\Entities\Language;
 use Modules\Menu\Entities\Menu;
 use Modules\Menu\Entities\MenuSettings;
@@ -74,7 +75,7 @@ class MenuController extends AdminController
         /**
          * Create menu
          */
-        \DB::beginTransaction();
+        DB::beginTransaction();
         $menu = $this->menuService->addUpdate($request, $nameImages);
 
         $this->menuService->addUpdateTrans($menu, $request->get('items'));
@@ -83,7 +84,7 @@ class MenuController extends AdminController
             $this->menuService->showOn($menu->id, $request->get('show_page'));
         }
 
-        \DB::commit();
+        DB::commit();
 
         return true;
     }
@@ -164,7 +165,7 @@ class MenuController extends AdminController
     public function saveSettings(Request $request): bool
     {
         $defaultAction = MenuSettings::RESIZE;
-        $action = $request->get('resize', $defaultAction);
+        $action = $request->get('action', $defaultAction);
         $blur = $request->get('blur') >= 0 && $request->get('blur') <= 100 ? $request->get('blur') : null;
         $brightness = $request->get('brightness') >= -100 && $request->get('brightness') <= 100 ? $request->get(
             'brightness'

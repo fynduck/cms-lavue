@@ -233,13 +233,8 @@ export default {
                 method: this.sourceActionMethod.method,
                 url: this.sourceActionMethod.action,
                 data: this.item
-            }).then(response => {
-                this.$bvToast.toast(this.$t('Article.data_save'), {
-                    title: this.$t('Article.status'),
-                    variant: 'info',
-                    solid: true
-                })
-
+            }).then(() => {
+                this.$toast.global.success(this.$t('Article.data_save'))
                 setTimeout(() => {
                     this.$router.push({
                         name: `${this.$route.name.split('.')[0]}.index`

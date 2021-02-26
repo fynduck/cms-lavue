@@ -19,8 +19,8 @@
   "you_really_delete": "Вы действительно хотите удалить",
   "data_save": "Данные сохранены",
   "data_not_save": "Данные не сохранены",
-  "data_delete": "Данные удалины",
-  "data_not_deleted": "Данные не удалины",
+  "data_delete": "Данные были удалины",
+  "data_not_deleted": "Данные не были удалины",
   "are_you_sure": "Вы уверены?",
   "yes": "Да",
   "no_results": "Нет результатов"

@@ -168,20 +168,12 @@ export default {
             this.confirmWindow.openConfirm = false;
             if (id) {
                 this.loading = true;
-                axios.delete(`${this.source}/${id}`).then((response) => {
-                    this.$bvToast.toast(this.$t('User.data_delete'), {
-                        title: this.$t('User.status'),
-                        variant: 'info',
-                        solid: true
-                    })
+                axios.delete(`${this.source}/${id}`).then(() => {
+                    this.$toast.global.success(this.$t('User.data_delete'))
                     this.getItems();
                     this.loading = false;
-                }).catch((error) => {
-                    this.$bvToast.toast(error, {
-                        title: this.$t('User.status'),
-                        variant: 'info',
-                        solid: true
-                    })
+                }).catch(() => {
+                    this.$toast.global.error(this.$t('User.data_not_delete'))
                 });
             }
         }

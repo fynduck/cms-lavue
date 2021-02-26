@@ -154,7 +154,7 @@ class ArticleController extends AdminController
     public function saveSettings(SizeValidate $request)
     {
         $defaultAction = ArticleSettings::RESIZE;
-        $action = $request->get('resize', $defaultAction);
+        $action = $request->get('action', $defaultAction);
         $blur = $request->get('blur') >= 0 && $request->get('blur') <= 100 ? $request->get('blur') : null;
         $brightness = $request->get('brightness') >= -100 && $request->get('brightness') <= 100 ? $request->get(
             'brightness'

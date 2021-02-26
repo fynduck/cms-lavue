@@ -1,3 +1,18 @@
+.masonry
+  column-gap 1rem
+  @media (min-width: $md)
+    column-count 2
+  @media (min-width: $lg)
+    column-count 3
+  @media (min-width: $exl)
+    column-count 4
+
+  .article
+    display grid
+    grid-template-rows 1fr auto
+    margin-bottom 1rem
+    break-inside avoid
+
 .article
   height 100%
   position relative

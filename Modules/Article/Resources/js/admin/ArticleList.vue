@@ -16,13 +16,21 @@
                     <b-form-select v-model="lang_id" :options="langOptions"></b-form-select>
                 </b-col>
                 <b-col sm="6" lg="3" class="my-1 d-flex align-items-center">
-                    <b-form-checkbox id="checkbox_status"
-                                     switch
-                                     v-model="active"
-                                     :value="1"
-                                     :unchecked-value="0">
-                        {{ active ? $t('Article.inactive') : $t('Article.active') }}
-                    </b-form-checkbox>
+                    <div class="custom-control custom-switch custom-">
+                        <input type="checkbox" class="custom-control-input" id="checkbox_status"
+                               v-model="active"
+                               :value="1">
+                        <label class="custom-control-label" for="checkbox_status">
+                            {{ active ? $t('Article.inactive') : $t('Article.active') }}
+                        </label>
+                    </div>
+<!--                    <b-form-checkbox id="checkbox_status"-->
+<!--                                     switch-->
+<!--                                     v-model="active"-->
+<!--                                     :value="1"-->
+<!--                                     :unchecked-value="0">-->
+
+<!--                    </b-form-checkbox>-->
                 </b-col>
                 <b-col sm="6" lg="2" class="text-right" v-if="canCreate">
                     <b-button v-b-modal.article-settings variant="info">{{ $t('Article.settings') }}</b-button>
@@ -118,7 +126,9 @@
                     <label for="background">{{ $t('Article.background') }}</label>
                     <div class="d-flex">
                         <b-form-input v-model="settings.background" id="background" type="color"></b-form-input>
-                        <b-button @click="removeBg"><fa :icon="['fas', 'trash-alt']"/></b-button>
+                        <b-button @click="removeBg">
+                            <fa :icon="['fas', 'trash-alt']"/>
+                        </b-button>
                     </div>
                 </b-col>
             </b-row>
@@ -129,7 +139,9 @@
                     </b-button>
                 </b-col>
                 <b-col class="text-right">
-                    <b-button variant="primary" :title="$t('Article.save')" @click="saveSettings">
+                    <b-button variant="primary" :class="{'btn-loading': loading_setting}" :title="$t('Article.save')"
+                              :disabled="loading_setting"
+                              @click="saveSettings">
                         <fa :icon="['fas', 'save']"/>
                     </b-button>
                 </b-col>
@@ -180,6 +192,7 @@ export default {
                 background: null,
                 sizes: []
             },
+            loading_setting: false,
             timeout: null,
             confirmWindow: {
                 confirm: null,
@@ -295,20 +308,11 @@ export default {
             this.confirmWindow.openConfirm = false;
             if (id) {
                 this.loading = true;
-                axios.delete(`${this.source}/${id}`).then((response) => {
-                    this.$bvToast.toast(this.$t('Article.data_delete'), {
-                        title: this.$t('Article.status'),
-                        variant: 'info',
-                        solid: true
-                    })
+                axios.delete(`${this.source}/${id}`).then(() => {
+                    this.$toast.global.success(this.$t('Article.data_delete'))
                     this.getItems();
                     this.loading = false;
-                }).catch((error) => {
-                    this.$bvToast.toast(error, {
-                        title: this.$t('Article.status'),
-                        variant: 'info',
-                        solid: true
-                    })
+                }).catch(() => {
                 });
             }
         },
@@ -326,22 +330,16 @@ export default {
             this.settings.sizes.splice(index, 1)
         },
         removeBg() {
-                this.settings.background = null
+            this.settings.background = null
         },
         saveSettings() {
-            axios.post(`${this.source}-settings`, this.settings).then(response => {
+            this.loading_setting = true;
+            axios.post(`${this.source}-settings`, this.settings).then(() => {
                 this.$bvModal.hide('article-settings')
-                this.$bvToast.toast(this.$t('Article.settings_saved'), {
-                    title: this.$t('Article.status'),
-                    variant: 'info',
-                    solid: true
-                })
-            }).catch(error => {
-                this.$bvToast.toast(error.message, {
-                    title: this.$t('Article.status'),
-                    variant: 'danger',
-                    solid: true
-                })
+                this.$toast.global.success(this.$t('Article.settings_saved'))
+
+                this.loading_setting = false;
+            }).catch(() => {
             })
         }
     }

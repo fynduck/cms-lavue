@@ -121,7 +121,9 @@
                     <label for="background">{{ $t('Menu.background') }}</label>
                     <div class="d-flex">
                         <b-form-input v-model="settings.background" id="background" type="color"></b-form-input>
-                        <b-button @click="removeBg"><fa :icon="['fas', 'trash-alt']"/></b-button>
+                        <b-button @click="removeBg">
+                            <fa :icon="['fas', 'trash-alt']"/>
+                        </b-button>
                     </div>
                 </b-col>
             </b-row>
@@ -132,7 +134,9 @@
                     </b-button>
                 </b-col>
                 <b-col class="text-right">
-                    <b-button variant="primary" :title="$t('Menu.save')" @click="saveSettings">
+                    <b-button variant="primary" :class="{'btn-loading': loading_setting}" :title="$t('Menu.save')"
+                              @click="saveSettings"
+                              :disabled="loading_setting">
                         <fa :icon="['fas', 'save']"/>
                     </b-button>
                 </b-col>
@@ -189,7 +193,8 @@ export default {
                 brightness: null,
                 background: null,
                 sizes: []
-            }
+            },
+            loading_setting: false
         }
     },
     watch: {
@@ -288,9 +293,7 @@ export default {
                     this.settings = response.data.settings;
                 }
                 this.loading = false;
-
             }).catch((error) => {
-                console.log(error);
             });
         },
         changeSort() {
@@ -306,19 +309,11 @@ export default {
             if (id) {
                 this.loading = true;
                 axios.delete(`${this.source}/${id}`).then((response) => {
-                    this.$bvToast.toast(this.$t('Menu.data_delete'), {
-                        title: this.$t('Menu.status'),
-                        variant: 'info',
-                        solid: true
-                    })
+                    this.$toast.global.success(this.$t('Menu.data_delete'))
                     this.getItems();
                     this.loading = false;
                 }).catch((error) => {
-                    this.$bvToast.toast(error, {
-                        title: this.$t('Menu.status'),
-                        variant: 'info',
-                        solid: true
-                    })
+                    this.$toast.global.error(error.response.data.message)
                 });
             }
         },
@@ -339,19 +334,12 @@ export default {
             this.settings.background = null
         },
         saveSettings() {
+            this.loading_setting = true;
             axios.post(`${this.source}-settings`, this.settings).then(response => {
                 this.$bvModal.hide('menu-settings')
-                this.$bvToast.toast(this.$t('Menu.settings_saved'), {
-                    title: this.$t('Menu.status'),
-                    variant: 'info',
-                    solid: true
-                })
+                this.$toast.global.success(this.$t('Menu.settings_saved'))
+                this.loading_setting = false
             }).catch(error => {
-                this.$bvToast.toast(error, {
-                    title: this.$t('Menu.status'),
-                    variant: 'danger',
-                    solid: true
-                })
             })
         }
     }

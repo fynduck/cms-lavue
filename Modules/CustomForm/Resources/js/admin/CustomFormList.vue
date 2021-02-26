@@ -259,23 +259,15 @@ export default {
             this.show_copy = true;
         },
         saveCopy() {
-            axios.post(`${this.source}-clone/${this.copy_form.id}`, this.copy_form).then((response) => {
+            axios.post(`${this.source}-clone/${this.copy_form.id}`, this.copy_form).then(() => {
+                this.$toast.global.success(this.$t('CustomForm.data_save'))
                 this.show_copy = false;
                 this.copy_form.form_name = null
                 this.copy_form.id = null
                 this.copy_form.lang_id = null
-                this.$bvToast.toast(this.$t('CustomForm.data_save'), {
-                    title: this.$t('CustomForm.status'),
-                    variant: 'info',
-                    solid: true
-                })
                 this.current_page = 1;
                 this.getItems();
-            }).catch((error) => {
-                this.$message({
-                    message: error.response.data.message,
-                    type: 'error'
-                });
+            }).catch(() => {
             });
         },
         changeSort() {
@@ -293,20 +285,11 @@ export default {
             this.confirmWindow.openConfirm = false;
             if (id) {
                 this.loading = true;
-                axios.delete(`${this.source}/${id}`).then((response) => {
-                    this.$bvToast.toast(this.$t('CustomForm.data_delete'), {
-                        title: this.$t('CustomForm.status'),
-                        variant: 'info',
-                        solid: true
-                    })
+                axios.delete(`${this.source}/${id}`).then(() => {
+                    this.$toast.global.success(this.$t('CustomForm.data_delete'))
                     this.getItems();
                     this.loading = false;
-                }).catch((error) => {
-                    this.$bvToast.toast(error, {
-                        title: this.$t('CustomForm.status'),
-                        variant: 'info',
-                        solid: true
-                    })
+                }).catch(() => {
                 });
             }
         }
