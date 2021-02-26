@@ -2,7 +2,6 @@
     <section class="container">
         <div class="masonry">
             <article-item :item="item" v-for="item in items" :key="item.id"/>
-            <article-item :item="item" v-for="item in items" :key="item.id"/>
         </div>
         <skeleton-article :loading="loading"/>
     </section>
