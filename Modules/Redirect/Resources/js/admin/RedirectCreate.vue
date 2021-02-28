@@ -133,12 +133,8 @@ export default {
                 method: this.sourceActionMethod.method,
                 url: this.sourceActionMethod.action,
                 data: this.item
-            }).then(response => {
-                this.$bvToast.toast(this.$t('Redirect.data_save'), {
-                    title: this.$t('Redirect.status'),
-                    variant: 'info',
-                    solid: true
-                })
+            }).then(() => {
+                this.$toast.global.success(this.$t('Redirect.data_save'))
 
                 setTimeout(() => {
                     this.$router.push({

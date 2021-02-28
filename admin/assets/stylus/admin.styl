@@ -10,14 +10,15 @@ svg
 .container-fluid
   background-color #fff
   box-shadow 0 4px 70px -18px #707070
-  width calc(100% - 30px)
-  margin 1rem
+  width calc(100% - 2rem) !important
+  margin 1rem !important
   padding 1rem
-  transition all .2s ease
+  left 0
+  transition all .3s
 
   &.minWidth
-    margin-left "calc(1rem + %s)" % $aside-width
-    width "calc(100% - 2rem - %s)" % $aside-width
+    width "calc(100% - 2rem - %s)" % $aside-width !important
+    left $aside-width
 
 .title_form
   border-bottom 2px solid $vue-darkest-blue

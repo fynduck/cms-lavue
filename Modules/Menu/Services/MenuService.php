@@ -125,6 +125,7 @@ class MenuService
                 $blur = 1;
                 $brightness = 0;
                 $background = null;
+                $optimize = false;
 
                 if ($settings && !empty($settings->data['sizes'])) {
                     $sizes = $settings->data['sizes'];
@@ -133,6 +134,7 @@ class MenuService
                     $blur = !empty($settings->data['blur']) ? $settings->data['blur'] : $blur;
                     $brightness = !empty($settings->data['brightness']) ? $settings->data['brightness'] : $brightness;
                     $background = !empty($settings->data['background']) ? $settings->data['background'] : $background;
+                    $optimize = !empty($settings->data['optimize']) ? $settings->data['optimize'] : $background;
                 }
                 $nameImages['imageName'] = UploadFile::file($request->get('image'))
                     ->setFolder(Menu::FOLDER_IMG)
@@ -143,6 +145,7 @@ class MenuService
                     ->setBlur($blur)
                     ->setBrightness($brightness)
                     ->setBackground($background)
+                    ->setOptimize($optimize)
                     ->save($resizeMethod);
             } else {
                 $nameImages['imageName'] = $request->get('old_image');
@@ -175,9 +178,33 @@ class MenuService
             }
 
             $data['sizes'] = $sizes;
+
+            foreach ($this->defaultSettings() as $key => $defaultSetting) {
+                if (!array_key_exists($key, $data)) {
+                    $data[$key] = $defaultSetting;
+                }
+            }
         }
 
         return $data;
+    }
+
+    public function defaultSettings()
+    {
+        return [
+            'ratios'     => [
+                'width'  => 0,
+                'height' => 0,
+            ],
+            'ratio'      => false,
+            'action'     => 'resize-crop',
+            'optimize'   => null,
+            'greyscale'  => null,
+            'blur'       => null,
+            'brightness' => null,
+            'background' => null,
+            'sizes'      => []
+        ];
     }
 
     /**

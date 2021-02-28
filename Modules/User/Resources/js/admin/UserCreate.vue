@@ -150,12 +150,8 @@ export default {
                 method: this.sourceActionMethod.method,
                 url: this.sourceActionMethod.action,
                 data: this.form
-            }).then(response => {
-                this.$bvToast.toast(this.$t('User.data_save'), {
-                    title: this.$t('User.status'),
-                    variant: 'info',
-                    solid: true
-                })
+            }).then(() => {
+                this.$toast.global.success(this.$t('User.data_save'))
 
                 setTimeout(() => {
                     this.$router.push({

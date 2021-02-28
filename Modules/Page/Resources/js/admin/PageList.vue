@@ -231,19 +231,10 @@
                 if (id) {
                     this.loading = true;
                     axios.delete(`${this.source}/${id}`).then((response) => {
-                        this.$bvToast.toast(this.$t('Page.data_delete'), {
-                            title: this.$t('Page.status'),
-                            variant: 'info',
-                            solid: true
-                        })
+                        this.$toast.global.success(this.$t('Page.data_delete'))
                         this.getItems();
                         this.loading = false;
                     }).catch((error) => {
-                        this.$bvToast.toast(error, {
-                            title: this.$t('Page.status'),
-                            variant: 'info',
-                            solid: true
-                        })
                     });
                 }
             }

@@ -1,3 +1,24 @@
+$enable-print-styles: false;
+
+$grid-breakpoints: (
+        xs: 0,
+        sm: 576px,
+        md: 768px,
+        lg: 992px,
+        xl: 1200px,
+        xxl: 1400px,
+        exl: 2560px
+);
+
+$container-max-widths: (
+        sm: 540px,
+        md: 720px,
+        lg: 960px,
+        xl: 1140px,
+        xxl: 1320px,
+        exl: 2000px
+);
+
 // // Body
 $body-bg: #f7f9fb;
 $vue-green: #4ae387;

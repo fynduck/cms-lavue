@@ -79,6 +79,23 @@
                  v-if="confirmWindow.openConfirm"
         ></confirm>
         <b-modal id="article-settings" hide-footer centered>
+            <b-form-checkbox id="ration"
+                             switch
+                             v-model="settings.ratio"
+                             :value="1"
+                             :unchecked-value="0">
+                {{ $t('Article.ratio') }}
+            </b-form-checkbox>
+            <b-row v-if="settings.ratio && settings.ratios">
+                <b-col class="mb-3">
+                    <label for="ration_width">{{ $t('Article.width') }}</label>
+                    <b-form-input id="ration_width" v-model.number="settings.ratios.width" type="number"></b-form-input>
+                </b-col>
+                <b-col class="mb-3">
+                    <label for="ration_height">{{ $t('Article.height') }}</label>
+                    <b-form-input id="ration_height" v-model.number="settings.ratios.height" type="number"></b-form-input>
+                </b-col>
+            </b-row>
             <b-row class="mb-1 size" v-for="(size, key) in settings.sizes" :key="key">
                 <b-col class="mb-3">
                     <label :for="`name_${key}`">{{ $t('Article.size_name') }}</label>
@@ -86,22 +103,29 @@
                 </b-col>
                 <b-col class="mb-3">
                     <label :for="`width_${key}`">{{ $t('Article.width') }}</label>
-                    <b-form-input :id="`width_${key}`" v-model.number="size.width" type="number"></b-form-input>
+                    <b-form-input :id="`width_${key}`" v-model.number="size.width" type="number"
+                                  @input="calculateSizeWithRatio(size, 'w')"></b-form-input>
                 </b-col>
                 <b-col class="mb-3">
                     <label :for="`height_${key}`">{{ $t('Article.height') }}</label>
-                    <b-form-input :id="`height_${key}`" v-model.number="size.height" type="number"></b-form-input>
+                    <b-form-input :id="`height_${key}`" v-model.number="size.height" type="number"
+                                  @input="calculateSizeWithRatio(size, 'h')"></b-form-input>
                 </b-col>
                 <fa :icon="['fas', 'trash-alt']" class="text-danger remove" @click="deleteSize(key)"/>
             </b-row>
             <b-row class="align-items-center">
                 <b-col sm="6" class="mb-3">
-                    <b-form-select v-model="settings.action" :options="resizes" size="sm" class="my-3"></b-form-select>
+                    <b-form-checkbox v-model="settings.optimize" switch>
+                        {{ $t('Article.optimize') }}
+                    </b-form-checkbox>
                 </b-col>
                 <b-col sm="6" class="mb-3">
                     <b-form-checkbox v-model="settings.greyscale" switch>
                         {{ $t('Article.greyscale') }}
                     </b-form-checkbox>
+                </b-col>
+                <b-col class="mb-3">
+                    <b-form-select v-model="settings.action" :options="resizes" size="sm" class="my-3"></b-form-select>
                 </b-col>
             </b-row>
             <b-row>
@@ -118,7 +142,9 @@
                     <label for="background">{{ $t('Article.background') }}</label>
                     <div class="d-flex">
                         <b-form-input v-model="settings.background" id="background" type="color"></b-form-input>
-                        <b-button @click="removeBg"><fa :icon="['fas', 'trash-alt']"/></b-button>
+                        <b-button @click="removeBg">
+                            <fa :icon="['fas', 'trash-alt']"/>
+                        </b-button>
                     </div>
                 </b-col>
             </b-row>
@@ -129,7 +155,9 @@
                     </b-button>
                 </b-col>
                 <b-col class="text-right">
-                    <b-button variant="primary" :title="$t('Article.save')" @click="saveSettings">
+                    <b-button variant="primary" :class="{'btn-loading': loading_setting}" :title="$t('Article.save')"
+                              :disabled="loading_setting"
+                              @click="saveSettings">
                         <fa :icon="['fas', 'save']"/>
                     </b-button>
                 </b-col>
@@ -164,22 +192,33 @@ export default {
             languages: {},
             resizes: [
                 {
+                    value: 'resize-crop',
+                    text: this.$t('Article.resize_crop')
+                },
+                {
                     value: 'resize',
-                    text: this.$t('Menu.resize')
+                    text: this.$t('Article.resize')
                 },
                 {
                     value: 'crop',
-                    text: this.$t('Menu.crop')
+                    text: this.$t('Article.crop')
                 }
             ],
             settings: {
-                action: 'resize',
+                ratios: {
+                    width: 0,
+                    height: 0,
+                },
+                ratio: false,
+                action: 'resize-crop',
+                optimize: null,
                 greyscale: null,
                 blur: null,
                 brightness: null,
                 background: null,
                 sizes: []
             },
+            loading_setting: false,
             timeout: null,
             confirmWindow: {
                 confirm: null,
@@ -251,6 +290,12 @@ export default {
                 this.current_page = 1
                 this.getItems()
             }, 500);
+        },
+        'settings.ratios': {
+            handler() {
+                this.calculateSizeWithRatio()
+            },
+            deep: true
         }
     },
     mounted() {
@@ -295,20 +340,11 @@ export default {
             this.confirmWindow.openConfirm = false;
             if (id) {
                 this.loading = true;
-                axios.delete(`${this.source}/${id}`).then((response) => {
-                    this.$bvToast.toast(this.$t('Article.data_delete'), {
-                        title: this.$t('Article.status'),
-                        variant: 'info',
-                        solid: true
-                    })
+                axios.delete(`${this.source}/${id}`).then(() => {
+                    this.$toast.global.success(this.$t('Article.data_delete'))
                     this.getItems();
                     this.loading = false;
-                }).catch((error) => {
-                    this.$bvToast.toast(error, {
-                        title: this.$t('Article.status'),
-                        variant: 'info',
-                        solid: true
-                    })
+                }).catch(() => {
                 });
             }
         },
@@ -326,23 +362,39 @@ export default {
             this.settings.sizes.splice(index, 1)
         },
         removeBg() {
-                this.settings.background = null
+            this.settings.background = null
         },
         saveSettings() {
-            axios.post(`${this.source}-settings`, this.settings).then(response => {
+            this.loading_setting = true;
+            axios.post(`${this.source}-settings`, this.settings).then(() => {
                 this.$bvModal.hide('article-settings')
-                this.$bvToast.toast(this.$t('Article.settings_saved'), {
-                    title: this.$t('Article.status'),
-                    variant: 'info',
-                    solid: true
-                })
-            }).catch(error => {
-                this.$bvToast.toast(error.message, {
-                    title: this.$t('Article.status'),
-                    variant: 'danger',
-                    solid: true
-                })
+                this.$toast.global.success(this.$t('Article.settings_saved'))
+
+                this.loading_setting = false;
+            }).catch(() => {
             })
+        },
+        calculateSizeWithRatio(size = null, field = null) {
+            const rationW = this.settings.ratios.width;
+            const rationH = this.settings.ratios.height;
+            if (this.settings.ratio && rationW && rationH) {
+
+                if (size !== null && field) {
+                    if (field === 'w') {
+                        size.height = Math.round((parseInt(size.width) / rationW) * rationH);
+                    } else if (field === 'h') {
+                        size.width = Math.round(parseInt(size.height) * (rationW / rationH))
+                    }
+                } else {
+                    this.settings.sizes.forEach(item => {
+                        if (item.width) {
+                            item.height = Math.round((parseInt(item.width) / rationW) * rationH)
+                        } else if (item.height) {
+                            item.width = Math.round(parseInt(item.height) * (rationW / rationH))
+                        }
+                    })
+                }
+            }
         }
     }
 }

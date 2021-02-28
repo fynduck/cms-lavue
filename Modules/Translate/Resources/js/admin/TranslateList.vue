@@ -200,11 +200,7 @@ import {mapGetters} from 'vuex'
                     file_name: this.files[this.tabIndex]
                 }).then(response => {
                     this.submit = false;
-                    this.$bvToast.toast(this.$t('Translate.data_save'), {
-                        title: this.$t('Translate.status'),
-                        variant: 'info',
-                        solid: true
-                    })
+                    this.$toast.global.success(this.$t('Translate.data_save'))
                 }).catch(error => {
                     console.log(error)
                 })
