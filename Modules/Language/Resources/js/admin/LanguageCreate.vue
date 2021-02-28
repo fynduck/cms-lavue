@@ -8,7 +8,7 @@
                          :title="$t('Language.cancel')">
                 <fa :icon="['fas', 'reply']"/>
             </router-link>
-            <button :class="{'btn btn-primary submit_absolute': true, 'btn-loading': submit}" type="submit"
+            <button :class="{'btn btn-success submit_absolute': true, 'btn-loading': submit}" type="submit"
                     :title="$t('Language.save')"
                     :disabled="submit">
                 <fa :icon="['fas', 'save']"/>
@@ -65,7 +65,7 @@
                     <router-link class="btn btn-light" :to="{name: 'language.index'}" :title="$t('Language.cancel')">
                         <fa :icon="['fas', 'reply']"/>
                     </router-link>
-                    <button :class="{'btn btn-primary': true, 'btn-loading': submit}" type="submit" :title="$t('Language.save')"
+                    <button :class="{'btn btn-success': true, 'btn-loading': submit}" type="submit" :title="$t('Language.save')"
                             :disabled="submit">
                         <fa :icon="['fas', 'save']"/>
                     </button>

@@ -38,7 +38,9 @@ module.exports = {
     css: [
         {src: '~assets/sass/app.scss', lang: 'scss', mode: 'client'},
         {src: '~assets/stylus/admin.styl', lang: 'stylus', mode: 'client'},
-        {src: '~static/fontawesome/css/all.min.css', mode: 'client'}
+        {src: '~static/fontawesome/css/fontawesome.min.css', mode: 'client'},
+        {src: '~static/fontawesome/css/regular.min.css', mode: 'client'},
+        {src: '~static/fontawesome/css/solid.min.css', mode: 'client'}
     ],
 
     plugins: [
@@ -71,7 +73,8 @@ module.exports = {
                     className: 'rounded py-3 px-4',
                     iconPack: 'fontawesome',
                     type: 'success',
-                    duration: 2000,
+                    duration: 3000,
+                    keepOnHover: true,
                     icon: {
                         name: 'check-circle'
                     }
@@ -86,6 +89,7 @@ module.exports = {
                     iconPack: 'fontawesome',
                     type: 'error',
                     duration: 4000,
+                    keepOnHover: true,
                     icon: {
                         name: 'exclamation'
                     }
@@ -93,9 +97,9 @@ module.exports = {
             }
         ]
     },
-    // purgeCSS: {
-    //     enabled: true
-    // },
+    purgeCSS: {
+        enabled: true
+    },
     build: {
         extractCSS: true,
         cssSourceMap: false,

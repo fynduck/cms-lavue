@@ -4,7 +4,7 @@
             {{ $t('Settings.settings_site') }}
         </p>
         <form @submit.prevent="onSubmit">
-            <button :class="{'btn btn-primary submit_absolute': true, 'btn-loading': submit}" type="submit"
+            <button :class="{'btn btn-success submit_absolute': true, 'btn-loading': submit}" type="submit"
                     :title="$t('Settings.save')"
                     :disabled="submit" v-if="canCreate">
                 <fa :icon="['fas', 'save']"/>
@@ -64,7 +64,7 @@
                           placeholder="</body>"></textarea>
             </div>
             <p class="text-right" v-if="canCreate">
-                <button :class="{'btn btn-primary': true, 'btn-loading': submit}" type="submit" :title="$t('Settings.save')"
+                <button :class="{'btn btn-success': true, 'btn-loading': submit}" type="submit" :title="$t('Settings.save')"
                         :disabled="submit">
                     <fa :icon="['fas', 'save']"/>
                 </button>
