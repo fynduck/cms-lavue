@@ -7,7 +7,7 @@
             <router-link class="btn btn-light submit_absolute cancel" :to="{name: 'user.index'}" :title="$t('User.cancel')">
                 <fa :icon="['fas', 'reply']"/>
             </router-link>
-            <button :class="{'btn btn-primary submit_absolute': true, 'btn-loading': submit}" type="submit" :title="$t('User.save')"
+            <button :class="{'btn btn-success submit_absolute': true, 'btn-loading': submit}" type="submit" :title="$t('User.save')"
                     :disabled="submit">
                 <fa :icon="['fas', 'save']"/>
             </button>
@@ -69,7 +69,7 @@
                 <router-link class="btn btn-light" :to="{name: 'user.index'}" :title="$t('User.cancel')">
                     <fa :icon="['fas', 'reply']"/>
                 </router-link>
-                <button :class="{'btn btn-primary': true, 'btn-loading': submit}" type="submit" :title="$t('User.save')"
+                <button :class="{'btn btn-success': true, 'btn-loading': submit}" type="submit" :title="$t('User.save')"
                         :disabled="submit">
                     <fa :icon="['fas', 'save']"/>
                 </button>

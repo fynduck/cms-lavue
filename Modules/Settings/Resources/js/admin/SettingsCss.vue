@@ -13,7 +13,7 @@
                     </codemirror>
                 </client-only>
                 <div class="text-center mt-3" v-if="canCreate">
-                    <button :class="{'btn btn-primary': true, 'btn-loading': submit}" type="submit" :title="$t('Settings.save')"
+                    <button :class="{'btn btn-success': true, 'btn-loading': submit}" type="submit" :title="$t('Settings.save')"
                             :disabled="submit">
                         <fa :icon="['fas', 'save']"/> {{ $t('Settings.save') }}
                     </button>

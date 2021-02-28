@@ -25,10 +25,10 @@
                 </div>
             </div>
             <p class="mt-4 d-flex justify-content-between" v-if="canCreate">
-                <button type="button" class="btn btn-primary" :title="$t('Settings.add')" @click.prevent="addSocial()">
+                <button type="button" class="btn btn-success" :title="$t('Settings.add')" @click.prevent="addSocial()">
                     <fa :icon="['fas', 'plus']"/>
                 </button>
-                <button :class="{'btn btn-primary': true, 'btn-loading': submit}" type="submit" :title="$t('Settings.save')"
+                <button :class="{'btn btn-success': true, 'btn-loading': submit}" type="submit" :title="$t('Settings.save')"
                         :disabled="submit">
                     <fa :icon="['fas', 'save']"/>
                 </button>
