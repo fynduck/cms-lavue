@@ -240,14 +240,15 @@ class ArticleService
         );
 
         if ($settings && !empty($settings->data['sizes'])) {
+            $sortedSizes = collect($settings->data['sizes'])->sortBy('width');
             if ($first) {
-                return asset('storage/' . Article::FOLDER_IMG . '/' . key($settings->data['sizes']) . '/' . $image);
+                return asset('storage/' . Article::FOLDER_IMG . '/' . $sortedSizes->first()['name'] . '/' . $image);
             }
 
             if (array_key_exists($size, $settings->data['sizes'])) {
                 return asset('storage/' . Article::FOLDER_IMG . '/' . $size . '/' . $image);
             } else {
-                return asset('storage/' . Article::FOLDER_IMG . '/' . key(end($settings->data['sizes'])) . '/' . $image);
+                return asset('storage/' . Article::FOLDER_IMG . '/' . key(end($sortedSizes)) . '/' . $image);
             }
         }
 

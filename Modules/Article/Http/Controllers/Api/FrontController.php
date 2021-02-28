@@ -44,6 +44,8 @@ class FrontController extends Controller
             $query->where('no_show_home', '<>', 1);
         }
 
+        $query->orderBy('priority');
+        
         if ($type == Article::PROMOTIONS) {
             if ($request->get('past')) {
                 $query->where('date_to', '<', now())
@@ -55,8 +57,6 @@ class FrontController extends Controller
         } else {
             $query->orderBy('date', 'desc');
         }
-
-        $query->orderBy('priority');
 
         $articles = $query->simplePaginate($perPage ?? 9);
 

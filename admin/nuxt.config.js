@@ -93,9 +93,9 @@ module.exports = {
             }
         ]
     },
-    purgeCSS: {
-        enabled: true
-    },
+    // purgeCSS: {
+    //     enabled: true
+    // },
     build: {
         extractCSS: true,
         cssSourceMap: false,

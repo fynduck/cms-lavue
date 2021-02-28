@@ -29,7 +29,8 @@ export default {
         this.loading = true;
         let data = {
             params: {
-                type: this.type
+                type: this.type,
+                show_home: 1
             }
         };
         await axios.get(this.source, data).then(response => {
