@@ -57,6 +57,7 @@ class GenerateImages implements ShouldQueue
             $brightness = !empty($sizes->data['brightness']) ? $sizes->data['brightness'] : 0;
             $background = !empty($sizes->data['background']) ? $sizes->data['background'] : null;
             $path = Storage::get(Menu::FOLDER_IMG . '/' . $menu->image);
+            $optimize = !empty($sizes->data['optimize']) ? $sizes->data['optimize'] : false;
             ManipulationImage::load($path)
                 ->setSizes($sizes->data['sizes'])
                 ->setName($menu->image)
@@ -65,6 +66,7 @@ class GenerateImages implements ShouldQueue
                 ->setBlur($blur)
                 ->setBrightness($brightness)
                 ->setBackground($background)
+                ->setOptimize($optimize)
                 ->save($resizeMethod);
         }
     }

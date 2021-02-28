@@ -4,6 +4,7 @@ namespace Modules\Article\Http\Controllers\Api;
 
 use App\Http\Controllers\AdminController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Modules\Article\Entities\Article;
 use Modules\Article\Entities\ArticleSettings;
 use Modules\Article\Http\Requests\SizeValidate;
@@ -70,11 +71,11 @@ class ArticleController extends AdminController
         /**
          * Save article
          */
-        \DB::beginTransaction();
+        DB::beginTransaction();
         $article = $this->articleService->addUpdate($request, $nameImages);
 
         $this->articleService->addUpdateTrans($article->id, $request->get('items'));
-        \DB::commit();
+        DB::commit();
 
         return true;
     }
@@ -116,11 +117,11 @@ class ArticleController extends AdminController
         /**
          * Save article
          */
-        \DB::beginTransaction();
+        DB::beginTransaction();
         $article = $this->articleService->addUpdate($request, $nameImages, $id);
 
         $this->articleService->addUpdateTrans($article->id, $request->get('items'));
-        \DB::commit();
+        DB::commit();
 
         return true;
     }
@@ -153,19 +154,26 @@ class ArticleController extends AdminController
      */
     public function saveSettings(SizeValidate $request)
     {
-        $defaultAction = ArticleSettings::RESIZE;
+        $defaultAction = ArticleSettings::RESIZE_CROP;
         $action = $request->get('action', $defaultAction);
-        $blur = $request->get('blur') >= 0 && $request->get('blur') <= 100 ? $request->get('blur') : null;
-        $brightness = $request->get('brightness') >= -100 && $request->get('brightness') <= 100 ? $request->get(
-            'brightness'
-        ) : null;
+        $blur = null;
+        $brightness = null;
+        if ($request->get('blur') >= 0 && $request->get('blur') <= 100) {
+            $blur = $request->get('blur');
+        }
+        if ($request->get('brightness') >= -100 && $request->get('brightness') <= 100) {
+            $brightness = $request->get('brightness');
+        }
 
         $data = [
+            'ratio'      => $request->get('ratio'),
+            'ratios'     => $request->get('ratios'),
             'action'     => in_array($action, ArticleSettings::resizeMethods()) ? $action : $defaultAction,
             'greyscale'  => $request->get('greyscale'),
             'blur'       => $blur,
             'brightness' => $brightness,
             'background' => $request->get('background'),
+            'optimize'   => $request->get('optimize'),
         ];
         foreach ($request->get('sizes') as $size) {
             $data['sizes'][$size['name']] = [

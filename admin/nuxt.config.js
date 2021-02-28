@@ -57,7 +57,7 @@ module.exports = {
         '@nuxtjs/toast'
     ],
     bootstrapVue: {
-        bootstrapVueCSS: false,
+        // bootstrapVueCSS: false,
         bootstrapCSS: false
     },
     toast: {

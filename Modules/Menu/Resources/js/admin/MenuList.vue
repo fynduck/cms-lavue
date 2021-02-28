@@ -82,6 +82,24 @@
                  v-if="confirmWindow.openConfirm"
         ></confirm>
         <b-modal id="menu-settings" hide-footer centered>
+            <b-form-checkbox id="ration"
+                             class="mb-3"
+                             switch
+                             v-model="settings.ratio"
+                             :value="1"
+                             :unchecked-value="0">
+                {{ $t('Menu.ratio') }}
+            </b-form-checkbox>
+            <b-row v-if="settings.ratio && settings.ratios">
+                <b-col class="mb-3">
+                    <label for="ration_width">{{ $t('Menu.width') }}</label>
+                    <b-form-input id="ration_width" v-model.number="settings.ratios.width" type="number"></b-form-input>
+                </b-col>
+                <b-col class="mb-3">
+                    <label for="ration_height">{{ $t('Menu.height') }}</label>
+                    <b-form-input id="ration_height" v-model.number="settings.ratios.height" type="number"></b-form-input>
+                </b-col>
+            </b-row>
             <b-row class="mb-1 size" v-for="(size, key) in settings.sizes" :key="key">
                 <b-col class="mb-3">
                     <label :for="`name_${key}`">{{ $t('Menu.size_name') }}</label>
@@ -89,11 +107,13 @@
                 </b-col>
                 <b-col class="mb-3">
                     <label :for="`width_${key}`">{{ $t('Menu.width') }}</label>
-                    <b-form-input :id="`width_${key}`" v-model.number="size.width" type="number"></b-form-input>
+                    <b-form-input :id="`width_${key}`" v-model.number="size.width" type="number"
+                                  @input="calculateSizeWithRatio(size, 'w')"></b-form-input>
                 </b-col>
                 <b-col class="mb-3">
                     <label :for="`height_${key}`">{{ $t('Menu.height') }}</label>
-                    <b-form-input :id="`height_${key}`" v-model.number="size.height" type="number"></b-form-input>
+                    <b-form-input :id="`height_${key}`" v-model.number="size.height" type="number"
+                                  @input="calculateSizeWithRatio(size, 'h')"></b-form-input>
                 </b-col>
                 <fa :icon="['fas', 'trash-alt']" class="text-danger remove" @click="deleteSize(key)"/>
             </b-row>
@@ -178,6 +198,10 @@ export default {
             languages: {},
             resizes: [
                 {
+                    value: 'resize-crop',
+                    text: this.$t('Menu.resize_crop')
+                },
+                {
                     value: 'resize',
                     text: this.$t('Menu.resize')
                 },
@@ -187,7 +211,13 @@ export default {
                 }
             ],
             settings: {
-                action: 'resize',
+                ratios: {
+                    width: 0,
+                    height: 0,
+                },
+                ratio: false,
+                action: 'resize-crop',
+                optimize: null,
                 greyscale: null,
                 blur: null,
                 brightness: null,
@@ -218,6 +248,12 @@ export default {
         },
         position() {
             this.getItems();
+        },
+        'settings.ratios': {
+            handler() {
+                this.calculateSizeWithRatio()
+            },
+            deep: true
         }
     },
     computed: {
@@ -341,6 +377,28 @@ export default {
                 this.loading_setting = false
             }).catch(error => {
             })
+        },
+        calculateSizeWithRatio(size = null, field = null) {
+            const rationW = this.settings.ratios.width;
+            const rationH = this.settings.ratios.height;
+            if (this.settings.ratio && rationW && rationH) {
+
+                if (size !== null && field) {
+                    if (field === 'w') {
+                        size.height = Math.round((parseInt(size.width) / rationW) * rationH);
+                    } else if (field === 'h') {
+                        size.width = Math.round(parseInt(size.height) * (rationW / rationH))
+                    }
+                } else {
+                    this.settings.sizes.forEach(item => {
+                        if (item.width) {
+                            item.height = Math.round((parseInt(item.width) / rationW) * rationH)
+                        } else if (item.height) {
+                            item.width = Math.round(parseInt(item.height) * (rationW / rationH))
+                        }
+                    })
+                }
+            }
         }
     }
 }

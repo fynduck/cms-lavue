@@ -16,21 +16,13 @@
                     <b-form-select v-model="lang_id" :options="langOptions"></b-form-select>
                 </b-col>
                 <b-col sm="6" lg="3" class="my-1 d-flex align-items-center">
-                    <div class="custom-control custom-switch custom-">
-                        <input type="checkbox" class="custom-control-input" id="checkbox_status"
-                               v-model="active"
-                               :value="1">
-                        <label class="custom-control-label" for="checkbox_status">
-                            {{ active ? $t('Article.inactive') : $t('Article.active') }}
-                        </label>
-                    </div>
-<!--                    <b-form-checkbox id="checkbox_status"-->
-<!--                                     switch-->
-<!--                                     v-model="active"-->
-<!--                                     :value="1"-->
-<!--                                     :unchecked-value="0">-->
-
-<!--                    </b-form-checkbox>-->
+                    <b-form-checkbox id="checkbox_status"
+                                     switch
+                                     v-model="active"
+                                     :value="1"
+                                     :unchecked-value="0">
+                        {{ active ? $t('Article.inactive') : $t('Article.active') }}
+                    </b-form-checkbox>
                 </b-col>
                 <b-col sm="6" lg="2" class="text-right" v-if="canCreate">
                     <b-button v-b-modal.article-settings variant="info">{{ $t('Article.settings') }}</b-button>
@@ -87,6 +79,23 @@
                  v-if="confirmWindow.openConfirm"
         ></confirm>
         <b-modal id="article-settings" hide-footer centered>
+            <b-form-checkbox id="ration"
+                             switch
+                             v-model="settings.ratio"
+                             :value="1"
+                             :unchecked-value="0">
+                {{ $t('Article.ratio') }}
+            </b-form-checkbox>
+            <b-row v-if="settings.ratio && settings.ratios">
+                <b-col class="mb-3">
+                    <label for="ration_width">{{ $t('Article.width') }}</label>
+                    <b-form-input id="ration_width" v-model.number="settings.ratios.width" type="number"></b-form-input>
+                </b-col>
+                <b-col class="mb-3">
+                    <label for="ration_height">{{ $t('Article.height') }}</label>
+                    <b-form-input id="ration_height" v-model.number="settings.ratios.height" type="number"></b-form-input>
+                </b-col>
+            </b-row>
             <b-row class="mb-1 size" v-for="(size, key) in settings.sizes" :key="key">
                 <b-col class="mb-3">
                     <label :for="`name_${key}`">{{ $t('Article.size_name') }}</label>
@@ -94,22 +103,29 @@
                 </b-col>
                 <b-col class="mb-3">
                     <label :for="`width_${key}`">{{ $t('Article.width') }}</label>
-                    <b-form-input :id="`width_${key}`" v-model.number="size.width" type="number"></b-form-input>
+                    <b-form-input :id="`width_${key}`" v-model.number="size.width" type="number"
+                                  @input="calculateSizeWithRatio(size, 'w')"></b-form-input>
                 </b-col>
                 <b-col class="mb-3">
                     <label :for="`height_${key}`">{{ $t('Article.height') }}</label>
-                    <b-form-input :id="`height_${key}`" v-model.number="size.height" type="number"></b-form-input>
+                    <b-form-input :id="`height_${key}`" v-model.number="size.height" type="number"
+                                  @input="calculateSizeWithRatio(size, 'h')"></b-form-input>
                 </b-col>
                 <fa :icon="['fas', 'trash-alt']" class="text-danger remove" @click="deleteSize(key)"/>
             </b-row>
             <b-row class="align-items-center">
                 <b-col sm="6" class="mb-3">
-                    <b-form-select v-model="settings.action" :options="resizes" size="sm" class="my-3"></b-form-select>
+                    <b-form-checkbox v-model="settings.optimize" switch>
+                        {{ $t('Article.optimize') }}
+                    </b-form-checkbox>
                 </b-col>
                 <b-col sm="6" class="mb-3">
                     <b-form-checkbox v-model="settings.greyscale" switch>
                         {{ $t('Article.greyscale') }}
                     </b-form-checkbox>
+                </b-col>
+                <b-col class="mb-3">
+                    <b-form-select v-model="settings.action" :options="resizes" size="sm" class="my-3"></b-form-select>
                 </b-col>
             </b-row>
             <b-row>
@@ -176,16 +192,26 @@ export default {
             languages: {},
             resizes: [
                 {
+                    value: 'resize-crop',
+                    text: this.$t('Article.resize_crop')
+                },
+                {
                     value: 'resize',
-                    text: this.$t('Menu.resize')
+                    text: this.$t('Article.resize')
                 },
                 {
                     value: 'crop',
-                    text: this.$t('Menu.crop')
+                    text: this.$t('Article.crop')
                 }
             ],
             settings: {
-                action: 'resize',
+                ratios: {
+                    width: 0,
+                    height: 0,
+                },
+                ratio: false,
+                action: 'resize-crop',
+                optimize: null,
                 greyscale: null,
                 blur: null,
                 brightness: null,
@@ -264,6 +290,12 @@ export default {
                 this.current_page = 1
                 this.getItems()
             }, 500);
+        },
+        'settings.ratios': {
+            handler() {
+                this.calculateSizeWithRatio()
+            },
+            deep: true
         }
     },
     mounted() {
@@ -341,6 +373,28 @@ export default {
                 this.loading_setting = false;
             }).catch(() => {
             })
+        },
+        calculateSizeWithRatio(size = null, field = null) {
+            const rationW = this.settings.ratios.width;
+            const rationH = this.settings.ratios.height;
+            if (this.settings.ratio && rationW && rationH) {
+
+                if (size !== null && field) {
+                    if (field === 'w') {
+                        size.height = Math.round((parseInt(size.width) / rationW) * rationH);
+                    } else if (field === 'h') {
+                        size.width = Math.round(parseInt(size.height) * (rationW / rationH))
+                    }
+                } else {
+                    this.settings.sizes.forEach(item => {
+                        if (item.width) {
+                            item.height = Math.round((parseInt(item.width) / rationW) * rationH)
+                        } else if (item.height) {
+                            item.width = Math.round(parseInt(item.height) * (rationW / rationH))
+                        }
+                    })
+                }
+            }
         }
     }
 }

@@ -8,6 +8,8 @@ class ArticleSettings extends Model
 {
     const RESIZE = 'resize';
 
+    const RESIZE_CROP = 'resize-crop';
+
     const CROP = 'crop';
 
     protected $fillable = [
@@ -23,6 +25,7 @@ class ArticleSettings extends Model
     {
         return [
             self::RESIZE,
+            self::RESIZE_CROP,
             self::CROP
         ];
     }

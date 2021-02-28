@@ -164,19 +164,26 @@ class MenuController extends AdminController
      */
     public function saveSettings(Request $request): bool
     {
-        $defaultAction = MenuSettings::RESIZE;
+        $defaultAction = MenuSettings::RESIZE_CROP;
         $action = $request->get('action', $defaultAction);
-        $blur = $request->get('blur') >= 0 && $request->get('blur') <= 100 ? $request->get('blur') : null;
-        $brightness = $request->get('brightness') >= -100 && $request->get('brightness') <= 100 ? $request->get(
-            'brightness'
-        ) : null;
+        $blur = null;
+        $brightness = null;
+        if ($request->get('blur') >= 0 && $request->get('blur') <= 100) {
+            $blur = $request->get('blur');
+        }
+        if ($request->get('brightness') >= -100 && $request->get('brightness') <= 100) {
+            $brightness = $request->get('brightness');
+        }
 
         $data = [
+            'ratio'      => $request->get('ratio'),
+            'ratios'     => $request->get('ratios'),
             'action'     => in_array($action, MenuSettings::resizeMethods()) ? $action : $defaultAction,
             'greyscale'  => $request->get('greyscale'),
             'blur'       => $blur,
             'brightness' => $brightness,
             'background' => $request->get('background'),
+            'optimize'   => $request->get('optimize'),
         ];
         foreach ($request->get('sizes') as $size) {
             $data['sizes'][$size['name']] = [
