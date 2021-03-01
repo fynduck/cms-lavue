@@ -27,5 +27,16 @@ class ArticlePaginationTableSeeder extends Seeder
                 'user_id' => 1
             ]
         );
+
+        Pagination::firstOrCreate(
+            [
+                'on'  => 'articles',
+                'for' => 'relates'
+            ],
+            [
+                'value'   => 3,
+                'user_id' => 1
+            ]
+        );
     }
 }

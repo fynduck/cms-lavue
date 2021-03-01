@@ -141,7 +141,7 @@ class ArticleService
                     $blur = !empty($settings->data['blur']) ? $settings->data['blur'] : $blur;
                     $brightness = !empty($settings->data['brightness']) ? $settings->data['brightness'] : $brightness;
                     $background = !empty($settings->data['background']) ? $settings->data['background'] : $background;
-                    $optimize = !empty($settings->data['optimize']) ? $settings->data['optimize'] : $background;
+                    $optimize = !empty($settings->data['optimize']) ? $settings->data['optimize'] : $optimize;
                 }
                 $nameImages['imageName'] = UploadFile::file($request->get('image'))
                     ->setFolder(Article::FOLDER_IMG)

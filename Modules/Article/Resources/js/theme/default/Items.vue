@@ -1,14 +1,8 @@
 <template>
     <section class="container">
-        <div class="row my-4">
-            <div class="col-md-6 col-lg-4 col-exl-3 mb-4" v-for="item in items">
-                <article-item :item="item"/>
-            </div>
+        <div class="masonry">
+            <article-item :item="item" v-for="item in items" :key="item.id"/>
         </div>
-        <skeleton-article :loading="loading"/>
-        <p class="text-center" v-if="links.next">
-            <a href="#" class="btn-custom px-5" @click.prevent="changePage">{{ $t('Article.show_more') }}</a>
-        </p>
     </section>
 </template>
 
@@ -35,8 +29,7 @@ export default {
         let data = {
             params: {
                 page: this.current_page,
-                type: this.type,
-                past: this.past
+                type: this.type
             }
         };
         await axios.get(this.source, data).then(response => {
@@ -50,12 +43,23 @@ export default {
             this.loading = false;
         });
     },
+    mounted() {
+        window.onscroll = () => {
+            if ((document.documentElement.scrollTop + window.innerHeight) + 100 >= document.documentElement.offsetHeight) {
+                clearTimeout(this.timeout);
+                this.timeout = setTimeout(() => {
+                    this.changePage()
+                }, 1000);
+            }
+        }
+    },
     data() {
         return {
             loading: true,
             items: [],
             show_more: '',
             past: null,
+            timeout: null,
             links: {
                 first: '',
                 last: null,
@@ -72,9 +76,10 @@ export default {
     },
     methods: {
         changePage() {
-            this.current_page++;
-
-            this.getItems();
+            if (this.links.next) {
+                this.current_page++;
+                this.$fetch();
+            }
         }
     }
 }
