@@ -68,5 +68,7 @@
   "greyscale": "Greyscale",
   "blur": "Blur",
   "brightness": "Brightness",
-  "background": "Background"
+  "background": "Background",
+  "ratio": "Соотношение сторон",
+  "latest_news": "Latest news"
 }

@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Cache;
 use Modules\Article\Entities\Article;
 use Modules\Article\Entities\ArticleTrans;
 use Modules\Article\Transformers\ArticleResource;
-use Modules\Page\Entities\Page;
 use Modules\Page\Services\PageService;
 use Modules\Settings\Entities\Pagination;
 
@@ -31,7 +30,7 @@ class FrontController extends Controller
         if (!$request->get('limit')) {
             $perPage = Cache::remember(
                 'articles_pagination_' . $type,
-                30,
+                now()->addDay(),
                 function () use ($type) {
                     return Pagination::where('on', $type)->where('for', 'items')->value('value');
                 }
@@ -45,7 +44,7 @@ class FrontController extends Controller
         }
 
         $query->orderBy('priority');
-        
+
         if ($type == Article::PROMOTIONS) {
             if ($request->get('past')) {
                 $query->where('date_to', '<', now())
@@ -67,10 +66,31 @@ class FrontController extends Controller
     {
         $articleTrans = ArticleTrans::whereSlug($slug)->active()->first();
 
+        $type = $articleTrans->getArticle->type;
         if (!$articleTrans) {
             return PageService::notFound();
         }
 
-        return new ArticleResource($articleTrans);
+        $perPage = Cache::remember(
+            'relate_articles_pagination_' . $type,
+            now()->addDay(),
+            function () use ($type) {
+                return Pagination::where('on', $type)->where('for', 'relates')->value('value');
+            }
+        );
+
+        $relateArticles = Article::leftJoin('article_trans as t', 'articles.id', '=', 't.article_id')
+            ->where('lang_id', config('app.locale_id'))
+            ->where('article_id', '!=', $articleTrans->article_id)
+            ->where('type', $type)
+            ->where('active', 1)
+            ->limit($perPage ?? 3)
+            ->get(['articles.*', 't.title', 't.slug']);
+
+        $additional = [
+            'relates' => ArticleResource::collection($relateArticles)
+        ];
+
+        return (new ArticleResource($articleTrans))->additional($additional);
     }
 }

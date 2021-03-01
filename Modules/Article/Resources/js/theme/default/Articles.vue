@@ -1,20 +1,42 @@
 <template>
     <section v-if="item" class="container">
-        <h1 class="my-4 title_page">{{ item.title }}</h1>
-        <v-runtime-template :template="description" v-if="item.description"/>
-        <time>{{ item.show_date }}</time>
+        <div class="row">
+            <div class="col-lg-9">
+                <h1 class="my-4 title_page">{{ item.title }}</h1>
+                <time :datetime="$moment(item.date).format()" class="time_views">
+                    <i class="far fa-clock"></i> {{ item.show_date }}
+                </time>
+                <span class="time_views">
+                    <i class="far fa-eye"></i> <span>{{ item.views }}</span>
+                </span>
+                <figure class="mt-2">
+                    <img v-lazy.container="item.imgObj" :data-srcset="item.srcset" :alt="item.title" class="lazy-img">
+                </figure>
+                <v-runtime-template :template="description" v-if="item.description"/>
+            </div>
+            <div class="col-lg-3 relates mt-4" v-if="relates.length">
+                <h2 class="relate_news">{{ $t('Article.latest_news') }}</h2>
+                <div class="row">
+                    <div class="col-sm-6 col-md-4 col-lg-12 mb-4" v-for="relate in relates">
+                        <article-item :item="relate"/>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 </template>
 
 <script>
-import VRuntimeTemplate from "v-runtime-template";
 import axios from "axios";
 import {mapGetters} from "vuex";
+import VRuntimeTemplate from "v-runtime-template";
+import ArticleItem from './components/ArticleItem';
 
 export default {
     name: "Articles",
     components: {
         VRuntimeTemplate,
+        ArticleItem
     },
     head() {
         return {
@@ -31,7 +53,8 @@ export default {
                 title: '',
                 description: '',
                 keywords: ''
-            }
+            },
+            relates: []
         }
     },
     async fetch() {
@@ -52,6 +75,10 @@ export default {
                 this.meta.title = data.meta.meta_title
                 this.meta.description = data.meta.meta_description
                 this.meta.keywords = data.meta.meta_keywords
+            }
+
+            if (typeof data.relates !== "undefined") {
+                this.relates = data.relates;
             }
 
             if (typeof data.page_lang !== "undefined") {

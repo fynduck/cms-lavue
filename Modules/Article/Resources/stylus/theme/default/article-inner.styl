@@ -1,11 +1,30 @@
-.inner_art_time
-  text-transform capitalize
-  font-size 18px
-  text-align center
-  color $blackGray
+.relates
+  &:hover
+    .relate_news
+      &:after
+      &:before
+        background-color $green
 
-.title_last_notes
+.relate_news
   margin-bottom 1.5rem
-  font-size 1.9rem
+  font-size 1.4rem
   font-weight bold
   color $black
+  position relative
+
+  &:after
+  &:before
+    content ''
+    position absolute
+    top 0
+    right 0
+    background-color $black
+    transition all .2s ease
+
+  &:before
+    width .75rem
+    height 3px
+
+  &:after
+    height .75rem
+    width 3px

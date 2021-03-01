@@ -16,17 +16,28 @@
 .article
   height 100%
   position relative
+  background-color $white
 
   a
     color $black
     position relative
+    transition color .2s ease
 
     &:hover
       text-decoration none
+      color $black
 
-  .title
-    font-size 1.37rem
-    font-weight bold
-    color $black
-    margin-bottom 1rem
-    text-align center
+  .info
+    padding 0 1rem 1rem
+
+    .title
+      font-size 1.37rem
+      font-weight bold
+      color $black
+      margin-bottom 1rem
+      text-align center
+
+.time_views
+  color $grey
+  font-size .9rem
+  margin-right .3rem

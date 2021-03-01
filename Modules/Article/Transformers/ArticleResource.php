@@ -39,9 +39,10 @@ class ArticleResource extends JsonResource
             'srcset'            => $this->srcset(),
             'link'              => $this->generateLink(),
             'date'              => $this->date,
-            'show_date'         => $this->date->format('d.m.Y'),
+            'show_date'         => localeDate($this->date),
             'date_to'           => $this->date_to,
-            'promo_finish_date' => $this->date_to && $this->date_to->isFuture() ? $this->date_to->timestamp : null
+            'promo_finish_date' => $this->date_to && $this->date_to->isFuture() ? $this->date_to->timestamp : null,
+            'views'             => 0
         ];
     }
 
@@ -77,6 +78,10 @@ class ArticleResource extends JsonResource
 
     private function generateMiniDescription(): string
     {
+        if (request()->get('show_home')) {
+            return '';
+        }
+
         $description = null;
         if ($this->short_desc) {
             $description = $this->short_desc;

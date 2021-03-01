@@ -1,7 +1,9 @@
 <template>
     <section class="container">
-        <div class="masonry">
-            <article-item :item="item" v-for="item in items" :key="item.id"/>
+        <div class="row my-4">
+            <div class="col-md-6 col-lg-4 col-exl-3 mb-4" v-for="item in items">
+                <article-item :item="item"/>
+            </div>
         </div>
         <skeleton-article :loading="loading"/>
     </section>
@@ -30,7 +32,8 @@ export default {
         let data = {
             params: {
                 type: this.type,
-                show_home: 1
+                show_home: 1,
+                limit: 3
             }
         };
         await axios.get(this.source, data).then(response => {
