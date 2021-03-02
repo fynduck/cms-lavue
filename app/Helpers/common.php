@@ -6,6 +6,7 @@
  * Time: 22:32
  */
 
+use Illuminate\Support\Facades\Cache;
 use Modules\Article\Entities\ArticleTrans;
 use Modules\Page\Entities\Page;
 use Modules\Page\Entities\PageTrans;
@@ -119,7 +120,7 @@ function convertIntMinSecToString(int $number)
 function generateRoute($item, $urlsPages = null)
 {
     if (!$urlsPages) {
-        $urlsPages = \Cache::remember(
+        $urlsPages = Cache::remember(
             'urls_pages_' . config('app.locale_id'),
             now()->addHours(5),
             function () {

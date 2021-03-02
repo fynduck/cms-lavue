@@ -3,56 +3,48 @@
         <h2 class="title_form">{{ form.form_name }}</h2>
         <form :action="form.action" :method="form.method" @submit.prevent="onSubmit"
               :enctype="form.file ? 'multipart/form-data' : 'application/x-www-form-urlencoded'">
-            <div class="form-row">
-                <div class="form-group" :class="[field.block_class ? field.block_class : 'col-12']"
-                     v-for="(field, field_key) in form.fields"
+            <div class="row">
+                <div :class="['mb-3', field.block_class || 'col-12']" v-for="(field, field_key) in form.fields"
                      v-if="fieldInput.includes(field.type)">
-                    <label :for="field.field_id ? 'file_' + field.field_id : 'file_' + field.id" v-if="field.label">
+                    <label :for="`field_${field.field_id || field.id}`" class="form-label" v-if="field.label">
                         {{ field.label }}
                     </label>
-                    <input :type="field.type" :name="field.name" class="form-control" :class="field.field_class"
-                           :placeholder="field.placeholder" :required="isValidate(field)" :pattern="isValidate(field, true)"
-                           :id="field.field_id ? 'file_' + field.field_id : 'file_' + field.id" v-model="field.value">
+                    <input :type="field.type" :class="[field.type ==='range' ? 'form-range' : 'form-control', field.field_class]"
+                           v-model="field.value" :placeholder="field.placeholder" :required="isValidate(field)" :name="field.name"
+                           :pattern="isValidate(field, true)" :id="`field_${field.field_id || field.id}`">
                 </div>
-                <div class="form-group" :class="[field.block_class ? field.block_class : 'col-12']"
-                     v-else-if="field.type === 'file'">
-                    <div class="custom-file">
-                        <input :type="field.type" :name="field.name" class="custom-file-input"
-                               :id="field.field_id ? 'file_' + field.field_id : 'file_' + field.id"
-                               @change="addFile($event, field_key)">
-                        <label class="custom-file-label"
-                               :for="field.field_id ? 'file_' + field.field_id : 'file_' + field.id">
-                            {{ trans.file_no_selected }}</label>
-                    </div>
-                </div>
-                <div class="form-group" :class="[field.block_class ? field.block_class : 'col-12']"
-                     v-else-if="field.type === 'textarea'">
-                    <label :for="field.field_id ? 'textarea_' + field.field_id : 'textarea_' + field.id"
-                           v-if="field.label">
+                <div :class="['mb-3', field.block_class || 'col-12']" v-else-if="field.type === 'file'">
+                    <label :for="`file_${field.field_id || field.id}`" class="form-label" v-if="field.label">
                         {{ field.label }}
                     </label>
-                    <textarea class="form-control" v-model="field.value" :placeholder="field.placeholder" rows="3"
-                              :id="field.field_id ? 'textarea_' + field.field_id : 'textarea_' + field.id"
-                              :required="isValidate(field)" :pattern="isValidate(field, true)"></textarea>
+                    <input :type="field.type" :name="field.name" :class="['form-control', field.field_class]"
+                           :required="isValidate(field)" :id="`file_${field.field_id || field.id}`"
+                           @change="addFile($event, field_key)">
                 </div>
-                <div class="form-group" :class="[field.block_class ? field.block_class : 'col-12']"
-                     v-else-if="fieldRadioCheck.includes(field.type)">
-                    <label v-if="field.label">{{ field.label }}</label>
-                    <div class="custom-control" :class="'custom-' + field.type" v-for="option in field.options">
-                        <input :type="field.type" class="custom-control-input" :name="field.name" v-model="field.value"
-                               :required="isValidate(field)" :id="[option.option_id ? option.option_id : 'key_' + option.id]"
+                <div :class="['mb-3', field.block_class || 'col-12']" v-else-if="field.type === 'textarea'">
+                    <label :for="`textarea_${field.field_id || field.id}`" v-if="field.label" class="form-label">
+                        {{ field.label }}
+                    </label>
+                    <textarea :class="['form-control', field.field_class]" v-model="field.value" :placeholder="field.placeholder"
+                              rows="3" :id="`textarea_${field.field_id || field.id}`" :required="isValidate(field)"
+                              :pattern="isValidate(field, true)"></textarea>
+                </div>
+                <div :class="['mb-3', field.block_class || 'col-12']" v-else-if="fieldRadioCheck.includes(field.type)">
+                    <label v-if="field.label" class="form-label">{{ field.label }}</label>
+                    <br>
+                    <div :class="['form-check form-check-inline', `custom-${field.type}`]" v-for="option in field.options">
+                        <input :type="field.type" :class="['form-check-input', option.option_class]" :name="field.name"
+                               v-model="field.value" :required="isValidate(field)" :id="`key_${option.option_id || option.id}`"
                                :value="option.value">
-                        <label class="custom-control-label"
-                               :for="[option.option_id ? option.option_id : 'key_' + option.id]"
+                        <label class="form-check-label" :for="`key_${option.option_id || option.id}`"
                                v-html="option.title"></label>
                     </div>
                 </div>
-                <div class="form-group" :class="[field.block_class ? field.block_class : 'col-12']"
-                     v-else-if="field.type === 'select'">
-                    <label :for="field.field_id ? 'select_' + field.field_id : 'select_' + field.id" v-if="field.label">
+                <div :class="['mb-3', field.block_class || 'col-12']" v-else-if="field.type === 'select'">
+                    <label :for="`select_${field.field_id || field.id}`" v-if="field.label" class="form-label">
                         {{ field.label }}
                     </label>
-                    <select class="form-control" :id="field.field_id ? 'select_' + field.field_id : 'select_' + field.id"
+                    <select :class="['form-select', field.field_class]" :id="`select_${field.field_id || field.id}`"
                             v-model="field.value" :required="isValidate(field)">
                         <option v-for="option in field.options" :value="option.value"
                                 :class="[option.option_class ? option.option_class : null]"
@@ -97,7 +89,7 @@ export default {
                 'number',
                 'tel',
                 'email',
-                'range',
+                'range'
             ],
             fieldRadioCheck: [
                 'radio',

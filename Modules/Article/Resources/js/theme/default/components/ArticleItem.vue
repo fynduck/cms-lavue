@@ -1,10 +1,10 @@
 <template>
     <div class="article">
-        <figure>
-            <router-link :to="item.link">
+        <router-link :to="item.link">
+            <figure>
                 <img v-lazy.container="item.imgObj" :data-srcset="item.srcset" :alt="item.title" class="lazy-img">
-            </router-link>
-        </figure>
+            </figure>
+        </router-link>
         <div class="info">
             <router-link :to="item.link">
                 <div class="title">
