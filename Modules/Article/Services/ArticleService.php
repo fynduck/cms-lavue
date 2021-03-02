@@ -248,7 +248,7 @@ class ArticleService
             if (array_key_exists($size, $settings->data['sizes'])) {
                 return asset('storage/' . Article::FOLDER_IMG . '/' . $size . '/' . $image);
             } else {
-                return asset('storage/' . Article::FOLDER_IMG . '/' . key(end($sortedSizes)) . '/' . $image);
+                return asset('storage/' . Article::FOLDER_IMG . '/' . $sortedSizes->last()['name'] . '/' . $image);
             }
         }
 

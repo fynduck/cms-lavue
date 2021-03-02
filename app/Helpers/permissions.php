@@ -1,6 +1,7 @@
 <?php
 
 use Modules\User\Entities\User;
+use Nwidart\Modules\Facades\Module;
 
 /**
  * Check active module

@@ -9,14 +9,20 @@ use Modules\Article\Services\ArticleService;
 
 class ArticleResource extends JsonResource
 {
+    private $pageUrlsOnLang;
+
     public function __construct($resource)
     {
         if ($resource instanceof ArticleTrans) {
+            $article = $resource->getArticle;
             $resource->id = $resource->article_id;
-            $resource->date = $resource->getArticle->date;
-            $resource->date_to = $resource->getArticle->date_to;
-            $resource->image = $resource->getArticle->image;
+            $resource->date = $article->date;
+            $resource->date_to = $article->date_to;
+            $resource->image = $article->image;
+            $resource->type = $article->type;
         }
+
+        $this->pageUrlsOnLang = cache('urls_pages_' . config('app.locale_id'));
 
         parent::__construct($resource);
     }
@@ -49,7 +55,7 @@ class ArticleResource extends JsonResource
     private function imgObj(): array
     {
         return [
-            'src'     => (new ArticleService())->linkImage($this->image),
+            'src'     => (new ArticleService())->linkImage($this->image, 'mdw'),
             'loading' => (new ArticleService())->linkImage($this->image, null, true)
         ];
     }
@@ -57,7 +63,7 @@ class ArticleResource extends JsonResource
     private function generateLink(): string
     {
         $pageSlug = null;
-        if (array_key_exists($this->type, cache('urls_pages_' . config('app.locale_id')))) {
+        if ($this->pageUrlsOnLang && array_key_exists($this->type, $this->pageUrlsOnLang)) {
             $pageSlug = cache('urls_pages_' . config('app.locale_id'))[$this->type];
         } else {
             return '';
@@ -126,7 +132,7 @@ class ArticleResource extends JsonResource
 
         foreach ($pageLang as $key => $item) {
             $type = $item->getArticle->type;
-            if (array_key_exists($type, cache('urls_pages_' . $item->lang_id))) {
+            if (cache('urls_pages_' . $item->lang_id) && array_key_exists($type, cache('urls_pages_' . $item->lang_id))) {
                 $params = [
                     cache('urls_pages_' . $item->lang_id)[$type],
                     $item->slug
