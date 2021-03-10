@@ -1,19 +1,8 @@
 {
   "slug": "Ключи перевода",
-  "current_lang": "Перевод",
+  "current_lang": "Текуший язык",
   "translate": "Переводы",
-  "file_admin": "Перевод Админ",
-  "file_auth": "Перевод авторизацию",
-  "file_chat": "Перевод чат",
-  "file_email": "Перевод e-mail",
-  "file_events": "Перевод евентов",
-  "file_gallery": "Перевод альбом",
-  "file_global": "Глобальные переводы",
-  "file_pagination": "Перевод пагинация",
-  "file_passwords": "Перевод паролей",
-  "file_profile": "Перевод профиля",
-  "file_validation": "Перевод валидацию",
-  "file_cart": "Перевод корзина",
-  "file_order": "Перевод заказы",
-  "file_errors": "Перевод ошибки"
+  "search": "Введите для поиска",
+  "data_saved": "Данные сохранены",
+  "save": "Сохранить"
 }

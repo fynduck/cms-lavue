@@ -151,7 +151,7 @@ export default {
                 url: this.sourceActionMethod.action,
                 data: this.form
             }).then(() => {
-                this.$toast.global.success(this.$t('User.data_save'))
+                this.$toast.global.success(this.$t('User.data_saved'))
 
                 setTimeout(() => {
                     this.$router.push({

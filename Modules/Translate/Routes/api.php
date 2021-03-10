@@ -16,6 +16,6 @@ use Modules\Translate\Http\Controllers\Api\TranslateController;
 
 Route::prefix('admin')->middleware(['auth:api'])->group(
     function () {
-        Route::apiResource('translate', TranslateController::class)->only(['index', 'store']);
+        Route::apiResource('translate', TranslateController::class)->only(['index', 'show', 'store']);
     }
 );

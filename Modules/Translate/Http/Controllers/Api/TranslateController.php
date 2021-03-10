@@ -4,12 +4,12 @@ namespace Modules\Translate\Http\Controllers\Api;
 
 use App\Http\Controllers\AdminController;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\File;
+use Modules\Translate\Http\Requests\TranslateValidate;
+use Nwidart\Modules\Facades\Module;
 
 class TranslateController extends AdminController
 {
-
     public function __construct()
     {
         $this->middleware('admin');
@@ -17,81 +17,60 @@ class TranslateController extends AdminController
 
     /**
      * Contacts page
-     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index(Request $request)
+    public function index()
     {
-        $locale = $request->get('locale', config('app.locale'));
-
-        $data = [
-            'locales' => config('app.locales')
-        ];
-
-        $path = resource_path('lang/' . $locale);
-        $files = File::allFiles($path);
-        foreach ($files as $file) {
-            $data['files'][] = str_replace('.php', '', $file->getFilename());
+        $data['modules'] = [];
+        foreach (Module::allEnabled() as $module) {
+            $data['modules'][] = $module->getName();
         }
-
-        $file_name = $request->get('file_name', $data['files'][0]);
-        $translates = trans($file_name, [], $locale);
-
-        foreach ($translates as $key => $item) {
-            $data['items'][] = [
-                'slug'  => $key,
-                'trans' => $item
-            ];
-        }
-
-        $data['locale'] = $locale;
 
         return response()->json($data);
     }
 
     /**
-     * @param Request $request
+     * @param TranslateValidate $request
      * @return mixed
      */
-    protected function store(Request $request)
+    public function store(TranslateValidate $request)
     {
-        $content = '';
-        if ($request->get('items')) {
-            $content = $this->arrayToString($request->get('items'));
+        $module = Module::find($request->get('module'));
+
+        if (!$module) {
+            abort(422, 'Invalid data');
         }
 
-        $file = $request->get('file_name');
-        $locale = $request->get('locale');
-
-        $content = "<?php \nreturn [\n$content];";
-
-        $path = resource_path('lang/' . $locale . '/' . $file . '.php');
-
-        if (!File::exists($path)) {
-            File::makeDirectory($path, 0775);
+        foreach ($request->get('files') as $lang => $items) {
+            $content = collect($items)->pluck('value', 'slug');
+            if ($content->count()) {
+                File::put($module->getPath() . '/Resources/lang/' . $lang . '.json', $content->toJson(JSON_UNESCAPED_UNICODE));
+            }
         }
-
-        file_put_contents($path, $content);
 
         return true;
     }
 
-    protected function arrayToString(array $array): string
+    public function show(string $module)
     {
-        $content = '';
-        foreach ($array as $key => $value) {
-            if (isset($value['trans']) && isset($value['slug'])) {
-                $key = $value['slug'];
-                $value = $value['trans'];
-            }
+        $module = Module::find($module);
 
-            if (is_array($value)) {
-                $content .= "'$key' => [\n" . $this->arrayToString($value) . "],\n";
-            } else {
-                $content .= "'$key' => '$value',\n";
+        if (!$module) {
+            return null;
+        }
+
+        $data['files'] = [];
+        $files = File::files($module->getPath() . '/Resources/lang');
+        foreach ($files as $file) {
+            $fileName = str_replace('.' . $file->getExtension(), '', $file->getFilename());
+            foreach (json_decode($file->getContents(), true) as $key => $value) {
+                $data['files'][$fileName][] = [
+                    'slug'  => $key,
+                    'value' => $value
+                ];
             }
         }
 
-        return $content;
+        return response()->json($data);
     }
 }

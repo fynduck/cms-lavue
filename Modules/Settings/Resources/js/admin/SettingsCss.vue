@@ -74,7 +74,7 @@
             saveCss() {
                 this.submit = true;
                 axios.post(this.source, {css: this.css}).then(() => {
-                    this.$toast.global.success(this.$t('Settings.data_save'))
+                    this.$toast.global.success(this.$t('Settings.data_saved'))
 
                     this.submit = false;
                 }).catch(() => {
