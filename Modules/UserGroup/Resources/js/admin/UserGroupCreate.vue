@@ -113,7 +113,7 @@
                     url: this.sourceActionMethod.action,
                     data: {form: this.form, items: this.routes}
                 }).then(() => {
-                    this.$toast.global.success(this.$t('UserGroup.data_save'))
+                    this.$toast.global.success(this.$t('UserGroup.data_saved'))
 
                     setTimeout(() => {
                         this.$router.push({

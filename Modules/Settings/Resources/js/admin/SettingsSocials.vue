@@ -106,7 +106,7 @@
                 this.submit = true;
                 axios.post(this.source, this.items).then(response => {
                     this.items = response.data.data;
-                    this.$toast.global.success(this.$t('Settings.data_save'))
+                    this.$toast.global.success(this.$t('Settings.data_saved'))
 
                     this.$nextTick(() => {
                         this.submit = false;

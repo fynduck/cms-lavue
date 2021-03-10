@@ -134,7 +134,7 @@ export default {
                 url: this.sourceActionMethod.action,
                 data: this.item
             }).then(() => {
-                this.$toast.global.success(this.$t('Redirect.data_save'))
+                this.$toast.global.success(this.$t('Redirect.data_saved'))
 
                 setTimeout(() => {
                     this.$router.push({

@@ -21,6 +21,6 @@
   "status": "Status",
   "action": "Action",
   "priority": "Priority",
-  "data_save": "Data has been saved",
+  "data_saved": "Data has been saved",
   "save": "Save"
 }

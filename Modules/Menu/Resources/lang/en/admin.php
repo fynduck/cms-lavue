@@ -7,7 +7,7 @@
  */
 
 return [
-    'data_save'         => 'Data has been saved',
+    'data_saved'         => 'Data has been saved',
     'data_not_save'     => 'Data not has been save',
     'you_really_delete' => 'Do you really want to delete',
     'data_delete'       => 'Data has been deleted',

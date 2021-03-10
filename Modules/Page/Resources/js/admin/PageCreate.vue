@@ -177,7 +177,7 @@
                     url: this.sourceActionMethod.action,
                     data: this.item
                 }).then(() => {
-                    this.$toast.global.success(this.$t('Page.data_save'))
+                    this.$toast.global.success(this.$t('Page.data_saved'))
 
                     setTimeout(() => {
                         this.$router.push({

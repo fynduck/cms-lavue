@@ -260,7 +260,7 @@ export default {
         },
         saveCopy() {
             axios.post(`${this.source}-clone/${this.copy_form.id}`, this.copy_form).then(() => {
-                this.$toast.global.success(this.$t('CustomForm.data_save'))
+                this.$toast.global.success(this.$t('CustomForm.data_saved'))
                 this.show_copy = false;
                 this.copy_form.form_name = null
                 this.copy_form.id = null

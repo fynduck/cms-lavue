@@ -74,10 +74,6 @@
             };
         },
         methods: {
-            checkIsIndex(name) {
-                return name.split('.').pop() === 'index'
-            },
-
             generateTransKey(route) {
                 let moduleName = route.name.split('.')[0];
 

@@ -234,7 +234,7 @@ export default {
                 url: this.sourceActionMethod.action,
                 data: this.item
             }).then(() => {
-                this.$toast.global.success(this.$t('Article.data_save'))
+                this.$toast.global.success(this.$t('Article.data_saved'))
                 setTimeout(() => {
                     this.$router.push({
                         name: `${this.$route.name.split('.')[0]}.index`

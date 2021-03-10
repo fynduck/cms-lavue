@@ -130,7 +130,7 @@ export default {
         onSubmit() {
             this.submit = true;
             axios.post(this.source, {items: this.items}).then(response => {
-                let message = this.$t('Settings.data_save');
+                let message = this.$t('Settings.data_saved');
                 if (typeof response.data === 'string') {
                     message = response.data;
                 }

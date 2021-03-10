@@ -158,7 +158,7 @@ export default {
                 url: this.sourceActionMethod.action,
                 data: this.item
             }).then(() => {
-                this.$toast.global.success(this.$t('Language.data_save'))
+                this.$toast.global.success(this.$t('Language.data_saved'))
 
                 setTimeout(() => {
                     this.$router.push({
