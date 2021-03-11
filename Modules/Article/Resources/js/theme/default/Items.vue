@@ -3,6 +3,11 @@
         <div class="masonry">
             <article-item :item="item" v-for="item in items" :key="item.id"/>
         </div>
+        <div class="d-flex justify-content-center my-4" v-if="loading">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
     </section>
 </template>
 
@@ -45,7 +50,7 @@ export default {
     },
     mounted() {
         window.onscroll = () => {
-            if ((document.documentElement.scrollTop + window.innerHeight) + 100 >= document.documentElement.offsetHeight) {
+            if ((document.documentElement.scrollTop + window.innerHeight) + 200 >= document.documentElement.offsetHeight) {
                 clearTimeout(this.timeout);
                 this.timeout = setTimeout(() => {
                     this.changePage()
