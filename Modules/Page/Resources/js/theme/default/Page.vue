@@ -5,6 +5,9 @@
             <v-runtime-template :template="description" v-if="page.description"/>
         </section>
         <home-articles type="articles" v-if="page.method === 'home'"/>
+        <section class="container" v-if="page.description_footer">
+            <v-runtime-template :template="descriptionFooter"/>
+        </section>
     </div>
 </template>
 
@@ -24,6 +27,9 @@ export default {
         }),
         description() {
             return this.page.description.replace(/<p>\s*<\/p>/gi, "");
+        },
+        descriptionFooter() {
+            return this.page.description_footer.replace(/<p>\s*<\/p>/gi, "");
         }
     }
 }

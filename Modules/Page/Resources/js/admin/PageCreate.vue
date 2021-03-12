@@ -44,8 +44,8 @@
                         </div>
                         <div class="form-group">
                             <label :for="`description_footer_${locale_id}`">{{ $t('Page.description_footer')}}</label>
-                            <textarea class="form-control editor" v-model="item.items[locale_id].description_footer"
-                                      :id="`description_footer_${locale_id}`" rows="5"></textarea>
+                            <tinymce :id="`description_footer_${locale_id}`" :path_absolute="`${baseAPI}/admin/filemanager`" :lang="locale"
+                                     :token="token" v-model="item.items[locale_id].description_footer"></tinymce>
                         </div>
                         <div class="form-group">
                             <label :for="`meta_title_${locale_id}`">{{ $t('Page.meta_title') }}</label>
