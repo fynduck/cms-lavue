@@ -31,14 +31,17 @@ class AppServiceProvider extends ServiceProvider
             /**
              * urls pages
              */
-            foreach (Language::active()->get() as $language) {
-                Cache::remember(
-                    'urls_pages_' . $language->id,
-                    now()->addHours(5),
-                    function () use ($language) {
-                        return Page::getSlugAllStaticPages($language->id)->toArray();
-                    }
-                );
+            try {
+                foreach (Language::active()->get() as $language) {
+                    Cache::remember(
+                        'urls_pages_' . $language->id,
+                        now()->addHours(5),
+                        function () use ($language) {
+                            return Page::getSlugAllStaticPages($language->id)->toArray();
+                        }
+                    );
+                }
+            } catch (\Exception $e) {
             }
         }
 
