@@ -158,9 +158,9 @@ gradient(from_c, to_c)
   &[lazy=loaded]
     @extend .lazy
 
-  &[lazy=loading],
-  &[lazy-progressive=true]
+  &[lazy=loading]
     width 100% !important
+    filter blur(10px)
     @extend .lazy
 
 for i in (10..40)

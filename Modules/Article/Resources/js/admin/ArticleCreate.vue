@@ -32,6 +32,7 @@
                             </div>
                             <div class="form-group col-md-4 d-flex align-items-end">
                                 <b-form-checkbox :id="`active_${locale_id}`"
+                                                 class="switch-success"
                                                  switch
                                                  v-model="item.items[locale_id].active"
                                                  :value="1"
@@ -106,6 +107,7 @@
                 </div>
                 <div class="col-md-4 col-xl-3 form-group d-flex align-items-center">
                     <b-form-checkbox id="no_show_home"
+                                     class="switch-success"
                                      switch
                                      v-model="item.no_show_home"
                                      :value="1"
@@ -115,6 +117,7 @@
                 </div>
                 <div class="col-md-4 col-xl-3 form-group d-flex align-items-center">
                     <b-form-checkbox id="socials"
+                                     class="switch-success"
                                      switch
                                      v-model="item.socials"
                                      :value="1"

@@ -39,7 +39,7 @@
                                        v-model="item.items[locale_id].additional" :id="`additional_${locale_id}`">
                             </div>
                             <div class="form-group col-md-4 d-flex align-items-end">
-                                <div class="custom-control custom-switch my-1 mr-sm-2">
+                                <div class="custom-control custom-switch switch-success my-1 mr-sm-2">
                                     <input type="checkbox" class="custom-control-input"
                                            v-model="item.items[locale_id].active"
                                            :id="`active_${locale_id}`" :value="1">
@@ -114,7 +114,7 @@
                            placeholder="style=color:red,margin:10px;data-info=10" v-model="item.attributes">
                 </div>
                 <div class="col-md-4 col-lg-3 form-group d-flex align-items-end">
-                    <div class="custom-control custom-switch my-1 mr-sm-2">
+                    <div class="custom-control custom-switch switch-success my-1 mr-sm-2">
                         <input type="checkbox" class="custom-control-input" id="nofollow" v-model="item.nofollow" :value="1">
                         <label class="custom-control-label" for="nofollow">{{ $t('Menu.nofollow') }}</label>
                     </div>

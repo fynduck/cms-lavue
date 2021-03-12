@@ -38,6 +38,7 @@
                     </div>
                     <div class="form-group col-md-3">
                         <b-form-checkbox id="checkbox_default"
+                                         class="switch-success"
                                          switch
                                          v-model="item.default"
                                          :value="1"
@@ -47,6 +48,7 @@
                     </div>
                     <div class="form-group col-md-3">
                         <b-form-checkbox id="checkbox_active"
+                                         class="switch-success"
                                          switch
                                          v-model="item.active"
                                          :value="1"

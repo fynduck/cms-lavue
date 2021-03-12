@@ -24,7 +24,7 @@
                     <b-nav-item href="/" v-b-tooltip.hover :title="$t('to_site')" target="_blank">
                         <fa :icon="['fa', 'home']"/>
                     </b-nav-item>
-                    <b-nav-item @click.stop.prevent="logoutForm" v-b-tooltip.hover :title="$t('logout')">
+                    <b-nav-item @click.stop.prevent="logoutForm" v-b-tooltip.hover :title="$t('User.logout')">
                         <fa :icon="['fa', 'power-off']"/>
                     </b-nav-item>
                 </b-navbar-nav>
