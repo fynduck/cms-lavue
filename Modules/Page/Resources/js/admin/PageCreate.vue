@@ -30,7 +30,7 @@
                                        v-model="item.items[locale_id].slug" :id="`slug_${locale_id}`" :placeholder="$t('Page.slug')">
                             </div>
                             <div class="form-group col-md-4 d-flex align-items-end">
-                                <div class="custom-control custom-switch my-1 mr-sm-2">
+                                <div class="custom-control custom-switch switch-success my-1 mr-sm-2">
                                     <input type="checkbox" class="custom-control-input" v-model="item.items[locale_id].active"
                                            :id="`active_${locale_id}`" :value="1">
                                     <label class="custom-control-label" :for="`active_${locale_id}`">{{ $t('Page.on_off') }}</label>
@@ -75,7 +75,7 @@
                 <textarea class="form-control" v-model="item.sql_products" id="sql_products" rows="5"></textarea>
             </div>
             <div class="form-group d-flex align-items-end">
-                <div class="custom-control custom-switch my-1 mr-sm-2">
+                <div class="custom-control custom-switch switch-success my-1 mr-sm-2">
                     <input type="checkbox" class="custom-control-input" v-model="item.socials" id="socials" :value="1">
                     <label class="custom-control-label" for="socials">{{ $t('Page.socials_on_off') }}</label>
                 </div>

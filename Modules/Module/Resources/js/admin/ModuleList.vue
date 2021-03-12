@@ -14,7 +14,7 @@
         >
             <template v-slot:cell(active)="row">
                 <b-form-checkbox :id="`checkbox_module_status_${row.item.name}`"
-                                 class="success"
+                                 class="switch-success"
                                  switch
                                  v-model="row.item.active"
                                  :value="1"
@@ -105,10 +105,12 @@ export default {
             });
         },
         changeStatus(item) {
-            axios.put(this.source + '/' + item.name, {status: !item.active}).then(response => {
-                this.$toast.global.success(this.$t('Module.status_saved'))
-            }).catch(error => {
-                console.log(error)
+            this.$nextTick(() => {
+                axios.put(this.source + '/' + item.name, {status: item.active}).then(response => {
+                    this.$toast.global.success(this.$t('Module.status_saved'))
+                }).catch(error => {
+                    console.log(error)
+                })
             })
         },
         confirmDelete(item) {

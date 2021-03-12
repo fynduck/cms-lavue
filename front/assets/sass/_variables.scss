@@ -21,13 +21,6 @@ $container-max-widths: (
 
 // // Body
 $body-bg: #f7f9fb;
-$vue-green: #4ae387;
-
-// Cards
-$card-spacer-x: 0.9375rem;
-$card-spacer-y: 0.625rem;
-$card-cap-bg: #fbfbfb;
-$card-border-color: #e8eced;
 
 // Borders
 $border-radius: .125rem;
@@ -39,7 +32,3 @@ $custom-file-text: (
         es: "Elegir",
         ru: "Выберите"
 );
-
-$vs-border-radius: .125rem !default;
-$vs-component-line-height: 1.5 !default;
-$vs-state-active-bg: $vue-green !default

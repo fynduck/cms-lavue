@@ -17,6 +17,7 @@
                 </b-col>
                 <b-col sm="6" lg="3" class="my-1 d-flex align-items-center">
                     <b-form-checkbox id="checkbox_status"
+                                     class="switch-success"
                                      switch
                                      v-model="active"
                                      :value="1"
