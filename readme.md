@@ -41,6 +41,8 @@ SSH ```git@github.com:fynduck/cms-lavue.git .```
  - ```php artisan project:migrations```
  
  - ```php artisan project:seeds```
+
+- ``` php artisan vendor:publish --tag=lfm_public```
  
  #### Install npm and run
  
