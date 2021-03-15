@@ -1,5 +1,6 @@
 {
   "redirect": "Redirect",
+  "redirects": "Redirects",
   "add_redirect": "Add redirect",
   "edit_redirect": "Edit redirect",
   "active": "Active",

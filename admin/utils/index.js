@@ -51,47 +51,51 @@ export function moduleIconsSort(name, key) {
         },
         'menu': {
             'iconClass': ['fas', 'route'],
-            'sort': 3
-        },
-        'article': {
-            'iconClass': ['far', 'newspaper'],
             'sort': 5
         },
         'page': {
             'iconClass': ['fas', 'scroll'],
-            'sort': 7
+            'sort': 10
+        },
+        'article': {
+            'iconClass': ['far', 'newspaper'],
+            'sort': 15
+        },
+        'banner': {
+            'iconClass': ['fas', 'film'],
+            'sort': 20
         },
         'custom_form': {
             'iconClass': ['far', 'list-alt'],
-            'sort': 9
+            'sort': 25
         },
         'language': {
             'iconClass': ['fas', 'globe'],
-            'sort': 11
+            'sort': 30
         },
         'user_group': {
             'iconClass': ['fas', 'user-tag'],
-            'sort': 13
+            'sort': 35
         },
         'user': {
             'iconClass': ['fas', 'users'],
-            'sort': 14
+            'sort': 40
         },
         'translate': {
             'iconClass': ['fas', 'language'],
-            'sort': 15
+            'sort': 45
         },
         'redirect': {
             'iconClass': ['fas', 'exchange-alt'],
-            'sort': 17
+            'sort': 50
         },
         'module': {
             'iconClass': ['fas', 'puzzle-piece'],
-            'sort': 17
+            'sort': 55
         },
         'settings': {
             'iconClass': ['fas', 'cogs'],
-            'sort': 50
+            'sort': 60
         }
     }
 

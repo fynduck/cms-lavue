@@ -62,7 +62,7 @@
                     <select id="position" :class="['form-control', errors.position ? ' is-invalid' : '']" required
                             v-model="item.position">
                         <option v-for="(title, position) in positions" :value="position">
-                            {{ title }}
+                            {{ $t(title) }}
                         </option>
                     </select>
                 </div>

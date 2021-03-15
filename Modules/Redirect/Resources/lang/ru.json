@@ -1,5 +1,6 @@
 {
-    "redirect": "Редиректы",
+    "redirect": "Редирект",
+    "redirects": "Редиректы",
     "add_redirect": "Добавит редирект",
     "edit_redirect": "Редактировать редирект",
     "active": "Активный",

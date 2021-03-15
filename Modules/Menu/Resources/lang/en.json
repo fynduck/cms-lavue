@@ -76,5 +76,6 @@
   "greyscale": "Greyscale",
   "blur": "Blur",
   "brightness": "Brightness",
-  "background": "Background"
+  "background": "Background",
+  "ratio": "Ratio"
 }

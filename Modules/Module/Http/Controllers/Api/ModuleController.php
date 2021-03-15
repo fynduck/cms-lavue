@@ -27,7 +27,7 @@ class ModuleController extends Controller
         foreach (Module::getCached() as $module) {
             $modules[] = [
                 'name'        => $module['name'],
-                'active'      => $statusModules[$module['name']] ? 1 : 0,
+                'active'      => array_key_exists($module['name'], $statusModules) && $statusModules[$module['name']] ? 1 : 0,
                 'permissions' => [
                     'destroy' => checkModulePermission('module', 'destroy')
                 ]
