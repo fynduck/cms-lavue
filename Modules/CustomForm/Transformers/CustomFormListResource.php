@@ -16,6 +16,25 @@ class CustomFormListResource extends JsonResource
      */
     public function toArray($request)
     {
+        return [
+            'id'          => $this->id,
+            'form_name'   => $this->form_name,
+            'action'      => $this->action,
+            'method'      => $this->method,
+            'send_emails' => explode(';', $this->send_emails),
+            'lang'        => $this->getLang(),
+            'permissions' => [
+                'edit'    => checkModulePermission('CustomForm', 'edit'),
+                'destroy' => checkModulePermission('CustomForm', 'destroy')
+            ]
+        ];
+    }
+
+    /**
+     * @return mixed|null
+     */
+    private function getLang()
+    {
         $languages = Cache::remember(
             'languages_name_id',
             now()->addDay(),
@@ -24,17 +43,6 @@ class CustomFormListResource extends JsonResource
             }
         );
 
-        return [
-            'id'          => $this->id,
-            'form_name'   => $this->form_name,
-            'action'      => $this->action,
-            'method'      => $this->method,
-            'send_emails' => explode(';', $this->send_emails),
-            'lang'        => $languages[$this->lang_id] ?? '',
-            'permissions' => [
-                'edit'    => checkModulePermission('CustomForm', 'edit'),
-                'destroy' => checkModulePermission('CustomForm', 'destroy')
-            ]
-        ];
+        return $languages[$this->lang_id] ?? null;
     }
 }

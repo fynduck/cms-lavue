@@ -4,6 +4,7 @@ namespace Modules\Page\Transformers;
 
 use App\Services\SeoCalculator;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Cache;
 use Modules\Language\Entities\Language;
 
 class PageListResource extends JsonResource
@@ -16,14 +17,12 @@ class PageListResource extends JsonResource
      */
     public function toArray($request)
     {
-        $languages = Language::pluck('name', 'id');
-
         return [
             'id'           => $this->page_id,
             'title'        => $this->title,
             'slug'         => $this->slug,
             'active'       => $this->active,
-            'lang'         => $this->lang_id ? $languages[$this->lang_id] : null,
+            'lang'         => $this->getLang(),
             'socials'      => $this->socials,
             'seo_complete' => SeoCalculator::collectionCalcSeo($this),
             'link'         => $this->generateLink(),
@@ -34,6 +33,9 @@ class PageListResource extends JsonResource
         ];
     }
 
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\UrlGenerator|string
+     */
     private function generateLink()
     {
         $link = url($this->slug);
@@ -42,5 +44,21 @@ class PageListResource extends JsonResource
         }
 
         return $link;
+    }
+
+    /**
+     * @return mixed|null
+     */
+    private function getLang()
+    {
+        $languages = Cache::remember(
+            'languages_name_id',
+            now()->addDay(),
+            function () {
+                return Language::pluck('name', 'id');
+            }
+        );
+
+        return $languages[$this->lang_id] ?? null;
     }
 }

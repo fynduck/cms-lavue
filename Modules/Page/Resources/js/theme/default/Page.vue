@@ -1,5 +1,6 @@
 <template>
     <div v-if="page">
+        <slider-top :page-id="page.id"></slider-top>
         <section class="container">
             <h1 class="text-center my-4 title_page">{{ page.title }}</h1>
             <v-runtime-template :template="description" v-if="page.description"/>
@@ -19,7 +20,8 @@ export default {
     name: "PagePage",
     components: {
         VRuntimeTemplate,
-        HomeArticles: () => import(`../../../../../Article/Resources/js/theme/${process.env.appTheme}/HomeArticles`),
+        SliderTop: () => import(`../../../../../Banner/Resources/js/theme/${process.env.appTheme}/SliderTop`),
+        HomeArticles: () => import(`../../../../../Article/Resources/js/theme/${process.env.appTheme}/HomeArticles`)
     },
     computed: {
         ...mapGetters({

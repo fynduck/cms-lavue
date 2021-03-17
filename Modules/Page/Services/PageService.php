@@ -73,16 +73,14 @@ class PageService
 
     public function searchPage(&$limit, $typeName, $value, $q, $selected)
     {
-        $current = PageTrans::where('lang_id', config('app.locale_id'))
-            ->selectRaw('page_id AS id, title, ' . $typeName);
+        $current = PageTrans::selectRaw('page_id AS id, title, ' . $typeName);
 
         if ($selected && array_key_exists($value, $selected)) {
-            $current->whereIn('page_id', $selected[$value]);
+            $current->where('lang_id', config('app.locale_id'))
+                ->whereIn('page_id', $selected[$value]);
             $limit += count($selected[$value]);
-        } else {
-            if ($q) {
-                $current->where('title', 'like', '%' . $q . '%');
-            }
+        } elseif ($q) {
+            $current->where('title', 'like', '%' . $q . '%');
         }
 
         return $current;

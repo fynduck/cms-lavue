@@ -45,7 +45,7 @@
         watch: {
             date(val) {
                 let time = this.$moment().format('HH:mm:ss');
-                if (typeof this.date_time.split(' ')[1] !== "undefined")
+                if (this.date_time && typeof this.date_time.split(' ')[1] !== "undefined")
                     time = this.date_time.split(' ')[1];
 
                 this.date_time = val + ' ' + time
@@ -53,7 +53,7 @@
             time(val) {
                 let date = this.$moment().format('YYYY-MM-DD');
 
-                if (this.date_time.split(' ')[0])
+                if (this.date_time && this.date_time.split(' ')[0])
                     date = this.date_time.split(' ')[0];
 
                 this.date_time = date + ' ' + val

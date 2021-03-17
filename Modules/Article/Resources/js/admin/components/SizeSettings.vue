@@ -52,19 +52,38 @@
         </b-row>
         <b-row>
             <b-col md="4" class="mb-3">
-                <label for="blur">
-                    {{ $t('Article.blur') }}
-                    <b-badge>{{ settings.blur }}</b-badge>
-                </label>
-                <b-form-input id="brightness" v-model.number="settings.blur" type="range" min="0" max="100"></b-form-input>
+                <b-form-group :label="$t('Article.blur')" label-for="blur">
+                    <b-input-group>
+                        <b-form-input
+                            id="blur"
+                            v-model.number="settings.blur"
+                            type="range"
+                            number
+                            min="0"
+                            max="100"
+                        ></b-form-input>
+                        <b-input-group-append is-text class="text-monospace">
+                            {{ settings.blur }}
+                        </b-input-group-append>
+                    </b-input-group>
+                </b-form-group>
             </b-col>
             <b-col md="4" class="mb-3">
-                <label for="brightness">
-                    {{ $t('Article.brightness') }}
-                    <b-badge>{{ settings.brightness }}</b-badge>
-                </label>
-                <b-form-input id="brightness" v-model.number="settings.brightness" type="range" min="-100"
-                              max="100"></b-form-input>
+                <b-form-group :label="$t('Article.brightness')" label-for="brightness">
+                    <b-input-group>
+                        <b-form-input
+                            id="brightness"
+                            v-model.number="settings.brightness"
+                            type="range"
+                            number
+                            min="-100"
+                            max="100"
+                        ></b-form-input>
+                        <b-input-group-append is-text class="text-monospace">
+                            {{ settings.brightness }}
+                        </b-input-group-append>
+                    </b-input-group>
+                </b-form-group>
             </b-col>
             <b-col md="4" class="mb-3">
                 <label for="background">{{ $t('Article.background') }}</label>
