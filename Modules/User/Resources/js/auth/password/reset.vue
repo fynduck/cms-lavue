@@ -39,9 +39,10 @@
                     <!-- Submit Button -->
                     <div class="form-group row">
                         <div class="col-md-9 ml-md-auto">
-                            <v-button :loading="form.busy">
+                            <button :class="{'btn btn-success': true, 'btn-loading': form.busy}" type="submit"
+                                    :disabled="form.busy">
                                 {{ $t('User.reset_password') }}
-                            </v-button>
+                            </button>
                         </div>
                     </div>
                 </form>

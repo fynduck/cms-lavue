@@ -54,9 +54,10 @@
                     <div class="form-group row">
                         <div class="col-md-7 offset-md-3 d-flex">
                             <!-- Submit Button -->
-                            <v-button :loading="form.busy">
+                            <button :class="{'btn btn-success': true, 'btn-loading': form.busy}" type="submit"
+                                    :disabled="form.busy">
                                 {{ $t('User.register') }}
-                            </v-button>
+                            </button>
                         </div>
                     </div>
                 </form>
