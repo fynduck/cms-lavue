@@ -33,9 +33,6 @@ export default {
         componentInstance() {
             if (this.module_name)
                 return () => import(`../../Modules/${this.module_name}/Resources/js/theme/${process.env.appTheme}/Page`)
-        },
-        sliderPageId() {
-            return this.module_name !== 'page' && this.item ? this.item.id : this.page.id
         }
     },
     data() {
