@@ -125,6 +125,7 @@ import Upload from "../../../../../admin/components/Upload";
 import DateTimePicker from "../../../../../admin/components/DateTimePicker";
 import Tinymce from "../../../../../admin/components/Tinymce";
 import CustomSelect from "../../../../../admin/components/CustomSelect";
+import swal from "sweetalert2";
 
 export default {
     middleware: 'auth',
@@ -229,6 +230,14 @@ export default {
             }).catch(error => {
                 if (error.response.status === 422) {
                     this.errors = error.response.data.errors
+                } else {
+                    swal.fire({
+                        type: 'error',
+                        title: this.$t('error_alert_title'),
+                        text: this.$t('error_alert_text'),
+                        reverseButtons: true,
+                        confirmButtonText: 'ok',
+                    })
                     this.submit = false;
                 }
             })
