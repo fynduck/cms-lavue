@@ -3,8 +3,8 @@
 namespace Modules\Article\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Cache;
 use Modules\Article\Entities\Article;
-use Modules\Article\Entities\ArticleSettings;
 use Modules\Article\Services\ArticleService;
 use Modules\Language\Entities\Language;
 
@@ -18,14 +18,12 @@ class ArticleListResource extends JsonResource
      */
     public function toArray($request)
     {
-        $languages = Language::pluck('name', 'id')->toArray();
-
         return [
             'id'          => $this->article_id,
             'title'       => $this->title,
             'show_type'   => Article::getTypes()[$this->type],
             'show_img'    => $this->image(),
-            'lang'        => $languages[$this->lang_id],
+            'lang'        => $this->getLang(),
             'active'      => $this->active,
             'priority'    => $this->priority,
             'permissions' => [
@@ -35,8 +33,27 @@ class ArticleListResource extends JsonResource
         ];
     }
 
+    /**
+     * @return string
+     */
     private function image(): string
     {
         return (new ArticleService())->linkImage($this->image, null, true);
+    }
+
+    /**
+     * @return mixed|null
+     */
+    private function getLang()
+    {
+        $languages = Cache::remember(
+            'languages_name_id',
+            now()->addDay(),
+            function () {
+                return Language::pluck('name', 'id');
+            }
+        );
+
+        return $languages[$this->lang_id] ?? null;
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\AdminController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Modules\Article\Services\ArticleService;
 use Modules\Page\Services\PageService;
@@ -70,7 +71,7 @@ class AdminSearch extends AdminController
                 if (!$q && !isset($data['selected'][$value])) {
                     continue;
                 }
-                $typeName = \DB::raw("'$value' AS type");
+                $typeName = DB::raw("'$value' AS type");
                 if ($q) {
                     $limit = 5;
                 } else {

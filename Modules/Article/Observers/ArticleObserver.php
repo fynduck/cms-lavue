@@ -4,6 +4,7 @@ namespace Modules\Article\Observers;
 
 use Illuminate\Support\Facades\Cache;
 use Modules\Article\Entities\Article;
+use Modules\Article\Services\ArticleService;
 
 class ArticleObserver
 {
@@ -27,6 +28,11 @@ class ArticleObserver
      */
     public function deleted(Article $article)
     {
+        $articleService = new ArticleService();
+        if ($article->image) {
+            $articleService->deleteImages($article->image);
+        }
+
         Cache::forget('home_article');
         Cache::forget('pluck_promotions');
     }

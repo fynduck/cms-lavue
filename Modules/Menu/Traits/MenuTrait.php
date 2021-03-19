@@ -72,10 +72,10 @@ trait MenuTrait
     public static function positions(): array
     {
         return [
-            self::TOP_MENU     => trans('menu::admin.top_menu'),
+            self::TOP_MENU     => 'Menu.top_menu',
             //            self::MAIN_MENU => trans('menu::admin.main_menu'),
-            self::CUSTOM_MENU  => trans('menu::admin.custom_menu'),
-            self::FOOTER_LINKS => trans('menu::admin.footer_menus')
+            self::CUSTOM_MENU  => 'Menu.custom_menu',
+            self::FOOTER_LINKS => 'Menu.footer_menus'
         ];
     }
 

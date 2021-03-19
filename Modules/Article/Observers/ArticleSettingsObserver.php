@@ -4,8 +4,7 @@ namespace Modules\Article\Observers;
 
 use Illuminate\Support\Facades\Cache;
 use Modules\Article\Entities\ArticleSettings;
-use Modules\Article\Jobs\DeleteImages;
-use Modules\Article\Jobs\GenerateImages;
+use Modules\Article\Jobs\RegenerateImageSizes;
 
 class ArticleSettingsObserver
 {
@@ -17,8 +16,7 @@ class ArticleSettingsObserver
      */
     public function saved(ArticleSettings $articleSettings)
     {
-        DeleteImages::dispatch();
-        GenerateImages::dispatch();
+        RegenerateImageSizes::dispatch();
         Cache::forget('article_sizes');
     }
 

@@ -23,6 +23,7 @@
                 </div>
             </div>
         </div>
+        <page-inner-slider class="my-5" :page-id="item.id" :page-type="page.module"></page-inner-slider>
     </section>
 </template>
 
@@ -36,7 +37,8 @@ export default {
     name: "Articles",
     components: {
         VRuntimeTemplate,
-        ArticleItem
+        ArticleItem,
+        PageInnerSlider: () => import(`../../../../../Banner/Resources/js/theme/${process.env.appTheme}/PageInnerSlider`),
     },
     head() {
         return {
@@ -88,7 +90,8 @@ export default {
     },
     computed: {
         ...mapGetters({
-            item: 'page/item'
+            item: 'page/item',
+            page: 'page/page'
         }),
         description() {
             return this.item.description.replace(/<p>\s*<\/p>/gi, "");

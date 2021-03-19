@@ -1,5 +1,6 @@
 {
-  "module": "Модули",
+  "module": "Модуль",
+  "modules": "Модули",
   "new_module": "Новый module",
   "add_module": "Добавить module",
   "edit_module": "Редактировать module",

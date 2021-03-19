@@ -1,5 +1,6 @@
 {
   "module": "Module",
+  "modules": "Modules",
   "new_module": "New module",
   "add_module": "Add module",
   "edit_module": "Edit module",

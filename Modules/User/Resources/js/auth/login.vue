@@ -31,7 +31,7 @@
                                 {{ $t('User.remember_me') }}
                             </checkbox>
 
-                            <router-link :to="{ name: 'password.request' }" class="small ml-auto my-auto">
+                            <router-link :to="{ name: 'password.request' }" class="small ml-auto my-auto text-success">
                                 {{ $t('User.forgot_password') }}
                             </router-link>
                         </div>
@@ -40,9 +40,10 @@
                     <div class="form-group row">
                         <div class="col-md-7 offset-md-3 d-flex">
                             <!-- Submit Button -->
-                            <v-button :loading="form.busy">
+                            <button :class="{'btn btn-success': true, 'btn-loading': form.busy}" type="submit"
+                                    :disabled="form.busy">
                                 {{ $t('User.login') }}
-                            </v-button>
+                            </button>
                         </div>
                     </div>
                 </form>

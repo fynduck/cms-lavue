@@ -1,5 +1,6 @@
 {
-  "language": "Языки",
+  "language": "Язык",
+  "languages": "Языки",
   "add_language": "Добавить Язык",
   "edit_language": "Редактировать Язык",
   "default": "По умолчанию",

@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\DB;
 use Modules\Article\Entities\Article;
 use Modules\Article\Entities\ArticleSettings;
 use Modules\Article\Http\Requests\SizeValidate;
-use Modules\Article\Jobs\DeleteImages;
 use Modules\Article\Services\ArticleService;
 use Modules\Article\Http\Requests\ArticleValidate;
 use Modules\Article\Transformers\ArticleFormResource;
@@ -135,9 +134,9 @@ class ArticleController extends AdminController
      */
     public function destroy(Request $request, Article $article)
     {
-        DeleteImages::dispatch($article);
-
         if ($request->get('image')) {
+            $this->articleService->deleteImages($article->image);
+            $this->articleService->deleteOriginalImage($article->image);
             $article->image = null;
             $article->save();
         } else {
@@ -152,45 +151,11 @@ class ArticleController extends AdminController
      * @param SizeValidate $request
      * @return bool
      */
-    public function saveSettings(SizeValidate $request)
+    public function saveSettings(SizeValidate $request): bool
     {
-        $defaultAction = ArticleSettings::RESIZE_CROP;
-        $action = $request->get('action', $defaultAction);
-        $blur = null;
-        $brightness = null;
-        if ($request->get('blur') >= 0 && $request->get('blur') <= 100) {
-            $blur = $request->get('blur');
-        }
-        if ($request->get('brightness') >= -100 && $request->get('brightness') <= 100) {
-            $brightness = $request->get('brightness');
-        }
+        $data = $this->articleService->prepareSizeSettingsToSave($request);
 
-        $data = [
-            'ratio'      => $request->get('ratio'),
-            'ratios'     => $request->get('ratios'),
-            'action'     => in_array($action, ArticleSettings::resizeMethods()) ? $action : $defaultAction,
-            'greyscale'  => $request->get('greyscale'),
-            'blur'       => $blur,
-            'brightness' => $brightness,
-            'background' => $request->get('background'),
-            'optimize'   => $request->get('optimize'),
-        ];
-        foreach ($request->get('sizes') as $size) {
-            $data['sizes'][$size['name']] = [
-                'name'   => $size['name'],
-                'width'  => $size['width'] > 0 ? $size['width'] : null,
-                'height' => $size['height'] > 0 ? $size['height'] : null
-            ];
-        }
-
-        ArticleSettings::updateOrCreate(
-            [
-                'name' => 'sizes',
-            ],
-            [
-                'data' => $data
-            ]
-        );
+        ArticleSettings::updateOrCreate(['name' => 'sizes'], ['data' => $data]);
 
         return true;
     }

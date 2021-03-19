@@ -1,5 +1,6 @@
 {
   "language": "Language",
+  "languages": "Languages",
   "add_language": "Add_language",
   "edit_language": "Edit language",
   "default": "Default",

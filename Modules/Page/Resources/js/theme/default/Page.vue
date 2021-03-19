@@ -19,7 +19,7 @@ export default {
     name: "PagePage",
     components: {
         VRuntimeTemplate,
-        HomeArticles: () => import(`../../../../../Article/Resources/js/theme/${process.env.appTheme}/HomeArticles`),
+        HomeArticles: () => import(`../../../../../Article/Resources/js/theme/${process.env.appTheme}/HomeArticles`)
     },
     computed: {
         ...mapGetters({

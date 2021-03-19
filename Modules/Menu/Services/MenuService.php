@@ -11,6 +11,7 @@ namespace Modules\Menu\Services;
 use Fynduck\FilesUpload\UploadFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Modules\Menu\Entities\Menu;
 use Modules\Menu\Entities\MenuSettings;
@@ -134,7 +135,7 @@ class MenuService
                     $blur = !empty($settings->data['blur']) ? $settings->data['blur'] : $blur;
                     $brightness = !empty($settings->data['brightness']) ? $settings->data['brightness'] : $brightness;
                     $background = !empty($settings->data['background']) ? $settings->data['background'] : $background;
-                    $optimize = !empty($settings->data['optimize']) ? $settings->data['optimize'] : $background;
+                    $optimize = !empty($settings->data['optimize']) ? $settings->data['optimize'] : $optimize;
                 }
                 $nameImages['imageName'] = UploadFile::file($request->get('image'))
                     ->setFolder(Menu::FOLDER_IMG)
@@ -245,5 +246,98 @@ class MenuService
         }
 
         return asset('storage/' . Menu::FOLDER_IMG . '/' . $image);
+    }
+
+    public function prepareImgParams($imageSettings): array
+    {
+        $data['sizes'] = null;
+        $data['resizeMethod'] = null;
+        $data['greyscale'] = false;
+        $data['blur'] = 1;
+        $data['brightness'] = 0;
+        $data['background'] = null;
+        $data['optimize'] = false;
+
+        if ($imageSettings && !empty($imageSettings->data['sizes'])) {
+            $data['sizes'] = $imageSettings->data['sizes'];
+            $data['resizeMethod'] = $imageSettings->data['action'];
+            if (!empty($imageSettings->data['greyscale'])) {
+                $data['greyscale'] = $imageSettings->data['greyscale'];
+            }
+            if (!empty($imageSettings->data['blur'])) {
+                $data['blur'] = $imageSettings->data['blur'];
+            }
+            if (!empty($imageSettings->data['brightness'])) {
+                $data['brightness'] = $imageSettings->data['brightness'];
+            }
+            if (!empty($imageSettings->data['background'])) {
+                $data['background'] = $imageSettings->data['background'];
+            }
+            if (!empty($imageSettings->data['optimize'])) {
+                $data['optimize'] = $imageSettings->data['optimize'];
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param Request $request
+     * @return array
+     */
+    public function prepareSizeSettingsToSave(Request $request): array
+    {
+        $defaultAction = MenuSettings::RESIZE_CROP;
+        $action = $request->get('action', $defaultAction);
+        $blur = null;
+        $brightness = null;
+        if ($request->get('blur') >= 0 && $request->get('blur') <= 100) {
+            $blur = $request->get('blur');
+        }
+        if ($request->get('brightness') >= -100 && $request->get('brightness') <= 100) {
+            $brightness = $request->get('brightness');
+        }
+
+        $data = [
+            'ratio'      => $request->get('ratio'),
+            'ratios'     => $request->get('ratios'),
+            'action'     => in_array($action, MenuSettings::resizeMethods()) ? $action : $defaultAction,
+            'greyscale'  => $request->get('greyscale'),
+            'blur'       => $blur,
+            'brightness' => $brightness,
+            'background' => $request->get('background'),
+            'optimize'   => $request->get('optimize'),
+        ];
+        foreach ($request->get('sizes') as $size) {
+            $data['sizes'][$size['name']] = [
+                'name'   => $size['name'],
+                'width'  => $size['width'] > 0 ? $size['width'] : null,
+                'height' => $size['height'] > 0 ? $size['height'] : null
+            ];
+        }
+
+        return $data;
+    }
+
+    /**
+     * Delete image from all folders
+     * @param string $image
+     */
+    public function deleteImages(string $image)
+    {
+        $directories = Storage::directories(Menu::FOLDER_IMG);
+
+        foreach ($directories as $directory) {
+            Storage::delete($directory . '/' . $image);
+        }
+    }
+
+    /**
+     * Delete original image
+     * @param string $image
+     */
+    public function deleteOriginalImage(string $image)
+    {
+        Storage::delete(Menu::FOLDER_IMG . '/' . $image);
     }
 }

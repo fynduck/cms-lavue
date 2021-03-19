@@ -11,7 +11,6 @@ use Modules\Language\Entities\Language;
 use Modules\Menu\Entities\Menu;
 use Modules\Menu\Entities\MenuSettings;
 use Modules\Menu\Http\Requests\MenuValidate;
-use Modules\Menu\Jobs\DeleteImages;
 use Modules\Menu\Services\MenuService;
 use Modules\Menu\Transformers\MenuFormResource;
 use Modules\Menu\Transformers\MenuListResource;
@@ -124,13 +123,13 @@ class MenuController extends AdminController
         /**
          * Update menu
          */
-        \DB::beginTransaction();
+        DB::beginTransaction();
         $menu = $this->menuService->addUpdate($request, $nameImages, $menu->id);
 
         $this->menuService->addUpdateTrans($menu, $request->get('items'));
 
         $this->menuService->showOn($menu->id, $request->get('show_page'));
-        \DB::commit();
+        DB::commit();
 
         return true;
     }
@@ -145,13 +144,13 @@ class MenuController extends AdminController
      */
     public function destroy(Menu $menu, Request $request): bool
     {
-        DeleteImages::dispatch($menu);
-
         if ($request->get('image')) {
+            $this->menuService->deleteImages($menu->image);
+            $this->menuService->deleteOriginalImage($menu->image);
             $menu->image = '';
             $menu->save();
         } else {
-            return !$menu->delete();
+            return $menu->delete();
         }
 
         return true;
@@ -164,34 +163,7 @@ class MenuController extends AdminController
      */
     public function saveSettings(Request $request): bool
     {
-        $defaultAction = MenuSettings::RESIZE_CROP;
-        $action = $request->get('action', $defaultAction);
-        $blur = null;
-        $brightness = null;
-        if ($request->get('blur') >= 0 && $request->get('blur') <= 100) {
-            $blur = $request->get('blur');
-        }
-        if ($request->get('brightness') >= -100 && $request->get('brightness') <= 100) {
-            $brightness = $request->get('brightness');
-        }
-
-        $data = [
-            'ratio'      => $request->get('ratio'),
-            'ratios'     => $request->get('ratios'),
-            'action'     => in_array($action, MenuSettings::resizeMethods()) ? $action : $defaultAction,
-            'greyscale'  => $request->get('greyscale'),
-            'blur'       => $blur,
-            'brightness' => $brightness,
-            'background' => $request->get('background'),
-            'optimize'   => $request->get('optimize'),
-        ];
-        foreach ($request->get('sizes') as $size) {
-            $data['sizes'][$size['name']] = [
-                'name'   => $size['name'],
-                'width'  => $size['width'] > 0 ? $size['width'] : null,
-                'height' => $size['height'] > 0 ? $size['height'] : null
-            ];
-        }
+        $data = $this->menuService->prepareSizeSettingsToSave($request);
 
         MenuSettings::updateOrCreate(
             [
