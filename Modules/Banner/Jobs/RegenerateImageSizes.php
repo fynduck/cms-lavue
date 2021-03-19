@@ -22,12 +22,16 @@ class RegenerateImageSizes implements ShouldQueue
 
     private $sizeName;
 
+    private $position;
+
     /**
      * Create a new job instance.
+     * @param string $position
      * @param string $sizeName
      */
-    public function __construct(string $sizeName)
+    public function __construct(string $position, string $sizeName)
     {
+        $this->position = $position;
         $this->sizeName = $sizeName;
     }
 
@@ -42,7 +46,8 @@ class RegenerateImageSizes implements ShouldQueue
         $imageSettings = BannerSettings::where('name', $this->sizeName)->first();
         if ($imageSettings) {
             $data = $bannerService->prepareImgParams($imageSettings);
-            $banners = Banner::where('image', '!=', '')->get(['image', 'mobile_image']);
+            $banners = Banner::where('position', $this->position)
+                ->where('image', '!=', '')->get(['image', 'mobile_image']);
             foreach ($banners as $banner) {
                 $bannerService->deleteImages($banner->image);
                 if ($banner->image) {

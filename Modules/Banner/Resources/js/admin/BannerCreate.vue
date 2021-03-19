@@ -58,7 +58,7 @@
             </div>
             <div class="row">
                 <div class="form-group col-md-6 col-lg-3">
-                    <label for="position">{{ $t('Menu.position') }}</label>
+                    <label for="position">{{ $t('Banner.position') }}</label>
                     <select id="position" :class="['form-control', errors.position ? ' is-invalid' : '']" required
                             v-model="item.position">
                         <option v-for="(title, position) in positions" :value="position">

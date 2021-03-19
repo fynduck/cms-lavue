@@ -54,6 +54,7 @@
                 </div>
             </template>
             <template v-slot:cell(show_img)="row"><img :src="row.item.show_img" alt="" width="40"></template>
+            <template v-slot:cell(position)="row">{{ $t(row.item.position)}}</template>
             <template v-slot:cell(active)="row">
                 <fa :icon="['far', 'check-circle']" class="text-success" v-if="row.item.active"/>
                 <fa :icon="['far', 'times-circle']" class="text-danger" v-else/>
@@ -144,6 +145,7 @@ export default {
             return [
                 {key: 'show_img', label: this.$t('Banner.image'), sortable: false},
                 {key: 'title', label: this.$t('Banner.title'), sortable: true},
+                {key: 'position', label: this.$t('Banner.position'), sortable: true},
                 {key: 'lang', label: this.$t('Banner.lang'), sortable: false, 'class': 'text-center'},
                 {key: 'priority', label: this.$t('Banner.priority'), sortable: true, 'class': 'text-center'},
                 {key: 'active', label: this.$t('Banner.status'), sortable: true, 'class': 'text-center status'},
@@ -183,14 +185,8 @@ export default {
                 this.current_page = 1
                 this.getItems()
             }, 500);
+        }
         },
-        // 'settings.ratios': {
-        //     handler() {
-        //         this.calculateSizeWithRatio()
-        //     },
-        //     deep: true
-        // }
-    },
     mounted() {
         this.getItems();
     },
@@ -221,7 +217,7 @@ export default {
             });
         },
         changeSort() {
-            this.loading = true;
+            this.getItems()
         },
         confirmDelete(item) {
             this.confirmWindow.confirm = item.id;

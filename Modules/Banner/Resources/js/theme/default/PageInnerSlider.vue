@@ -1,8 +1,8 @@
 <template>
-    <div id="top_carouse" class="carousel carousel-dark slide" data-bs-ride="carousel"
+    <div id="page_carouse" class="carousel carousel-dark slide" data-bs-ride="carousel"
          :data-bs-interval="carouselSettings.interval" v-if="items.length">
         <div class="carousel-indicators" v-if="showIndicators">
-            <button type="button" data-bs-target="#top_carouse" :data-bs-slide-to="index" class="active"
+            <button type="button" data-bs-target="#page_carouse" :data-bs-slide-to="index" class="active"
                     v-for="(item, index) in items"></button>
         </div>
         <div class="carousel-inner">
@@ -16,12 +16,12 @@
                 <div class="carousel-caption d-none d-md-block" v-if="item.description" v-html="item.description"></div>
             </div>
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#top_carouse" data-bs-slide="prev"
+        <button class="carousel-control-prev" type="button" data-bs-target="#page_carouse" data-bs-slide="prev"
                 v-if="carouselSettings.nav && items.length > 1">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Previous</span>
         </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#top_carouse" data-bs-slide="next"
+        <button class="carousel-control-next" type="button" data-bs-target="#page_carouse" data-bs-slide="next"
                 v-if="carouselSettings.nav && items.length > 1">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Next</span>
@@ -31,10 +31,9 @@
 
 <script>
 import axios from "axios";
-import {mapGetters} from "vuex";
 
 export default {
-    name: "SliderTop",
+    name: "PageInnerSlider",
     props: {
         pageId: {
             type: Number,
@@ -46,7 +45,7 @@ export default {
         },
         position: {
             type: String,
-            default: 'top'
+            default: 'content'
         }
     },
     computed: {
@@ -55,7 +54,7 @@ export default {
         },
         source() {
             return '/get-slides'
-        }
+        },
     },
     data() {
         return {
@@ -81,9 +80,9 @@ export default {
     },
 
     methods: {
-        toLink(item) {
-            if (item.link)
-                window.open(item.link, item.target)
+        toLink(link) {
+            if (link)
+                location.href = link
         },
         showSrcset(item) {
             let srcset = item.srcset;

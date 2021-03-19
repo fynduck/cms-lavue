@@ -14,9 +14,9 @@ class SizeValidate extends FormRequest
     public function rules()
     {
         return [
-            'sizes'  => 'required',
-            'action' => 'required',
-            'type'   => 'required',
+            'sizes'    => 'required',
+            'action'   => 'required',
+            'position' => 'required',
         ];
     }
 

@@ -21,11 +21,11 @@ class BannerListResource extends JsonResource
         return [
             'id'          => $this->banner_id,
             'title'       => $this->title,
-            'show_type'   => Banner::getPositions()[$this->position],
             'show_img'    => $this->pathImage(),
             'lang'        => $this->getLang(),
             'active'      => $this->active,
             'priority'    => $this->priority,
+            'position'    => Banner::getPositions()[$this->position],
             'permissions' => [
                 'edit'    => checkModulePermission('banner', 'edit'),
                 'destroy' => checkModulePermission('banner', 'destroy')

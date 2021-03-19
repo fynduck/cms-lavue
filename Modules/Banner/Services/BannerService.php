@@ -52,8 +52,8 @@ class BannerService
                 'position'     => $request->get('position'),
                 'link'         => $request->get('link'),
                 'priority'     => $request->get('priority') ? $request->get('priority') : 0,
-                'date_from'    => $request->get('f'),
-                'date_to'      => $request->get('t')
+                'date_from'    => $request->get('date_from'),
+                'date_to'      => $request->get('date_to')
             ]
         );
     }

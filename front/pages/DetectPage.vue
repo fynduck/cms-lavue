@@ -1,5 +1,6 @@
 <template>
     <div>
+        <slider-top v-if="pageId" :page-id="pageId" :page-type="module_name"></slider-top>
         <component :is="componentInstance" v-if="!$fetchState.pending"/>
     </div>
 </template>
@@ -11,6 +12,9 @@ import {mapGetters} from "vuex";
 
 export default {
     name: "DetectPage",
+    components: {
+        SliderTop: () => import(`../../Modules/Banner/Resources/js/theme/${process.env.appTheme}/SliderTop`),
+    },
     head() {
         return {
             title: this.meta.title,
@@ -22,11 +26,16 @@ export default {
     },
     computed: {
         ...mapGetters({
-            module_name: 'page/module'
+            module_name: 'page/module',
+            page: 'page/page',
+            item: 'page/item',
         }),
         componentInstance() {
             if (this.module_name)
                 return () => import(`../../Modules/${this.module_name}/Resources/js/theme/${process.env.appTheme}/Page`)
+        },
+        sliderPageId() {
+            return this.module_name !== 'page' && this.item ? this.item.id : this.page.id
         }
     },
     data() {
@@ -35,7 +44,8 @@ export default {
                 title: '',
                 description: '',
                 keywords: ''
-            }
+            },
+            pageId: null
         }
     },
     async fetch() {
@@ -59,8 +69,21 @@ export default {
             await this.$store.dispatch('page/setMeta', data.meta)
         }
 
-        if(typeof data.page_lang !== "undefined") {
+        if (typeof data.page_lang !== "undefined") {
             await this.$store.dispatch('lang/setPageLang', data.page_lang)
+        }
+
+        if (!process.client) {
+            this.setPageId()
+        }
+
+        setTimeout(() => {
+            this.setPageId()
+        }, 1000)
+    },
+    methods: {
+        setPageId() {
+            this.pageId = this.module_name !== 'Page' && this.item ? this.item.id : this.page.id
         }
     }
 }

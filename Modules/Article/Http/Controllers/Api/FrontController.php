@@ -85,6 +85,7 @@ class FrontController extends Controller
             ->where('type', $type)
             ->where('active', 1)
             ->limit($perPage ?? 3)
+            ->inRandomOrder()
             ->get(['articles.*', 't.title', 't.slug']);
 
         $additional = [

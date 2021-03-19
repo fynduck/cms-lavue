@@ -86,7 +86,7 @@ class BannerController extends AdminController
         /**
          * Add show pages
          */
-        $bannersService->addUpdateShow($banner->id, $request->get('show_page'));
+        $bannersService->addUpdateShow($banner->id, $request->get('pagesShow'));
         DB::commit();
 
         return true;
@@ -181,10 +181,10 @@ class BannerController extends AdminController
     {
         $data = $this->bannerService->prepareSizeSettingsToSave($request);
 
-        $type = $request->get('type') . '_sizes';
+        $type = $request->get('position') . '_sizes';
         BannerSettings::updateOrCreate(['name' => $type], ['data' => $data]);
 
-        RegenerateImageSizes::dispatch($type);
+        RegenerateImageSizes::dispatch($request->get('position'), $type);
 
         Cache::forget("banner_$type");
         Cache::forget($type);

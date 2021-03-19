@@ -231,12 +231,12 @@ export default {
                 }
             }
         },
-        saveSettings(type) {
+        saveSettings(position) {
             this.errorMessage = null;
             this.loading_setting = true;
-            if (this.settings.hasOwnProperty(type)) {
-                this.settings[type].type = type;
-                axios.post(`${this.source}-settings`, this.settings[type]).then(() => {
+            if (this.settings.hasOwnProperty(position)) {
+                this.settings[position].position = position;
+                axios.post(`${this.source}-settings`, this.settings[position]).then(() => {
                     this.$bvModal.hide('banner-settings')
                     this.$toast.global.success(this.$t('Banner.settings_saved'))
 
