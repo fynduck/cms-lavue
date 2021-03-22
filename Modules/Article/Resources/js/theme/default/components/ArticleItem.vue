@@ -2,7 +2,7 @@
     <div class="article">
         <router-link :to="item.link">
             <figure>
-                <img v-lazy.container="item.imgObj" :srcset="item.srcset" :src="item.imgObj.loading" class="lazy-img"
+                <img v-lazy.container="item.imgObj" :srcset="item.srcset" class="lazy-img"
                      lazy="loading" :alt="item.title">
             </figure>
         </router-link>
