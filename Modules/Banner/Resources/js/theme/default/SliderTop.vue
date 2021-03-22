@@ -9,7 +9,6 @@
             <div :class="{'carousel-item': true, 'active': index === 0}" v-for="(item, index) in items" @click="toLink(item)">
                 <img class="d-block lazy-img w-100"
                      v-lazy.container="item.slide"
-                     :src="item.slide.loading"
                      :srcset="showSrcset(item)"
                      :alt="item.title"
                      lazy="loading">
@@ -106,6 +105,9 @@ export default {
             }
 
             return srcset
+        },
+        putSrc(src) {
+            return process.client ? src : null
         }
     }
 }
