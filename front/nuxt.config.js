@@ -57,7 +57,8 @@ module.exports = {
     modules: [
         '@nuxtjs/router',
         'nuxt-moment',
-        '@nuxtjs/style-resources'
+        '@nuxtjs/style-resources',
+        'nuxt-font-loader',
     ],
 
     styleResources: {
@@ -70,6 +71,14 @@ module.exports = {
         ]
     },
 
+    fontLoader: {
+        url: {
+            google: 'https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap',
+        },
+        prefetch: true,
+        preconnect: true
+    },
+
     build: {
         extractCSS: true,
         cssSourceMap: false,
@@ -78,7 +87,7 @@ module.exports = {
                 cacheGroups: {
                     styles: {
                         name: 'styles',
-                        test: /\.(css|vue|styl)$/,
+                        test: /\.(css|vue|styl|scss)$/,
                         chunks: 'all',
                         enforce: true
                     }
