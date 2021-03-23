@@ -38,7 +38,7 @@ class BannerResource extends JsonResource
     private function imgObj(): array
     {
         return [
-            'src'     => $this->bannerService->linkImage($this->image, $this->position, 'last_big'),
+            'src'     => $this->bannerService->linkImage($this->image, $this->position, null, false, true),
             'loading' => $this->bannerService->linkImage($this->image, $this->position, null, true),
             'error'   => $this->bannerService->linkImage(null, $this->position),
         ];

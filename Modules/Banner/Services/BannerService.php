@@ -168,15 +168,16 @@ class BannerService
      * @param string $position
      * @param string|null $size
      * @param bool $first
+     * @param bool $avg
      * @return string
      */
-    public function linkImage(?string $image, string $position, string $size = null, bool $first = false): string
+    public function linkImage(?string $image, string $position, string $size = null, bool $first = false, bool $avg = false): string
     {
         if (!$image) {
             return asset('img/placeholder.jpg');
         }
 
-        if (!$size && !$first) {
+        if (!$size && !$first && !$avg) {
             return asset('storage/' . Banner::FOLDER_IMG . '/' . $image);
         }
 
@@ -193,6 +194,15 @@ class BannerService
             $sortedSizes = collect($sizeSettings->data['sizes'])->sortBy('width');
             if ($first) {
                 return asset('storage/' . Banner::FOLDER_IMG . '/' . $sortedSizes->first()['name'] . '/' . $image);
+            }
+
+            if ($avg) {
+                $avgKey = $sortedSizes->count() / 2 - 1;
+                if ($avgKey > 0) {
+                    return asset('storage/' . Banner::FOLDER_IMG . '/' . $sortedSizes->values()[$avgKey]['name'] . '/' . $image);
+                } else {
+                    return asset('storage/' . Banner::FOLDER_IMG . '/' . $sortedSizes->first()['name'] . '/' . $image);
+                }
             }
 
             if (array_key_exists($size, $sizeSettings->data['sizes'])) {
