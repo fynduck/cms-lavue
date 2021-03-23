@@ -58,7 +58,7 @@ module.exports = {
         '@nuxtjs/router',
         'nuxt-moment',
         '@nuxtjs/style-resources',
-        'nuxt-font-loader',
+        'nuxt-font-loader'
     ],
 
     styleResources: {

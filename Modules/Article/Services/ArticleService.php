@@ -217,15 +217,16 @@ class ArticleService
      * @param $image
      * @param null $size
      * @param bool $first
+     * @param bool $avg
      * @return string
      */
-    public function linkImage($image, $size = null, $first = false): string
+    public function linkImage($image, $size = null, bool $first = false, bool $avg = false): string
     {
         if (!$image) {
             return asset('img/placeholder.jpg');
         }
 
-        if (!$size && !$first) {
+        if (!$size && !$first && !$avg) {
             return asset('storage/' . Article::FOLDER_IMG . '/' . $image);
         }
 
@@ -241,6 +242,14 @@ class ArticleService
             $sortedSizes = collect($settings->data['sizes'])->sortBy('width');
             if ($first) {
                 return asset('storage/' . Article::FOLDER_IMG . '/' . $sortedSizes->first()['name'] . '/' . $image);
+            }
+            if ($avg) {
+                $avgKey = $sortedSizes->count() / 2 - 1;
+                if ($avgKey > 0) {
+                    return asset('storage/' . Article::FOLDER_IMG . '/' . $sortedSizes->values()[$avgKey]['name'] . '/' . $image);
+                } else {
+                    return asset('storage/' . Article::FOLDER_IMG . '/' . $sortedSizes->first()['name'] . '/' . $image);
+                }
             }
 
             if (array_key_exists($size, $settings->data['sizes'])) {
