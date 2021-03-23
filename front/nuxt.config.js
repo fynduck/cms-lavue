@@ -100,6 +100,15 @@ module.exports = {
         babel: { compact: true }
     },
 
+    render: {
+        bundleRenderer: {
+            shouldPreload: (file, type) => {
+                return ['font'].includes(type)
+            }
+        }
+
+    },
+
     hooks: {
         generate: {
             done(generator) {
