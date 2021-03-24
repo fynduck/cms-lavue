@@ -39,12 +39,18 @@ class RegenerateImageSizes implements ShouldQueue
         $imageSettings = ArticleSettings::where('name', 'sizes')->first();
         if ($imageSettings) {
             $data = $articleService->prepareImgParams($imageSettings);
-            $articles = Article::where('image', '!=', '')->get(['image']);
+            $articles = Article::where('image', '!=', '')->where('id', '!=', 13)->get(['id', 'image']);
             foreach ($articles as $article) {
                 $articleService->deleteImages($article->image);
                 if ($article->image) {
                     $path = Storage::get(Article::FOLDER_IMG . '/' . $article->image);
-                    $this->generateBannerImages($path, $data, $article->image);
+                    $encode = 'webp';
+                    $explodeImgName = explode('.', $article->image);
+                    array_pop($explodeImgName);
+                    $newName = $encode . '_' . $explodeImgName[0] . '.' . $encode;
+                    $this->generateBannerImages($path, $data, $newName, $encode);
+                    $article->image = $newName;
+                    $article->save();
                 }
             }
         }
@@ -54,8 +60,9 @@ class RegenerateImageSizes implements ShouldQueue
      * @param string $path
      * @param array $data
      * @param string $image
+     * @param string|null $encode
      */
-    private function generateBannerImages(string $path, array $data, string $image)
+    private function generateBannerImages(string $path, array $data, string $image, ?string $encode = null)
     {
         ManipulationImage::load($path)
             ->setSizes($data['sizes'])
@@ -66,6 +73,7 @@ class RegenerateImageSizes implements ShouldQueue
             ->setBrightness($data['brightness'])
             ->setBackground($data['background'])
             ->setOptimize($data['optimize'])
+            ->setEncodeFormat($encode)
             ->save($data['resizeMethod']);
     }
 }
