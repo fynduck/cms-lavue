@@ -292,6 +292,7 @@ class BannerService
                 ->setBrightness($imageSettings['brightness'])
                 ->setBackground($imageSettings['background'])
                 ->setOptimize($imageSettings['optimize'])
+                ->setEncodeFormat('webp')
                 ->save($imageSettings['resizeMethod']);
         }
 

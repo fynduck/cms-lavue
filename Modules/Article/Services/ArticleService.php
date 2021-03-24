@@ -151,6 +151,7 @@ class ArticleService
                     ->setBrightness($brightness)
                     ->setBackground($background)
                     ->setOptimize($optimize)
+                    ->setEncodeFormat('webp')
                     ->save($resizeMethod);
             } else {
                 $nameImages['imageName'] = $request->get('old_image');
