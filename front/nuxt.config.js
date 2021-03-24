@@ -77,7 +77,7 @@ module.exports = {
     },
 
     build: {
-        extractCSS: false,
+        extractCSS: true,
         cssSourceMap: false,
         postcss: {
             plugins: {
@@ -93,18 +93,18 @@ module.exports = {
                 }
             }
         },
-        // optimization: {
-        //     splitChunks: {
-        //         cacheGroups: {
-        //             styles: {
-        //                 name: 'styles',
-        //                 test: /\.(css|vue|styl|scss)$/,
-        //                 chunks: 'all',
-        //                 enforce: true
-        //             }
-        //         }
-        //     }
-        // },
+        optimization: {
+            splitChunks: {
+                cacheGroups: {
+                    styles: {
+                        name: 'styles',
+                        test: /\.(css|vue|styl|scss)$/,
+                        chunks: 'all',
+                        enforce: true
+                    }
+                }
+            }
+        },
         extend(config, ctx) {
             config.resolve.alias["vue"] = "vue/dist/vue.common";
         },
