@@ -39,18 +39,13 @@ class RegenerateImageSizes implements ShouldQueue
         $imageSettings = ArticleSettings::where('name', 'sizes')->first();
         if ($imageSettings) {
             $data = $articleService->prepareImgParams($imageSettings);
-            $articles = Article::where('image', '!=', '')->where('id', '!=', 13)->get(['id', 'image']);
+            $articles = Article::where('image', '!=', '')->get(['image']);
             foreach ($articles as $article) {
                 $articleService->deleteImages($article->image);
                 if ($article->image) {
-                    $path = Storage::get(Article::FOLDER_IMG . '/' . $article->image);
-                    $encode = 'webp';
-                    $explodeImgName = explode('.', $article->image);
-                    array_pop($explodeImgName);
-                    $newName = $encode . '_' . $explodeImgName[0] . '.' . $encode;
-                    $this->generateBannerImages($path, $data, $newName, $encode);
-                    $article->image = $newName;
-                    $article->save();
+                    $imageName = $articleService->getOriginalImageName($article->image);
+                    $path = Storage::get(Article::FOLDER_IMG . '/' . $imageName);
+                    $this->generateBannerImages($path, $data, $article->image);
                 }
             }
         }
@@ -59,14 +54,14 @@ class RegenerateImageSizes implements ShouldQueue
     /**
      * @param string $path
      * @param array $data
-     * @param string $image
+     * @param string $imageName
      * @param string|null $encode
      */
-    private function generateBannerImages(string $path, array $data, string $image, ?string $encode = null)
+    private function generateBannerImages(string $path, array $data, string $imageName, ?string $encode = 'webp')
     {
         ManipulationImage::load($path)
             ->setSizes($data['sizes'])
-            ->setName($image)
+            ->setName($imageName)
             ->setFolder(Article::FOLDER_IMG)
             ->setGreyscale($data['greyscale'])
             ->setBlur($data['blur'])

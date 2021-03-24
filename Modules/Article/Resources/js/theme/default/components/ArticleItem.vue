@@ -1,10 +1,10 @@
 <template>
     <div class="article">
         <router-link :to="item.link">
-            <figure>
-                <img v-lazy.container="item.imgObj" :srcset="item.srcset" class="lazy-img"
-                     lazy="loading" :alt="item.title">
-            </figure>
+            <picture>
+                <source :srcset="linkToImg(srcset)" :media="`(max-width: ${mediaWidth(srcset)}px)`" v-for="srcset in item.srcset">
+                <img v-lazy.container="item.imgObj.src" class="lazy-img" lazy="loading" :alt="item.title">
+            </picture>
         </router-link>
         <div class="info">
             <router-link :to="item.link">
@@ -30,6 +30,14 @@ export default {
         item: {
             type: Object,
             required: true
+        }
+    },
+    methods: {
+        linkToImg(item) {
+            return item.split(' ')[0]
+        },
+        mediaWidth(item) {
+            return item.split(' ')[1].replace('w', '')
         }
     }
 }

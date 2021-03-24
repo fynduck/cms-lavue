@@ -2,9 +2,9 @@
 
 namespace Modules\Article\Transformers;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Modules\Article\Entities\Article;
-use Modules\Article\Entities\ArticleSettings;
+use Illuminate\Support\Collection;
 use Modules\Article\Services\ArticleService;
 
 class ArticleFormResource extends JsonResource
@@ -12,7 +12,7 @@ class ArticleFormResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param \Illuminate\Http\Request
+     * @param Request
      * @return array
      */
     public function toArray($request)
@@ -30,7 +30,7 @@ class ArticleFormResource extends JsonResource
             'priority'     => $this->priority ?? 0,
             'type'         => $this->type,
             'no_show_home' => $this->no_show_home,
-            'items'        => $this->emptyItems()
+            'items'        => $this->getItems()
         ];
     }
 
@@ -44,26 +44,36 @@ class ArticleFormResource extends JsonResource
         return $old_image;
     }
 
-    private function emptyItems()
+    private function getItems(): Collection
     {
+        $items = $this->emptyItems();
+
         if ($this->getTrans()->exists()) {
-            return $this->getTrans->keyBy('lang_id');
-        } else {
-            $items = [];
-            foreach (config('app.locales') as $lang_id => $locale) {
-                $items[$lang_id] = [
-                    'title'            => '',
-                    'description'      => '',
-                    'short_desc'       => '',
-                    'slug'             => '',
-                    'meta_title'       => '',
-                    'meta_description' => '',
-                    'meta_keywords'    => '',
-                    'active'           => 0,
-                    'lang_id'          => '',
-                ];
-            }
-            return collect($items);
+            $existItems = $this->getTrans->keyBy('lang_id');
+
+            $items = array_replace($items, $existItems->toArray());
         }
+
+        return collect($items);
+    }
+
+    private function emptyItems(): array
+    {
+        $items = [];
+        foreach (config('app.locales') as $lang_id => $locale) {
+            $items[$lang_id] = [
+                'title'            => '',
+                'description'      => '',
+                'short_desc'       => '',
+                'slug'             => '',
+                'meta_title'       => '',
+                'meta_description' => '',
+                'meta_keywords'    => '',
+                'active'           => 0,
+                'lang_id'          => '',
+            ];
+        }
+
+        return $items;
     }
 }

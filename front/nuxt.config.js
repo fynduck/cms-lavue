@@ -43,9 +43,6 @@ module.exports = {
         {src: '~static/fontawesome/css/all.min.css', mode: 'client'}
     ],
 
-    purgeCSS: {
-        enabled: true
-    },
     plugins: [
         '~components/global',
         '~plugins/i18n',
@@ -80,24 +77,38 @@ module.exports = {
     },
 
     build: {
-        extractCSS: true,
+        extractCSS: false,
         cssSourceMap: false,
-        optimization: {
-            splitChunks: {
-                cacheGroups: {
-                    styles: {
-                        name: 'styles',
-                        test: /\.(css|vue|styl|scss)$/,
-                        chunks: 'all',
-                        enforce: true
-                    }
+        postcss: {
+            plugins: {
+                cssnano: {
+                    preset: [
+                        'default',
+                        {
+                            discardComments: {
+                                removeAll: true
+                            }
+                        }
+                    ]
                 }
             }
         },
+        // optimization: {
+        //     splitChunks: {
+        //         cacheGroups: {
+        //             styles: {
+        //                 name: 'styles',
+        //                 test: /\.(css|vue|styl|scss)$/,
+        //                 chunks: 'all',
+        //                 enforce: true
+        //             }
+        //         }
+        //     }
+        // },
         extend(config, ctx) {
             config.resolve.alias["vue"] = "vue/dist/vue.common";
         },
-        babel: { compact: true }
+        babel: {compact: true}
     },
 
     render: {

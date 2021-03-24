@@ -3,6 +3,7 @@
 namespace Modules\Page\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Collection;
 
 class PageFormResource extends JsonResource
 {
@@ -20,37 +21,28 @@ class PageFormResource extends JsonResource
             'method'    => $this->method,
             'socials'   => $this->socials ?? 0,
             'priority'  => $this->priority ?? 0,
-            'items'     => $this->items()
+            'items'     => $this->getItems()
         ];
     }
 
-    private function items()
+    private function getItems(): Collection
     {
-        if (!$this->getTrans()->exists()) {
-            return $this->emptyItems();
-        } else {
-            $items = $this->getTrans->keyBy('lang_id');
+        $items = $this->emptyItems();
 
-            if (count($items) != count(config('app.locales'))) {
-                $locales = config('app.locales');
-                foreach ($items as $lang_id => $item) {
-                    unset($locales[$lang_id]);
-                }
+        if ($this->getTrans()->exists()) {
+            $existItems = $this->getTrans->keyBy('lang_id');
 
-                $items = $this->emptyItems($items->toArray(), $locales);
-            }
-
-            return $items;
+            $items = array_replace($items, $existItems->toArray());
         }
+
+        return collect($items);
     }
 
-    private function emptyItems(array $items = [], $locales = null)
-    {
-        if (is_null($locales)) {
-            $locales = config('app.locales');
-        }
 
-        foreach ($locales as $lang_id => $locale) {
+    private function emptyItems(): array
+    {
+        $items = [];
+        foreach (config('app.locales') as $lang_id => $locale) {
             $items[$lang_id] = [
                 'title'              => '',
                 'description'        => '',
@@ -63,6 +55,6 @@ class PageFormResource extends JsonResource
                 'lang_id'            => null,
             ];
         }
-        return collect($items);
+        return $items;
     }
 }

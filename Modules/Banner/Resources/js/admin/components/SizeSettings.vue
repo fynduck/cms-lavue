@@ -22,7 +22,7 @@
             </b-row>
             <b-row class="mb-1 size" v-for="(size, key) in item.sizes" :key="key">
                 <b-col cols="12" sm="4" class="mb-3">
-                    <b-form-group :label="$t('Banner.size_name')" :label-for="`name_${key}`">
+                    <b-form-group :label="$t('Banner.size_name')" :label-for="`name_${index}_${key}`">
                         <b-input-group>
                             <b-input-group-prepend is-text>
                                 <b-form-checkbox
@@ -32,18 +32,18 @@
                                 >
                                 </b-form-checkbox>
                             </b-input-group-prepend>
-                            <b-form-input :id="`name_${key}`" v-model="size.name"></b-form-input>
+                            <b-form-input :id="`name_${index}_${key}`" v-model="size.name"></b-form-input>
                         </b-input-group>
                     </b-form-group>
                 </b-col>
                 <b-col cols="12" sm="4" class="mb-3">
-                    <label :for="`width_${key}`">{{ $t('Banner.width') }}</label>
-                    <b-form-input :id="`width_${key}`" v-model.number="size.width" type="number"
+                    <label :for="`width_${index}_${key}`">{{ $t('Banner.width') }}</label>
+                    <b-form-input :id="`width_${index}_${key}`" v-model.number="size.width" type="number"
                                   @input="calculateSizeWithRatio(index, size, 'w')"></b-form-input>
                 </b-col>
                 <b-col cols="12" sm="4" class="mb-3">
-                    <label :for="`height_${key}`">{{ $t('Banner.height') }}</label>
-                    <b-form-input :id="`height_${key}`" v-model.number="size.height" type="number"
+                    <label :for="`height_${index}_${key}`">{{ $t('Banner.height') }}</label>
+                    <b-form-input :id="`height_${index}_${key}`" v-model.number="size.height" type="number"
                                   @input="calculateSizeWithRatio(index, size, 'h')"></b-form-input>
                 </b-col>
                 <fa :icon="['fas', 'trash-alt']" class="text-danger remove" @click="deleteSize(index, key)"/>

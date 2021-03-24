@@ -20,6 +20,8 @@ use Modules\Banner\Entities\BannerTrans;
  */
 class BannerService
 {
+    private $formats = ['jpeg', 'jpg', 'png', 'gif', 'webp'];
+
     public function addUpdate(Request $request, array $imagesName, int $id = null)
     {
         $type = '';
@@ -281,6 +283,8 @@ class BannerService
 
         $imageSettings = $this->prepareImgParams($settings);
 
+        $encode = 'webp';
+
         if ($request->get('image') && $this->isBase64($request->get('image'))) {
             $nameImages['imageName'] = UploadFile::file($request->get('image'))
                 ->setFolder(Banner::FOLDER_IMG)
@@ -292,7 +296,7 @@ class BannerService
                 ->setBrightness($imageSettings['brightness'])
                 ->setBackground($imageSettings['background'])
                 ->setOptimize($imageSettings['optimize'])
-                ->setEncodeFormat('webp')
+                ->setEncodeFormat($encode)
                 ->save($imageSettings['resizeMethod']);
         }
 
@@ -317,6 +321,7 @@ class BannerService
                 ->setBrightness($imageSettings['brightness'])
                 ->setBackground($imageSettings['background'])
                 ->setOptimize($imageSettings['optimize'])
+                ->setEncodeFormat($encode)
                 ->save($imageSettings['resizeMethod']);
         }
 
@@ -427,5 +432,21 @@ class BannerService
     public function deleteOriginalImage(string $image)
     {
         Storage::delete(Banner::FOLDER_IMG . '/' . $image);
+    }
+
+    public function getOriginalImageName($imageName): string
+    {
+        $explodedImage = explode('_', $imageName);
+        $extension = $explodedImage[0];
+
+        if (in_array($extension, $this->formats)) {
+            $imageName = implode('_', $explodedImage);
+            $explodedImage = explode('.', $imageName);
+            array_pop($explodedImage);
+
+            $imageName = implode('.', $explodedImage) . '.' . $extension;
+        }
+
+        return $imageName;
     }
 }
