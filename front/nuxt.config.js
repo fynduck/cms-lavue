@@ -77,7 +77,7 @@ module.exports = {
     },
 
     build: {
-        extractCSS: true,
+        extractCSS: false,
         cssSourceMap: false,
         postcss: {
             plugins: {
