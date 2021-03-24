@@ -47,17 +47,13 @@ class RegenerateImageSizes implements ShouldQueue
         if ($imageSettings) {
             $data = $bannerService->prepareImgParams($imageSettings);
             $banners = Banner::where('position', $this->position)
-                ->where('image', '!=', '')->get(['id', 'image', 'mobile_image']);
+                ->where('image', '!=', '')->get(['image', 'mobile_image']);
             foreach ($banners as $banner) {
-                $encode = 'webp';
                 $bannerService->deleteImages($banner->image);
                 if ($banner->image) {
-                    $path = Storage::get(Banner::FOLDER_IMG . '/' . $banner->image);
-                    $explodeImgName = explode('.', $banner->image);
-                    array_pop($explodeImgName);
-                    $newName = $encode . '_' . $explodeImgName[0] . '.' . $encode;
-                    $this->generateBannerImages($path, $data, $newName, $encode);
-                    $banner->image = $newName;
+                    $imageName = $bannerService->getOriginalImageName($banner->image);
+                    $path = Storage::get(Banner::FOLDER_IMG . '/' . $imageName);
+                    $this->generateBannerImages($path, $data, $imageName);
                 }
 
                 if ($banner->mobile_image) {
@@ -71,16 +67,11 @@ class RegenerateImageSizes implements ShouldQueue
                     if ($mobileSizes) {
                         $imgSettings['sizes'] = $mobileSizes;
                     }
-                    $path = Storage::get(Banner::FOLDER_IMG . '/' . $banner->mobile_image);
+                    $imageName = $bannerService->getOriginalImageName($banner->mobile_image);
+                    $path = Storage::get(Banner::FOLDER_IMG . '/' . $imageName);
                     $bannerService->deleteImages($banner->mobile_image);
-                    $explodeImgName = explode('.', $banner->mobile_image);
-                    array_pop($explodeImgName);
-                    $newName = $encode . '_' . $explodeImgName[0] . '.' . $encode;
-                    $this->generateBannerImages($path, $imgSettings, $newName, $encode);
-
-                    $banner->mobile_image = $newName;
+                    $this->generateBannerImages($path, $imgSettings, $imageName);
                 }
-                $banner->save();
             }
         }
     }
@@ -88,14 +79,14 @@ class RegenerateImageSizes implements ShouldQueue
     /**
      * @param string $path
      * @param array $data
-     * @param string $image
+     * @param string $imageName
      * @param string|null $encode
      */
-    private function generateBannerImages(string $path, array $data, string $image, ?string $encode = null)
+    private function generateBannerImages(string $path, array $data, string $imageName, ?string $encode = 'webp')
     {
         ManipulationImage::load($path)
             ->setSizes($data['sizes'])
-            ->setName($image)
+            ->setName($imageName)
             ->setFolder(Banner::FOLDER_IMG)
             ->setGreyscale($data['greyscale'])
             ->setBlur($data['blur'])

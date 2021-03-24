@@ -19,6 +19,8 @@ use Modules\Article\Entities\ArticleTrans;
 
 class ArticleService
 {
+    private $formats = ['jpeg', 'jpg', 'png', 'gif', 'webp'];
+
     public static function parseArticle(&$item, string $page = '', string $size = 'xs')
     {
         if (!$page) {
@@ -387,5 +389,21 @@ class ArticleService
         }
 
         return $data;
+    }
+
+    public function getOriginalImageName($imageName): string
+    {
+        $explodedImage = explode('_', $imageName);
+        $extension = $explodedImage[0];
+
+        if (in_array($extension, $this->formats)) {
+            $imageName = implode('_', $explodedImage);
+            $explodedImage = explode('.', $imageName);
+            array_pop($explodedImage);
+
+            $imageName = implode('.', $explodedImage) . '.' . $extension;
+        }
+
+        return $imageName;
     }
 }

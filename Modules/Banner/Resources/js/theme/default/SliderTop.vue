@@ -7,11 +7,13 @@
         </div>
         <div class="carousel-inner">
             <div :class="{'carousel-item': true, 'active': index === 0}" v-for="(item, index) in items" @click="toLink(item)">
-                <img class="d-block lazy-img w-100"
-                     v-lazy.container="item.slide"
-                     :srcset="showSrcset(item)"
-                     :alt="item.title"
-                     lazy="loading">
+                <picture>
+                    <source :srcset="linkToImg(srcset)" :media="`(max-width: ${mediaWidth(srcset)}px)`" v-for="srcset in item.srcset">
+                    <img class="d-block lazy-img"
+                         v-lazy.container="item.slide"
+                         :alt="item.title"
+                         lazy="loading">
+                </picture>
                 <div class="carousel-caption d-none d-md-block" v-if="item.description" v-html="item.description"></div>
             </div>
         </div>
@@ -108,6 +110,12 @@ export default {
         },
         putSrc(src) {
             return process.client ? src : null
+        },
+        linkToImg(item) {
+            return item.split(' ')[0]
+        },
+        mediaWidth(item) {
+            return item.split(' ')[1].replace('w', '')
         }
     }
 }

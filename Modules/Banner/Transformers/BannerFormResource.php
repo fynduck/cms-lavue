@@ -29,7 +29,7 @@ class BannerFormResource extends JsonResource
             'priority'         => $this->priority ?? 0,
             'date_from'        => $this->date_from ? $this->date_from->toDateTimeString() : null,
             'date_to'          => $this->date_to ? $this->date_to->toDateTimeString() : null,
-            'items'            => $this->emptyItems(),
+            'items'            => $this->getItems(),
             'pagesShow'        => $this->showOn(),
             'toPage'           => $this->toPage()
         ];
@@ -48,25 +48,34 @@ class BannerFormResource extends JsonResource
         return (new BannerService())->linkImage($image, $this->position, null, true);
     }
 
-    /**
-     * @return Collection
-     */
-    private function emptyItems(): Collection
+    private function getItems(): Collection
     {
+        $items = $this->emptyItems();
+
         if ($this->getTrans()->exists()) {
-            return $this->getTrans->keyBy('lang_id');
-        } else {
-            $items = [];
-            foreach (config('app.locales') as $lang_id => $locale) {
-                $items[$lang_id] = [
-                    'title'       => '',
-                    'description' => '',
-                    'active'      => 0,
-                    'lang_id'     => '',
-                ];
-            }
-            return collect($items);
+            $existItems = $this->getTrans->keyBy('lang_id');
+
+            $items = array_replace($items, $existItems->toArray());
         }
+
+        return collect($items);
+    }
+
+    /**
+     * @return array
+     */
+    private function emptyItems(): array
+    {
+        $items = [];
+        foreach (config('app.locales') as $lang_id => $locale) {
+            $items[$lang_id] = [
+                'title'       => '',
+                'description' => '',
+                'active'      => 0,
+                'lang_id'     => '',
+            ];
+        }
+        return $items;
     }
 
     private function showOn()
