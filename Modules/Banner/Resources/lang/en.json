@@ -19,6 +19,7 @@
   "priority": "Priority",
   "status": "Status",
   "action": "Action",
+  "default": "Default",
   "active": "Active",
   "inactive": "Inactive",
   "actives": "Actives",
@@ -54,5 +55,7 @@
   "ratio": "Соотношение сторон",
   "interval": "Interval",
   "show_indicators": "Show indicators",
-  "show_nav": "Show navigation"
+  "show_nav": "Show navigation",
+  "mobile_size": "Mobile size",
+  "format": "Format"
 }

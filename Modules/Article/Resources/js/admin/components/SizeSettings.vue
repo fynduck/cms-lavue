@@ -47,7 +47,14 @@
                 </b-form-checkbox>
             </b-col>
             <b-col class="mb-3">
-                <b-form-select v-model="settings.action" :options="resizes" size="sm" class="my-3"></b-form-select>
+                <b-form-group :label="$t('Article.action')" label-for="action">
+                    <b-form-select v-model="settings.action" :options="resizes" size="sm" id="action"></b-form-select>
+                </b-form-group>
+            </b-col>
+            <b-col class="mb-3">
+                <b-form-group :label="$t('Article.format')" label-for="encode">
+                    <b-form-select v-model="settings.encode" :options="formats" size="sm" id="encode"></b-form-select>
+                </b-form-group>
             </b-col>
         </b-row>
         <b-row>
@@ -143,6 +150,7 @@ export default {
                     text: this.$t('Article.crop')
                 }
             ],
+            formats: [this.$t('Article.default'), 'jpeg', 'jpg', 'png', 'gif', 'webp'],
             loading_setting: false,
         }
     },

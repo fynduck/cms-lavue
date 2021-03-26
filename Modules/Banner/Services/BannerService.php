@@ -2,6 +2,7 @@
 
 namespace Modules\Banner\Services;
 
+use Fynduck\FilesUpload\ManipulationImage;
 use Fynduck\FilesUpload\UploadFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -152,6 +153,7 @@ class BannerService
             ],
             'ratio'      => false,
             'action'     => 'resize-crop',
+            'encode'     => null,
             'optimize'   => null,
             'greyscale'  => null,
             'blur'       => null,
@@ -170,16 +172,16 @@ class BannerService
      * @param string $position
      * @param string|null $size
      * @param bool $first
-     * @param bool $avg
      * @return string
      */
-    public function linkImage(?string $image, string $position, string $size = null, bool $first = false, bool $avg = false): string
+    public function linkImage(?string $image, string $position, string $size = null, bool $first = false): string
     {
         if (!$image) {
             return asset('img/placeholder.jpg');
         }
 
-        if (!$size && !$first && !$avg) {
+        if (!$size && !$first) {
+            $image = $this->getOriginalImageName($image);
             return asset('storage/' . Banner::FOLDER_IMG . '/' . $image);
         }
 
@@ -193,23 +195,15 @@ class BannerService
         );
 
         if ($sizeSettings && !empty($sizeSettings->data['sizes'])) {
-            $sortedSizes = collect($sizeSettings->data['sizes'])->sortBy('width');
+            $sortedSizes = collect($sizeSettings->data['sizes'])->sortBy('width')->sortBy('height');
             if ($first) {
                 return asset('storage/' . Banner::FOLDER_IMG . '/' . $sortedSizes->first()['name'] . '/' . $image);
-            }
-
-            if ($avg) {
-                $avgKey = $sortedSizes->count() / 2 - 1;
-                if ($avgKey > 0) {
-                    return asset('storage/' . Banner::FOLDER_IMG . '/' . $sortedSizes->values()[$avgKey]['name'] . '/' . $image);
-                } else {
-                    return asset('storage/' . Banner::FOLDER_IMG . '/' . $sortedSizes->first()['name'] . '/' . $image);
-                }
             }
 
             if (array_key_exists($size, $sizeSettings->data['sizes'])) {
                 return asset('storage/' . Banner::FOLDER_IMG . '/' . $size . '/' . $image);
             } else {
+                $image = $this->getOriginalImageName($image);
                 return asset('storage/' . Banner::FOLDER_IMG . '/' . $sortedSizes->last()['name'] . '/' . $image);
             }
         }
@@ -239,7 +233,7 @@ class BannerService
         );
 
         if ($image && $imageSettings && !empty($imageSettings->data['sizes'])) {
-            $sortedSizes = collect($imageSettings->data['sizes'])->sortBy('width');
+            $sortedSizes = collect($imageSettings->data['sizes'])->sortByDesc('width')->sortByDesc('height');
             foreach ($sortedSizes as $size => $sizes) {
                 $checkFileExists = Storage::exists(Banner::FOLDER_IMG . '/' . $size . '/' . $image);
                 if (((!$mobile && !$sizes['mobile']) || $mobile) && $checkFileExists) {
@@ -283,8 +277,6 @@ class BannerService
 
         $imageSettings = $this->prepareImgParams($settings);
 
-        $encode = 'webp';
-
         if ($request->get('image') && $this->isBase64($request->get('image'))) {
             $nameImages['imageName'] = UploadFile::file($request->get('image'))
                 ->setFolder(Banner::FOLDER_IMG)
@@ -296,8 +288,10 @@ class BannerService
                 ->setBrightness($imageSettings['brightness'])
                 ->setBackground($imageSettings['background'])
                 ->setOptimize($imageSettings['optimize'])
-                ->setEncodeFormat($encode)
+                ->setEncodeFormat($imageSettings['encode'])
                 ->save($imageSettings['resizeMethod']);
+
+            $this->generateReserveImg($imageSettings, $nameImages['imageName']);
         }
 
         if ($request->get('mobile_image') && $this->isBase64($request->get('mobile_image'))) {
@@ -321,22 +315,29 @@ class BannerService
                 ->setBrightness($imageSettings['brightness'])
                 ->setBackground($imageSettings['background'])
                 ->setOptimize($imageSettings['optimize'])
-                ->setEncodeFormat($encode)
+                ->setEncodeFormat($imageSettings['encode'])
                 ->save($imageSettings['resizeMethod']);
+
+            $this->generateReserveImg($imageSettings, $nameImages['imageMobileName']);
         }
 
         return $nameImages;
     }
 
+    /**
+     * @param $imageSettings
+     * @return array
+     */
     public function prepareImgParams($imageSettings): array
     {
-        $data['sizes'] = null;
+        $data['sizes'] = [];
         $data['resizeMethod'] = null;
         $data['greyscale'] = false;
         $data['blur'] = 1;
         $data['brightness'] = 0;
         $data['background'] = null;
         $data['optimize'] = false;
+        $data['encode'] = null;
 
         if ($imageSettings && !empty($imageSettings->data['sizes'])) {
             $data['sizes'] = $imageSettings->data['sizes'];
@@ -355,6 +356,9 @@ class BannerService
             }
             if (!empty($imageSettings->data['optimize'])) {
                 $data['optimize'] = $imageSettings->data['optimize'];
+            }
+            if (!empty($imageSettings->data['encode'])) {
+                $data['encode'] = $imageSettings->data['encode'];
             }
         }
 
@@ -391,6 +395,7 @@ class BannerService
             'ratio'      => $request->get('ratio'),
             'ratios'     => $request->get('ratios'),
             'action'     => in_array($action, BannerSettings::resizeMethods()) ? $action : $defaultAction,
+            'encode'     => in_array($request->get('encode'), Banner::FORMATS) ? $request->get('encode') : null,
             'greyscale'  => $request->get('greyscale'),
             'blur'       => $blur,
             'brightness' => $brightness,
@@ -434,19 +439,67 @@ class BannerService
         Storage::delete(Banner::FOLDER_IMG . '/' . $image);
     }
 
-    public function getOriginalImageName($imageName): string
+    /**
+     * @param string $imageName
+     * @return string
+     */
+    public function getOriginalImageName(string $imageName): string
     {
         $explodedImage = explode('_', $imageName);
         $extension = $explodedImage[0];
 
-        if (in_array($extension, $this->formats)) {
+        if (in_array($extension, Banner::FORMATS)) {
             $imageName = implode('_', $explodedImage);
             $explodedImage = explode('.', $imageName);
+
+            //Extract extension
             array_pop($explodedImage);
 
             $imageName = implode('.', $explodedImage) . '.' . $extension;
         }
 
         return $imageName;
+    }
+
+    /**
+     * Generate reserve image size in case format is webp
+     * @param array $data
+     * @param string $imageName
+     * @param bool $checkOriginalName
+     */
+    public function generateReserveImg(array $data, string $imageName, bool $checkOriginalName = true)
+    {
+        if ($data['encode'] === 'webp') {
+            if ($checkOriginalName) {
+                $imageName = $this->getOriginalImageName($imageName);
+            }
+            $path = Storage::get(Banner::FOLDER_IMG . '/' . $imageName);
+
+            $biggestSize = collect($data['sizes'])->sortBy('width')->sortBy('height')->last();
+            $data['sizes'][$biggestSize['name']] = $biggestSize;
+            $data['encode'] = explode('_', $imageName)[0];
+
+            $this->generateImageSizes($path, $data, $imageName);
+        }
+    }
+
+    /**
+     * @param string $path
+     * @param array $data
+     * @param string $imageName
+     */
+    public function generateImageSizes(string $path, array $data, string $imageName)
+    {
+        ManipulationImage::load($path)
+            ->setSizes($data['sizes'])
+            ->setName($imageName)
+            ->setFolder(Banner::FOLDER_IMG)
+            ->setGreyscale($data['greyscale'])
+            ->setBlur($data['blur'])
+            ->setBrightness($data['brightness'])
+            ->setBackground($data['background'])
+            ->setOptimize($data['optimize'])
+            ->setEncodeFormat($data['encode'])
+            ->save($data['resizeMethod']);
     }
 }

@@ -55,7 +55,7 @@ class ArticleResource extends JsonResource
     private function imgObj(): array
     {
         return [
-            'src'     => (new ArticleService())->linkImage($this->image, 'last_big'),
+            'src'     => (new ArticleService())->linkImage($this->image, 'biggest_size'),
             'loading' => (new ArticleService())->linkImage($this->image, null, true)
         ];
     }

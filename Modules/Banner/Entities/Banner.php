@@ -45,11 +45,13 @@ class Banner extends Model
 {
     use BannerTrait;
 
-    const FOLDER_IMG = 'banners';
+    public const FOLDER_IMG = 'banners';
 
-    const TOP = 'top';
+    public const TOP = 'top';
 
-    const CONTENT = 'content';
+    public const CONTENT = 'content';
+
+    public const FORMATS = ['jpeg', 'jpg', 'png', 'gif', 'webp'];
 
     protected $fillable = [
         'page_id',
