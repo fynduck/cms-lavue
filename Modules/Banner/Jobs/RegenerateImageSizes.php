@@ -48,15 +48,20 @@ class RegenerateImageSizes implements ShouldQueue
             $data = $bannerService->prepareImgParams($imageSettings);
             $banners = Banner::where('position', $this->position)
                 ->where('image', '!=', '')->get(['image', 'mobile_image']);
+
             foreach ($banners as $banner) {
-                $bannerService->deleteImages($banner->image);
                 if ($banner->image) {
+                    $bannerService->deleteImages($banner->image);
                     $imageName = $bannerService->getOriginalImageName($banner->image);
                     $path = Storage::get(Banner::FOLDER_IMG . '/' . $imageName);
-                    $this->generateBannerImages($path, $data, $imageName);
+                    $bannerService->generateImageSizes($path, $data, $imageName);
+
+                    $bannerService->deleteImages($imageName);
+                    $bannerService->generateReserveImg($data, $imageName, false);
                 }
 
                 if ($banner->mobile_image) {
+                    $bannerService->deleteImages($banner->mobile_image);
                     $imgSettings = $data;
                     $mobileSizes = [];
                     foreach ($imageSettings->data['sizes'] as $key => $size) {
@@ -69,31 +74,12 @@ class RegenerateImageSizes implements ShouldQueue
                     }
                     $imageName = $bannerService->getOriginalImageName($banner->mobile_image);
                     $path = Storage::get(Banner::FOLDER_IMG . '/' . $imageName);
-                    $bannerService->deleteImages($banner->mobile_image);
-                    $this->generateBannerImages($path, $imgSettings, $imageName);
+                    $bannerService->generateImageSizes($path, $imgSettings, $imageName);
+
+                    $bannerService->deleteImages($imageName);
+                    $bannerService->generateReserveImg($data, $imageName, false);
                 }
             }
         }
-    }
-
-    /**
-     * @param string $path
-     * @param array $data
-     * @param string $imageName
-     * @param string|null $encode
-     */
-    private function generateBannerImages(string $path, array $data, string $imageName, ?string $encode = 'webp')
-    {
-        ManipulationImage::load($path)
-            ->setSizes($data['sizes'])
-            ->setName($imageName)
-            ->setFolder(Banner::FOLDER_IMG)
-            ->setGreyscale($data['greyscale'])
-            ->setBlur($data['blur'])
-            ->setBrightness($data['brightness'])
-            ->setBackground($data['background'])
-            ->setOptimize($data['optimize'])
-            ->setEncodeFormat($encode)
-            ->save($data['resizeMethod']);
     }
 }

@@ -24,7 +24,7 @@
                 <b-col cols="12" sm="4" class="mb-3">
                     <b-form-group :label="$t('Banner.size_name')" :label-for="`name_${index}_${key}`">
                         <b-input-group>
-                            <b-input-group-prepend is-text>
+                            <b-input-group-prepend is-text v-b-tooltip.hover :title="$t('Banner.mobile_size')">
                                 <b-form-checkbox
                                     v-model="size.mobile"
                                     :value="1"
@@ -60,7 +60,14 @@
                     </b-form-checkbox>
                 </b-col>
                 <b-col class="mb-3">
-                    <b-form-select v-model="item.action" :options="resizes" size="sm" class="my-3"></b-form-select>
+                    <b-form-group :label="$t('Banner.action')" label-for="action">
+                        <b-form-select v-model="item.action" :options="resizes" size="sm" id="action"></b-form-select>
+                    </b-form-group>
+                </b-col>
+                <b-col class="mb-3">
+                    <b-form-group :label="$t('Banner.format')" label-for="encode">
+                        <b-form-select v-model="item.encode" :options="formats" size="sm" id="encode"></b-form-select>
+                    </b-form-group>
                 </b-col>
             </b-row>
             <b-row>
@@ -186,6 +193,7 @@ export default {
                     text: this.$t('Banner.crop')
                 }
             ],
+            formats: [this.$t('Banner.default'), 'jpeg', 'jpg', 'png', 'gif', 'webp'],
             loading_setting: false,
             errorMessage: null
         }

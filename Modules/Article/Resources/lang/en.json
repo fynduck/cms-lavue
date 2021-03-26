@@ -1,9 +1,4 @@
 {
-  "new": "New",
-  "news": "News",
-  "title_news": "Title news",
-  "news_description": "News description",
-  "rubric": "Rubric",
   "article": "Article",
   "articles": "Articles",
   "add_article": "Add article",
@@ -11,7 +6,6 @@
   "promotion": "Promotion",
   "type_publication": "Type publication",
   "no_show_home": "No show home",
-  "categories_articles": "Categories articles",
   "discount": "Discount",
   "type_article": "Type article",
   "promotions": "Promotions",
@@ -28,6 +22,8 @@
   "image": "Image",
   "active": "Active",
   "inactive": "Inactive",
+  "active_s": "Active",
+  "inactive_s": "Inactive",
   "filters": "Filters",
   "search": "Search",
   "insert_query": "Insert query",
@@ -38,8 +34,6 @@
   "priority": "Priority",
   "status": "Status",
   "action": "Action",
-  "active_s": "Active",
-  "inactive_s": "Inactive",
   "default": "Default",
   "all_lang": "All languages",
   "warning": "Warning",
@@ -72,5 +66,6 @@
   "brightness": "Brightness",
   "background": "Background",
   "ratio": "Соотношение сторон",
-  "latest_news": "Latest news"
+  "latest_news": "Latest news",
+  "format": "Format"
 }

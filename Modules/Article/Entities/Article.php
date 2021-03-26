@@ -51,13 +51,15 @@ class Article extends Model
 {
     use ArticleTrait;
 
-    const FOLDER_IMG = 'articles';
+    public const FOLDER_IMG = 'articles';
 
-    const NEWS = 'news';
+    public const NEWS = 'news';
 
-    const ARTICLES = 'articles';
+    public const ARTICLES = 'articles';
 
-    const PROMOTIONS = 'promotions';
+    public const PROMOTIONS = 'promotions';
+
+    public const FORMATS = ['jpeg', 'jpg', 'png', 'gif', 'webp'];
 
     protected $fillable = [
         'date',

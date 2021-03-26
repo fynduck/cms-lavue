@@ -22,7 +22,7 @@
                                      v-model="active"
                                      :value="1"
                                      :unchecked-value="0">
-                        {{ active ? $t('Article.inactive') : $t('Article.active') }}
+                        {{ active ? $t('Article.inactive_s') : $t('Article.active_s') }}
                     </b-form-checkbox>
                 </b-col>
                 <b-col sm="6" lg="2" class="text-right" v-if="canCreate">

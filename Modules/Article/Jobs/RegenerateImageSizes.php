@@ -41,34 +41,16 @@ class RegenerateImageSizes implements ShouldQueue
             $data = $articleService->prepareImgParams($imageSettings);
             $articles = Article::where('image', '!=', '')->get(['image']);
             foreach ($articles as $article) {
-                $articleService->deleteImages($article->image);
                 if ($article->image) {
+                    $articleService->deleteImages($article->image);
                     $imageName = $articleService->getOriginalImageName($article->image);
                     $path = Storage::get(Article::FOLDER_IMG . '/' . $imageName);
-                    $this->generateBannerImages($path, $data, $article->image);
+                    $articleService->generateImageSizes($path, $data, $imageName);
+
+                    $articleService->deleteImages($imageName);
+                    $articleService->generateReserveImg($data, $imageName, false);
                 }
             }
         }
-    }
-
-    /**
-     * @param string $path
-     * @param array $data
-     * @param string $imageName
-     * @param string|null $encode
-     */
-    private function generateBannerImages(string $path, array $data, string $imageName, ?string $encode = 'webp')
-    {
-        ManipulationImage::load($path)
-            ->setSizes($data['sizes'])
-            ->setName($imageName)
-            ->setFolder(Article::FOLDER_IMG)
-            ->setGreyscale($data['greyscale'])
-            ->setBlur($data['blur'])
-            ->setBrightness($data['brightness'])
-            ->setBackground($data['background'])
-            ->setOptimize($data['optimize'])
-            ->setEncodeFormat($encode)
-            ->save($data['resizeMethod']);
     }
 }
