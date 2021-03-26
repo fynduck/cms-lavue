@@ -8,7 +8,7 @@
         <div class="carousel-inner">
             <div :class="{'carousel-item': true, 'active': index === 0}" v-for="(item, index) in items" @click="toLink(item)">
                 <picture>
-                    <source :srcset="linkToImg(srcset)" :media="`(max-width: ${mediaWidth(srcset)}px)`" v-for="srcset in item.srcset">
+                    <source :srcset="linkToImg(srcset)" :media="mediaWidth(srcset, srcKey)" v-for="(srcset, srcKey) in item.srcset">
                     <img class="d-block lazy-img"
                          v-lazy.container="item.slide"
                          :alt="item.title"
@@ -114,8 +114,14 @@ export default {
         linkToImg(item) {
             return item.split(' ')[0]
         },
-        mediaWidth(item) {
-            return item.split(' ')[1].replace('w', '')
+        mediaWidth(item, index) {
+
+            if (index === 0) {
+                return null
+            }
+            const width = item.split(' ')[1].replace('w', '');
+
+            return `(max-width: ${width}px)`
         }
     }
 }
