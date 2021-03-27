@@ -86,31 +86,6 @@ export default {
             if (item.link)
                 window.open(item.link, item.target)
         },
-        showSrcset(item) {
-            let srcset = item.srcset;
-            if (!process.server && item.mobile_srcset.length) {
-                let mobileSizes = [];
-                item.mobile_srcset.forEach(item => {
-                    let itemSplit = item.split(' ')
-                    if (itemSplit.length > 1) {
-                        mobileSizes.push(parseInt(itemSplit[1]))
-                    }
-                })
-
-                mobileSizes.sort(function (a, b) {
-                    return a - b;
-                });
-
-                if (window.innerWidth <= mobileSizes[mobileSizes.length - 1]) {
-                    srcset = item.mobile_srcset
-                }
-            }
-
-            return srcset
-        },
-        putSrc(src) {
-            return process.client ? src : null
-        },
         linkToImg(item) {
             return item.split(' ')[0]
         },
