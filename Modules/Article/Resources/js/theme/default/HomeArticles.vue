@@ -1,7 +1,7 @@
 <template>
     <section class="container">
         <div class="row my-4">
-            <div class="col-md-6 col-lg-4 col-exl-3 mb-4" v-for="item in items">
+            <div class="col-md-6 col-lg-4 col-xxl-3 mb-4" v-for="item in items">
                 <article-item :item="item"/>
             </div>
         </div>
