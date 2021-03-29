@@ -30,7 +30,7 @@ class BannerResource extends JsonResource
             'target'        => $this->target,
             'slide'         => $this->imgObj(),
             'srcset'        => $this->srcset($this->image),
-            'mobile_srcset' => $this->srcset($this->mobile_image, true),
+//            'mobile_srcset' => $this->srcset($this->mobile_image, true),
             'link'          => generateRoute($this)
         ];
     }

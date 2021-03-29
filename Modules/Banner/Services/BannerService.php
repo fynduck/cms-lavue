@@ -233,7 +233,7 @@ class BannerService
         );
 
         if ($image && $imageSettings && !empty($imageSettings->data['sizes'])) {
-            $sortedSizes = collect($imageSettings->data['sizes'])->sortByDesc('width')->sortByDesc('height');
+            $sortedSizes = collect($imageSettings->data['sizes'])->sortBy('width')->sortBy('height');
             foreach ($sortedSizes as $size => $sizes) {
                 $checkFileExists = Storage::exists(Banner::FOLDER_IMG . '/' . $size . '/' . $image);
                 if (((!$mobile && !$sizes['mobile']) || $mobile) && $checkFileExists) {
