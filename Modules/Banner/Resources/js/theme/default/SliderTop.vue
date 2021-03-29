@@ -91,9 +91,9 @@ export default {
         },
         mediaWidth(item, index) {
 
-            if (index === 0) {
-                return null
-            }
+            // if (index === 0) {
+            //     return null
+            // }
             const width = item.split(' ')[1].replace('w', '');
 
             return `(max-width: ${width}px)`
