@@ -1,26 +1,28 @@
 <template>
     <div class="row justify-content-center my-5">
         <div class="col-lg-8 m-auto">
-            <card>
-                <template v-if="success">
-                    <div class="alert alert-success" role="alert">
-                        {{ status }}
-                    </div>
+            <div class="card">
+                <div class="card-body">
+                    <template v-if="success">
+                        <div class="alert alert-success" role="alert">
+                            {{ status }}
+                        </div>
 
-                    <router-link :to="{ name: 'login' }" class="btn btn-primary">
-                        {{ $t('User.login') }}
-                    </router-link>
-                </template>
-                <template v-else>
-                    <div class="alert alert-danger" role="alert">
-                        {{ status || $t('User.failed_to_verify_email') }}
-                    </div>
+                        <router-link :to="{ name: 'login' }" class="btn btn-primary">
+                            {{ $t('User.login') }}
+                        </router-link>
+                    </template>
+                    <template v-else>
+                        <div class="alert alert-danger" role="alert">
+                            {{ status || $t('User.failed_to_verify_email') }}
+                        </div>
 
-                    <router-link :to="{ name: 'verification.resend' }" class="small float-right">
-                        {{ $t('User.resend_verification_link') }}
-                    </router-link>
-                </template>
-            </card>
+                        <router-link :to="{ name: 'verification.resend' }" class="small float-right">
+                            {{ $t('User.resend_verification_link') }}
+                        </router-link>
+                    </template>
+                </div>
+            </div>
         </div>
     </div>
 </template>
