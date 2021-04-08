@@ -115,8 +115,11 @@ export default {
         }
     },
     async fetch() {
-        let {data} = await axios.get(this.source)
-        this.items = data.data
+        try {
+            let {data} = await axios.get(this.source)
+            this.items = data.data
+        } catch (error) {
+        }
     },
     methods: {
         checkPro(link) {

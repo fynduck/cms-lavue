@@ -26,8 +26,11 @@ export default {
         };
     },
     async fetch() {
-        const {data} = await axios.get(`/get-settings`)
-        await this.$store.dispatch('settings/setSettings', data)
+        try {
+            const {data} = await axios.get(`/get-settings`)
+            await this.$store.dispatch('settings/setSettings', data)
+        } catch (e) {
+        }
     },
     components: {
         TopMenu: () => import(`../../Modules/Menu/Resources/js/theme/${process.env.appTheme}/TopMenu`)

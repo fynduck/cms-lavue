@@ -19,7 +19,7 @@
                                  v-model="row.item.active"
                                  :value="1"
                                  :unchecked-value="0"
-                                 v-if="canEdit"
+                                 v-if="canEdit && !exceptDisable.includes(row.item.name)"
                                  @change="changeStatus(row.item)">
                     {{ active ? $t('Module.inactive') : $t('Module.active') }}
                 </b-form-checkbox>
@@ -65,6 +65,15 @@ export default {
                 openConfirm: false,
                 text: ''
             },
+            exceptDisable: [
+                'Page',
+                'Language',
+                'Module',
+                'Redirect',
+                'UserGroup',
+                'User',
+                'Translate',
+            ]
         }
     },
     computed: {
