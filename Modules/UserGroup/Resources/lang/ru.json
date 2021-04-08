@@ -11,6 +11,7 @@
   "parameter": "Параметры",
   "menu": "Меню",
   "banner": "Баннеры",
+  "module": "Модули",
   "admin_live_select": "Доступ к (ajax) выборке",
   "admin_users_select": "Доступ к (ajax) выборке пользователеи",
   "admin_category_select": "Доступ к (ajax) выборке разделов",

@@ -11,7 +11,7 @@
   "add_user": "Добавить пользователя",
   "edit_user": "Редактировать пользователя",
   "email": "Email",
-  "password": "password",
+  "password": "Password",
   "password_confirmation": "Подтверждение пароля",
   "groups": "Группы",
   "default_option": "Все",

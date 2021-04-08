@@ -1,52 +1,55 @@
 <template>
     <div class="row justify-content-center my-5">
         <div class="col-lg-8 m-auto">
-            <card>
-                <form @submit.prevent="reset" @keydown="form.onKeydown($event)">
-                    <alert-success :form="form" :message="status"/>
+            <div class="card">
+                <div class="card-body">
+                    <form @submit.prevent="reset" @keydown="form.onKeydown($event)">
+                        <alert-success :form="form" :message="status"/>
 
-                    <!-- Email -->
-                    <div class="form-group row">
-                        <label class="col-md-3 col-form-label text-md-right">{{ $t('User.email') }}</label>
-                        <div class="col-md-7">
-                            <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" type="email"
-                                   name="email" class="form-control" readonly>
-                            <has-error :form="form" field="email"/>
+                        <!-- Email -->
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label text-md-right">{{ $t('User.email') }}</label>
+                            <div class="col-md-7">
+                                <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" type="email"
+                                       name="email" class="form-control" readonly>
+                                <has-error :form="form" field="email"/>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Password -->
-                    <div class="form-group row">
-                        <label class="col-md-3 col-form-label text-md-right">{{ $t('User.password') }}</label>
-                        <div class="col-md-7">
-                            <input v-model="form.password" :class="{ 'is-invalid': form.errors.has('password') }" type="password"
-                                   name="password" class="form-control">
-                            <has-error :form="form" field="password"/>
+                        <!-- Password -->
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label text-md-right">{{ $t('User.password') }}</label>
+                            <div class="col-md-7">
+                                <input v-model="form.password" :class="{ 'is-invalid': form.errors.has('password') }"
+                                       type="password"
+                                       name="password" class="form-control">
+                                <has-error :form="form" field="password"/>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Password Confirmation -->
-                    <div class="form-group row">
-                        <label class="col-md-3 col-form-label text-md-right">{{ $t('User.confirm_password') }}</label>
-                        <div class="col-md-7">
-                            <input v-model="form.password_confirmation"
-                                   :class="{ 'is-invalid': form.errors.has('password_confirmation') }" type="password"
-                                   name="password_confirmation" class="form-control">
-                            <has-error :form="form" field="password_confirmation"/>
+                        <!-- Password Confirmation -->
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label text-md-right">{{ $t('User.confirm_password') }}</label>
+                            <div class="col-md-7">
+                                <input v-model="form.password_confirmation"
+                                       :class="{ 'is-invalid': form.errors.has('password_confirmation') }" type="password"
+                                       name="password_confirmation" class="form-control">
+                                <has-error :form="form" field="password_confirmation"/>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Submit Button -->
-                    <div class="form-group row">
-                        <div class="col-md-9 ml-md-auto">
-                            <button :class="{'btn btn-success': true, 'btn-loading': form.busy}" type="submit"
-                                    :disabled="form.busy">
-                                {{ $t('User.reset_password') }}
-                            </button>
+                        <!-- Submit Button -->
+                        <div class="form-group row">
+                            <div class="col-md-9 ml-md-auto">
+                                <button :class="{'btn btn-success': true, 'btn-loading': form.busy}" type="submit"
+                                        :disabled="form.busy">
+                                    {{ $t('User.reset_password') }}
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                </form>
-            </card>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </template>

@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\UserGroup\Http\Controllers\UserGroupController;
+use Modules\UserGroup\Http\Controllers\Api\UserGroupController;
 
 /*
 |--------------------------------------------------------------------------

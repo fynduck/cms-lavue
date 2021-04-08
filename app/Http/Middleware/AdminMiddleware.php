@@ -23,18 +23,23 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next, $right = 'view')
     {
+        $ajaxRoutes = [
+            'admin-live-select-list',
+            'trans-slug-list'
+        ];
+        $currentRouteName = $request->route()->getName();
+
         if (!auth()->check()) {
             if ($request->ajax()) {
                 return response('Permission denied', 401);
             }
 
             abort(401);
-        } elseif (auth()->user()->isAdmin()) {
+        } elseif (auth()->user()->isAdmin() || in_array($currentRouteName, $ajaxRoutes)) {
             return $next($request);
         } elseif (auth()->user()->roles->groupPermission && $right) {
-            $currentRoute = $request->route()->getName();
-            $explodeWithLine = explode('-', $currentRoute);
-            $explodeRoute = explode('.', $currentRoute);
+            $explodeWithLine = explode('-', $currentRouteName);
+            $explodeRoute = explode('.', $currentRouteName);
             $listPermission = null;
             if (array_key_exists(1, $explodeRoute)) {
                 switch ($explodeRoute[1]) {

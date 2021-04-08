@@ -39,9 +39,8 @@ export const actions = {
 
         try {
             const {data} = await axios.get(`${process.env.apiUrl}/admin/get-app-data`)
-            let locale = data.locale;
 
-            commit('SET_LOCALE', locale)
+            commit('SET_LOCALE', {locale: data.locale})
             commit('SET_FALLBACK', data.fallback)
             commit('SET_LOCALES', data.locales)
         } catch (e) {

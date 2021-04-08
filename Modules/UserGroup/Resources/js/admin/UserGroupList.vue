@@ -106,7 +106,7 @@ export default {
         },
         fields() {
             return [
-                {key: 'name', label: this.$t('UserGroup.name')},
+                {key: 'name', label: this.$t('UserGroup.title')},
                 {key: 'actions', label: this.$t('UserGroup.action'), 'class': 'text-right'}
             ]
         }
