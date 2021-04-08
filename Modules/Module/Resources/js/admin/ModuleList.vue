@@ -19,9 +19,14 @@
                                  v-model="row.item.active"
                                  :value="1"
                                  :unchecked-value="0"
+                                 v-if="canEdit"
                                  @change="changeStatus(row.item)">
                     {{ active ? $t('Module.inactive') : $t('Module.active') }}
                 </b-form-checkbox>
+                <div v-else>
+                    <fa :icon="['far', 'check-circle']" class="text-success" v-if="row.item.active"/>
+                    <fa :icon="['far', 'times-circle']" class="text-danger" v-else/>
+                </div>
             </template>
             <template v-slot:cell(actions)="row">
                 <b-button variant="danger" v-if="row.item.permissions.destroy" @click.prevent="confirmDelete(row.item)">
@@ -73,10 +78,10 @@ export default {
         source() {
             return `/admin/${this.$router.currentRoute.name.split('.')[0]}`
         },
-        canCreate() {
+        canEdit() {
             if (this.authenticated) {
                 const arrayName = this.$router.currentRoute.name.split('.');
-                return this.permissions(arrayName[0], 'create')
+                return this.permissions(arrayName[0], 'edit')
             }
 
             return false;
