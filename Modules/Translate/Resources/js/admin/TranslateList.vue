@@ -18,7 +18,7 @@
                             :title="$t('Translate.save')"
                             :disabled="submit"
                             @click="onSave(index)"
-                            v-if="!files_loading">
+                            v-if="!files_loading && canCreate">
                         <fa :icon="['fas', 'save']"/>
                     </button>
                     <div class="d-flex justify-content-center my-4" v-if="files_loading">
@@ -47,7 +47,7 @@
                             </b-table>
                         </b-tab>
                     </b-tabs>
-                    <div class="text-right" v-if="!files_loading">
+                    <div class="text-right" v-if="!files_loading && canCreate">
                         <button :class="{'btn btn-success': true, 'btn-loading': submit}" type="button"
                                 :title="$t('Translate.save')"
                                 :disabled="submit"
@@ -99,7 +99,15 @@ export default {
                 {key: 'slug', label: this.$t('Translate.slug')},
                 {key: 'value', label: this.$t('Translate.current_lang')}
             ]
-        }
+        },
+        canCreate() {
+            if (this.authenticated) {
+                const arrayName = this.$router.currentRoute.name.split('.');
+                return this.permissions(arrayName[0], 'create')
+            }
+
+            return false;
+        },
     },
     mounted() {
         this.getModules();
@@ -168,7 +176,10 @@ export default {
                 this.$toast.global.success(this.$t('Translate.data_saved'))
             }).catch(error => {
                 this.submit = false;
-                this.$toast.global.error(error.response.data.message)
+                let message = error.response.data.message;
+                if (typeof message === "undefined")
+                    message = error.response.data;
+                this.$toast.global.error(message)
             })
         }
     }

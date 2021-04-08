@@ -44,7 +44,7 @@ export default {
             let routers = [];
             this.$router.options.routes.forEach(router => {
                 if ((typeof router.meta !== "undefined" && typeof router.meta.sort !== "undefined") &&
-                    (this.user.admin || checkPermission(router.name, this.user.permissions))) {
+                    (router.name === 'dashboard.index' || this.user.admin || checkPermission(router.name, this.user.permissions))) {
 
                     if (!this.user.admin && router.children) {
                         let routeWithChild = router;

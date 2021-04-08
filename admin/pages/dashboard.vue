@@ -1,7 +1,7 @@
 <template>
-    <section id="content" class="">
+    <section id="content">
         <div class="row">
-            <div class="col-xs-12 col-md-10">
+            <div class="col-md-10">
                 <div class="pl15 pr50">
                     <h4> {{ $t('welcome') }} </h4>
                     <hr class="alt short">

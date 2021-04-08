@@ -1,12 +1,8 @@
 <template>
     <div class="row justify-content-center my-5">
         <div class="col-lg-8 m-auto">
-            <div class="card" v-if="mustVerifyEmail">
-                <div class="card-body">
-                    <div class="alert alert-success" role="alert">
-                        {{ $t('User.verify_email_address') }}
-                    </div>
-                </div>
+            <div class="alert alert-success" role="alert" v-if="mustVerifyEmail">
+                {{ $t('User.verify_email_address') }}
             </div>
             <div class="card" v-else>
                 <div class="card-body">
@@ -94,11 +90,18 @@ export default {
 
     methods: {
         async register() {
+            let data
             // Register the user.
-            const {data} = await this.form.post('/register')
+            // const {data} = await this.form.post('/register')
+            try {
+                const response = await this.form.post('/register')
+                data = response.data
+            } catch (e) {
+                return
+            }
 
             // Must verify email fist.
-            if (data.status) {
+            if (data.verifyEmail) {
                 this.mustVerifyEmail = true
             } else {
                 // Log in the user.

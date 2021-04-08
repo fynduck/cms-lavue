@@ -6,8 +6,8 @@ export default ({store, redirect, route}) => {
     } else {
         if (!store.getters['auth/user'].admin) {
 
-            if (!checkPermission(route.name, store.getters['auth/user'].permissions))
-                return redirect('/')
+            if (route.name !== 'dashboard.index' && !checkPermission(route.name, store.getters['auth/user'].permissions))
+                return redirect('/admin/dashboard')
         }
     }
 }
