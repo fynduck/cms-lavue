@@ -35,6 +35,8 @@ use Modules\Language\Traits\LanguageTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Language\Entities\Language whereUpdatedAt($value)
  * @mixin \Eloquent
  * @method static \Illuminate\Database\Eloquent\Builder|Language wherePriority($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Language active()
+ * @method static \Illuminate\Database\Eloquent\Builder|Language default()
  */
 class Language extends Model
 {

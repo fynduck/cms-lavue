@@ -34,6 +34,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\CustomForm\Entities\Form whereUpdatedAt($value)
  * @property-read \Illuminate\Database\Eloquent\Collection|\Modules\CustomForm\Entities\FormSent[] $completed
  * @property-read int|null $completed_count
+ * @property int|null $lang_id
+ * @method static \Illuminate\Database\Eloquent\Builder|Form whereLangId($value)
  */
 class Form extends Model
 {

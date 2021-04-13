@@ -141,7 +141,7 @@ function generateRoute($item, $urlsPages = null)
     if ($item->type_page) {
         switch ($item->type_page) {
             case 'page':
-                $pageSlug = PageTrans::getByPageId($item->page_id)->value('slug');
+                $pageSlug = PageTrans::pageId($item->page_id)->active()->value('slug');
                 $params = [
                     count(config('app.locales')) > 1 ? ($item->lang_id ? config(
                         'app.locales.' . $item->lang_id . '.slug'

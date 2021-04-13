@@ -10,36 +10,34 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property int $id
  * @property int $article_id
- * @property int $lang
+ * @property int $lang_id
  * @property string|null $title
  * @property string|null $description
  * @property string|null $short_desc
- * @property string $slug
+ * @property string|null $slug
  * @property string|null $meta_title
  * @property string|null $meta_description
  * @property string|null $meta_keywords
  * @property int $active
- * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Article\Entities\ArticleTrans active()
- * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Article\Entities\ArticleTrans lang()
- * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Article\Entities\ArticleTrans newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Article\Entities\ArticleTrans newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Article\Entities\ArticleTrans query()
- * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Article\Entities\ArticleTrans search($search, $threshold = null, $entireText = false, $entireTextOnly = false)
- * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Article\Entities\ArticleTrans searchRestricted($search, $threshold = null, $entireText = false, $entireTextOnly = false)
- * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Article\Entities\ArticleTrans whereActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Article\Entities\ArticleTrans whereArticleId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Article\Entities\ArticleTrans whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Article\Entities\ArticleTrans whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Article\Entities\ArticleTrans whereLang($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Article\Entities\ArticleTrans whereMetaDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Article\Entities\ArticleTrans whereMetaKeywords($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Article\Entities\ArticleTrans whereMetaTitle($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Article\Entities\ArticleTrans whereShortDesc($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Article\Entities\ArticleTrans whereSlug($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Article\Entities\ArticleTrans whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleTrans active()
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleTrans lang()
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleTrans newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleTrans newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleTrans query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleTrans search($search, $threshold = null, $entireText = false, $entireTextOnly = false)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleTrans searchRestricted($search, $threshold = null, $entireText = false, $entireTextOnly = false)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleTrans whereActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleTrans whereArticleId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleTrans whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleTrans whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleTrans whereLangId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleTrans whereMetaDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleTrans whereMetaKeywords($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleTrans whereMetaTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleTrans whereShortDesc($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleTrans whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ArticleTrans whereTitle($value)
  * @mixin \Eloquent
- * @property int $lang_id
- * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Article\Entities\ArticleTrans whereLangId($value)
  */
 class ArticleTrans extends Model
 {
@@ -73,9 +71,9 @@ class ArticleTrans extends Model
         return [
             'columns' => [
                 'title'       => 10,
-                'short_desc'  => 7,
-                'description' => 7,
-                'slug'        => 5,
+                'slug'        => 9,
+                'description' => 9,
+                'short_desc'  => 8,
             ]
         ];
     }
@@ -90,67 +88,11 @@ class ArticleTrans extends Model
             'title',
             'description',
             'short_desc',
-            'article_id',
             'slug',
+            'article_id',
             'lang_id',
             'active'
         ];
-    }
-
-    /**
-     * Select title by id and lang_id
-     * @param $id
-     * @param null $active
-     * @param null $lang_id
-     * @return array
-     */
-    static function getTitle($id, $active = null, $lang_id = null)
-    {
-        $lang_id = is_null($lang_id) ? config('app.locale_id') : $lang_id;
-        $query = ArticleTrans::where('lang_id', $lang_id);
-        if ($active) {
-            $query->where('active', 1);
-        }
-        if (is_array($id)) {
-            $query->whereIn('article_id', $id);
-        } else {
-            $query->where('article_id', $id);
-        }
-        $query->select('title', 'article_id');
-
-        return $query->pluck('title', 'article_id');
-    }
-
-    /**
-     * Select slug by id and lang_id
-     * @param $id
-     * @param null $lang_id
-     * @param null $active
-     * @return array
-     */
-    static function getSlug($id, $active = null, $lang_id = null)
-    {
-        $lang_id = is_null($lang_id) ? config('app.locale_id') : $lang_id;
-        $query = ArticleTrans::where('lang_id', $lang_id);
-        if ($active) {
-            $query->where('active', 1);
-        }
-        if (is_array($id)) {
-            $query->whereIn('article_id', $id);
-        } else {
-            $query->where('article_id', $id);
-        }
-
-        return $query->pluck('slug', 'article_id');
-    }
-
-    /**
-     * Select slugs item
-     * @return array
-     */
-    static function getSlugs($id)
-    {
-        return ArticleTrans::where('article_id', $id)->where('active', 1)->pluck('slug', 'lang_id');
     }
 
     public function getArticle()

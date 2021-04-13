@@ -2,6 +2,7 @@
 
 namespace Modules\Page\Entities;
 
+use Fynduck\LaravelSearchable\Searchable;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -18,24 +19,31 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $meta_keywords
  * @property int|null $active
  * @property int $lang_id
- * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Page\Entities\PageTrans newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Page\Entities\PageTrans newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Page\Entities\PageTrans query()
- * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Page\Entities\PageTrans whereActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Page\Entities\PageTrans whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Page\Entities\PageTrans whereDescriptionFooter($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Page\Entities\PageTrans whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Page\Entities\PageTrans whereLangId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Page\Entities\PageTrans whereMetaDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Page\Entities\PageTrans whereMetaKeywords($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Page\Entities\PageTrans whereMetaTitle($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Page\Entities\PageTrans wherePageId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Page\Entities\PageTrans whereSlug($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Page\Entities\PageTrans whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PageTrans active()
+ * @method static \Illuminate\Database\Eloquent\Builder|PageTrans lang(?int $lang_id = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|PageTrans newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PageTrans newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PageTrans pageId(int $page_id)
+ * @method static \Illuminate\Database\Eloquent\Builder|PageTrans query()
+ * @method static \Illuminate\Database\Eloquent\Builder|PageTrans search($search, $threshold = null, $entireText = false, $entireTextOnly = false)
+ * @method static \Illuminate\Database\Eloquent\Builder|PageTrans searchRestricted($search, $threshold = null, $entireText = false, $entireTextOnly = false)
+ * @method static \Illuminate\Database\Eloquent\Builder|PageTrans whereActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PageTrans whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PageTrans whereDescriptionFooter($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PageTrans whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PageTrans whereLangId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PageTrans whereMetaDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PageTrans whereMetaKeywords($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PageTrans whereMetaTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PageTrans wherePageId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PageTrans whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PageTrans whereTitle($value)
  * @mixin \Eloquent
  */
 class PageTrans extends Model
 {
+    use Searchable;
+
     protected $fillable = [
         'page_id',
         'title',
@@ -52,94 +60,55 @@ class PageTrans extends Model
     public $timestamps = false;
 
     /**
-     * Select slugs
-     * @param $id
+     * Searchable rules.
+     * Columns and their priority in search results.
+     * Columns with higher values are more important.
+     * Columns with equal values have equal importance.
      * @return array
+     * @var array
      */
-    static function getSlugs($id)
+    protected function toSearchableArray(): array
     {
-        return PageTrans::where('page_id', $id)->where('active', 1)->pluck('slug', 'lang_id');
-    }
-
-    static function getByPageId($id, $lang_id = null)
-    {
-        $lang_id = $lang_id ?? config('app.locale_id');
-
-        return PageTrans::where('page_id', $id)->where('lang_id', $lang_id)->where('active', 1);
+        return [
+            'columns' => [
+                'title'              => 10,
+                'slug'               => 9,
+                'description'        => 9,
+                'description_footer' => 8,
+            ]
+        ];
     }
 
     /**
-     * Select translation by id
-     * @param $id
-     * @param bool|false $languagesActive
+     * Select fields
      * @return array
      */
-    static function getTrans($id, $languagesActive = false)
+    public function selectFields(): array
     {
-        $query = PageTrans::where('page_id', $id);
-        if ($languagesActive) {
-            $query->whereIn('lang_id', array_keys(config('app.locales')));
-        }
-
-        return $query->get();
+        return [
+            'title',
+            'slug',
+            'description',
+            'description_footer as short_desc',
+            'lang_id',
+            'active',
+        ];
     }
 
-    /**
-     * Select title by id and lang
-     * @param $id
-     * @param null $active
-     * @param null $lang_id
-     * @return array
-     * @internal param $ids
-     */
-    static function getTitle($id, $active = null, $lang_id = null)
+    public function scopePageId($query, int $page_id)
+    {
+        return $query->where('page_id', $page_id);
+    }
+
+    public function scopeLang($query, int $lang_id = null)
     {
         $lang_id = $lang_id ?? config('app.locale_id');
-        $query = PageTrans::where('lang_id', $lang_id);
-        if ($active) {
-            $query->where('active', 1);
-        }
-        if (is_array($id)) {
-            $query->whereIn('page_id', $id);
-        } else {
-            $query->where('page_id', $id);
-        }
-        $query->select('title', 'page_id');
 
-        return $query->pluck('title', 'page_id');
+        return $query->where('lang_id', $lang_id);
     }
 
-    /**
-     * Select slug by id and lang
-     * @param $id
-     * @param null $active
-     * @param null $lang_id
-     * @return array
-     * @internal param $ids
-     */
-    static function getSlug($id, $active = null, $lang_id = null)
+    public function scopeActive($query)
     {
-        $lang_id = $lang_id ?? config('app.locale_id');
-        $query = PageTrans::where('lang_id', $lang_id);
-        if ($active) {
-            $query->where('active', 1);
-        }
-        if (is_array($id)) {
-            $query->whereIn('page_id', $id);
-        } else {
-            $query->where('page_id', $id);
-        }
-
-        return $query->pluck('slug', 'page_id');
-    }
-
-
-    /**Get all active
-     * @param $id
-     * @return mixed
-     */
-    static function getActiveLang($id)
-    {
-        return PageTrans::where('page_id', $id)->pluck('active', 'lang_id');
+        return $query->where('active', 1);
     }
 }
