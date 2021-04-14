@@ -1,11 +1,10 @@
 <template>
     <ul class="navbar-nav position-relative">
         <li class="nav-item">
-            <a class="nav-link dropdown-toggle" href="#" role="button" @click.prevent="open_lang = !open_lang">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                 {{ currentLang }}
             </a>
-            <div :class="{'dropdown-menu dropdown-menu-dark dropdown-menu-end': true, show: open_lang}"
-                 v-if="showLanguages" data-bs-popper="none">
+            <div class="dropdown-menu dropdown-menu-dark dropdown-menu-end" v-show="showLanguages">
                 <a class="dropdown-item" href="#" v-for="lang in listLanguages" @click.prevent="setLocale(lang)">
                     {{ lang.title }}
                 </a>
