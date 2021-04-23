@@ -74,7 +74,7 @@ class ArticleResource extends JsonResource
             $pageSlug,
             $this->slug
         ];
-        return '/' . implode('/', $params);
+        return Str::start(implode('/', $params), '/');
     }
 
     private function srcset(): array

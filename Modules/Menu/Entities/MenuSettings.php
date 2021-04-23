@@ -21,6 +21,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|MenuSettings whereSizes($value)
  * @method static \Illuminate\Database\Eloquent\Builder|MenuSettings whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property string $name
+ * @property array $data
+ * @method static \Illuminate\Database\Eloquent\Builder|MenuSettings whereData($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MenuSettings whereName($value)
  */
 class MenuSettings extends Model
 {

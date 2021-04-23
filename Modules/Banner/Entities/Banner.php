@@ -40,6 +40,10 @@ use Modules\Banner\Traits\BannerTrait;
  * @property string|null $link
  * @method static \Illuminate\Database\Eloquent\Builder|Banner whereLink($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Banner whereMobileImage($value)
+ * @property int $priority
+ * @property string $position
+ * @method static \Illuminate\Database\Eloquent\Builder|Banner wherePosition($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Banner wherePriority($value)
  */
 class Banner extends Model
 {

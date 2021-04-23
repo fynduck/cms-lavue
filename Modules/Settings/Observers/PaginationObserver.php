@@ -2,6 +2,7 @@
 
 namespace Modules\Settings\Observers;
 
+use Illuminate\Support\Facades\Cache;
 use Modules\Article\Entities\Article;
 use Modules\Settings\Entities\Pagination;
 
@@ -15,7 +16,7 @@ class PaginationObserver
      */
     public function saved(Pagination $pagination)
     {
-//        \Cache::forget('manufacturers_page');
+        Cache::forget('search_' . $pagination->on);
     }
 
     /**
@@ -26,6 +27,6 @@ class PaginationObserver
      */
     public function deleted(Pagination $pagination)
     {
-//        \Cache::forget('manufacturers_page');
+        Cache::forget('search_' . $pagination->on);
     }
 }

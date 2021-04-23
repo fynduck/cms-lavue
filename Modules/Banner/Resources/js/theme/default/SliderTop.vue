@@ -8,7 +8,8 @@
         <div class="carousel-inner">
             <div :class="{'carousel-item': true, 'active': index === 0}" v-for="(item, index) in items" @click="toLink(item)">
                 <picture>
-                    <source :srcset="linkToImg(srcset)" :media="mediaWidth(srcset, srcKey)" v-for="(srcset, srcKey) in item.srcset">
+                    <source :srcset="linkToImg(srcset)" :media="mediaWidth(srcset, srcKey)"
+                            v-for="(srcset, srcKey) in item.srcset">
                     <img class="d-block lazy-img"
                          v-lazy.container="item.slide"
                          :alt="item.title"
@@ -65,20 +66,22 @@ export default {
         }
     },
     async fetch() {
-        let data = {
+        let params = {
             params: {
                 page_id: this.pageId,
                 type: this.pageType,
                 position: this.position
             }
         };
-        await axios.get(this.source, data).then(response => {
-            this.items = response.data.data;
-            if (typeof response.data.carousel_settings !== "undefined") {
-                this.carouselSettings = response.data.carousel_settings
+        try {
+            const {data} = await axios.get(this.source, params);
+
+            this.items = data.data;
+            if (typeof data.data.carousel_settings !== "undefined") {
+                this.carouselSettings = data.data.carousel_settings
             }
-        }).catch(() => {
-        });
+        } catch (e) {
+        }
     },
 
     methods: {

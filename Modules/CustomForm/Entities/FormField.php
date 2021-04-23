@@ -35,6 +35,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\CustomForm\Entities\FormField whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\CustomForm\Entities\FormField whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\CustomForm\Entities\FormField whereValidate($value)
+ * @property int|null $priority
+ * @method static \Illuminate\Database\Eloquent\Builder|FormField wherePriority($value)
  */
 class FormField extends Model
 {

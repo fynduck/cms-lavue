@@ -23,6 +23,10 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Banner\Entities\BannerTrans whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\Banner\Entities\BannerTrans whereTitle($value)
  * @mixin \Eloquent
+ * @property int $lang_id
+ * @property int $active
+ * @method static \Illuminate\Database\Eloquent\Builder|BannerTrans whereActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BannerTrans whereLangId($value)
  */
 class BannerTrans extends Model
 {

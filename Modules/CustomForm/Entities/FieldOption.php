@@ -27,6 +27,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\CustomForm\Entities\FieldOption whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\CustomForm\Entities\FieldOption whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\Modules\CustomForm\Entities\FieldOption whereValue($value)
+ * @property int|null $priority
+ * @method static \Illuminate\Database\Eloquent\Builder|FieldOption wherePriority($value)
  */
 class FieldOption extends Model
 {
