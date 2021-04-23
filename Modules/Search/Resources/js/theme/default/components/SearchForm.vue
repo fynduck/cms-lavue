@@ -5,13 +5,13 @@
               itemtype="https://schema.org/SearchAction">
             <meta itemprop="target" :content="`${appUrl}?q={q}`"/>
             <input class="form-control me-2" name="q" type="search" autocomplete="off" v-model="q" @input="search()"
-                   :placeholder="$t('search')"
-                   aria-label="Search" required itemprop="query">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">{{ $t('search') }}
+                   :placeholder="$t('search')" aria-label="Search" required itemprop="query" @focus="inputFocus()">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+                {{ $t('search') }}
             </button>
         </form>
         <div :class="['collapse live_search', showResults ? 'show' : '']" id="liveSearch">
-            <div class="list-group list-group-flush" @click="hideResult = false">
+            <div class="list-group list-group-flush">
                 <router-link :to="item.link" v-for="(item, key) in items" :key="key"
                              class="list-group-item list-group-item-action fw-bold">
                     {{ item.title }}
@@ -38,7 +38,7 @@ export default {
             return '/search-result'
         },
         showResults() {
-            return this.hideResult && this.items.length
+            return !this.hideResult && this.items.length
         }
     },
     data() {
@@ -49,6 +49,11 @@ export default {
             timeout: null,
             hideResult: true
         }
+    },
+    mounted() {
+        this.$root.$el.addEventListener('click', () => {
+            this.hideResult = true
+        })
     },
     methods: {
         search() {
@@ -70,8 +75,16 @@ export default {
             if (this.q) {
                 axios.get(this.searchResult, data).then(response => {
                     this.items = response.data.data
+                    this.hideResult = false;
                 })
             }
+        },
+        inputFocus() {
+            setTimeout(() => {
+                if (this.items.length) {
+                    this.hideResult = false;
+                }
+            }, 100)
         }
     }
 }
