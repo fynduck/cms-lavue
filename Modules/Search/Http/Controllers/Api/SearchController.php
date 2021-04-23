@@ -2,42 +2,75 @@
 
 namespace Modules\Search\Http\Controllers\Api;
 
+use App\Http\Controllers\AdminController;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Routing\Controller;
-use Modules\Search\Entities\Search;
+use Illuminate\Support\Facades\Cache;
+use Modules\Search\Entities\SearchModule;
+use Modules\Search\Services\SearchService;
+use Nwidart\Modules\Facades\Module;
 
-class SearchController extends Controller
+class SearchController extends AdminController
 {
-    /**
-     * Display a listing of the resource.
-     * @return Response
-     */
-    public function searchData()
+    protected $modules = [];
+
+    protected $searchService;
+
+    public function __construct(SearchService $searchService)
     {
-        $searchData = Search::get(['query', 'count']);
+        $this->middleware('admin');
 
-        $data['labels'] = $searchData->pluck('query');
-        $backgroundColor = [];
-        for ($i = 0; $i <= $searchData->count(); $i++)
-            $backgroundColor[] = $this->generateRandomColor();
+        $this->searchService = $searchService;
 
-        $data['datasets'] = [
-            'backgroundColor' => $backgroundColor,
-            'data'            => $searchData->pluck('count')
-        ];
-
-        return $data;
+        foreach (Module::getCached() as $module) {
+            $this->modules[$module['name']] = $module['path'];
+        }
     }
 
-    private function generateRandomColor()
+    /**
+     * Display a listing of the resource.
+     * @return JsonResponse
+     */
+    public function index(): JsonResponse
     {
-        $color = '#';
-        $colorHexLighter = ["9", "A", "B", "C", "D", "E", "F"];
+        $modules = $this->searchService->listModules($this->modules);
 
-        for ($x = 0; $x < 6; $x++)
-            $color .= $colorHexLighter[array_rand($colorHexLighter, 1)];
+        return response()->json($modules);
+    }
 
-        return substr($color, 0, 7);
+    /**
+     * Store a newly created resource in storage.
+     * @param Request $request
+     * @return bool
+     */
+    public function store(Request $request): bool
+    {
+        SearchModule::truncate();
+
+        foreach ($request->all() as $module) {
+            if (!array_key_exists($module['name'], $this->modules)) {
+                continue;
+            }
+
+            $models = [];
+            foreach ($module['models'] as $model) {
+                if ($model['active']) {
+                    $models[] = $model['name'];
+                }
+            }
+
+            if ($models) {
+                SearchModule::create(
+                    [
+                        'name'   => $module['name'],
+                        'models' => $models
+                    ]
+                );
+            }
+        }
+
+        Cache::forget('search_modules');
+
+        return true;
     }
 }

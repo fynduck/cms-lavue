@@ -73,6 +73,7 @@ export default {
                 'UserGroup',
                 'User',
                 'Translate',
+                'Settings',
             ]
         }
     },

@@ -74,7 +74,7 @@ export default {
         ...mapGetters({
             locale: 'lang/locale',
             logo: 'settings/logo'
-        }),
+        })
     },
     async fetch() {
         try {

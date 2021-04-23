@@ -13,10 +13,10 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Search\Http\Controllers\Api\FrontController;
+use Modules\Search\Http\Controllers\Api\SearchController;
 
-Route::get('query', 'FrontController@liveSearch')->name('query');
 Route::get('search-result', [FrontController::class, 'searchResult'])->name('search-result');
 
 Route::prefix('admin')->group(function () {
-    Route::get('search-data', 'SearchController@searchData')->name('search-info');
+    Route::resource('search', SearchController::class)->only(['index', 'store']);
 });

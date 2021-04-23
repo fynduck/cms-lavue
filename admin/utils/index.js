@@ -89,6 +89,10 @@ export function moduleIconsSort(name, key) {
             'iconClass': ['fas', 'exchange-alt'],
             'sort': 50
         },
+        'search': {
+            'iconClass': ['fas', 'search'],
+            'sort': 51
+        },
         'module': {
             'iconClass': ['fas', 'puzzle-piece'],
             'sort': 55

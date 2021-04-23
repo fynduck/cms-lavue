@@ -23,11 +23,18 @@
 
 <script>
 import axios from "axios";
+import {mapGetters} from "vuex";
 
 export default {
     name: "SearchForm",
     computed: {
+        ...mapGetters({
+            locale: 'lang/locale'
+        }),
         searchAction() {
+            return '/' + this.locale + '/search'
+        },
+        searchResult() {
             return '/search-result'
         },
         showResults() {
@@ -61,7 +68,7 @@ export default {
             };
 
             if (this.q) {
-                axios.get(this.searchAction, data).then(response => {
+                axios.get(this.searchResult, data).then(response => {
                     this.items = response.data.data
                 })
             }

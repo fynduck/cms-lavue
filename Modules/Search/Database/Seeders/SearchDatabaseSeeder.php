@@ -19,19 +19,11 @@ class SearchDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        $pageSearch = Page::firstOrCreate(['method' => 'search', 'module' => 'Search']);
-
-        $languages = Language::all();
-        foreach ($languages as $lang) {
-            PageTrans::firstOrCreate(
-                [
-                    'page_id' => $pageSearch->id,
-                    'title'   => 'Search',
-                    'slug'    => 'search',
-                    'lang_id' => $lang->id,
-                    'active'  => 1
-                ]
-            );
-        }
+        $this->call(
+            [
+                SeedPageTableSeeder::class,
+                SeedPaginationTableSeeder::class
+            ]
+        );
     }
 }

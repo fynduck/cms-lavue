@@ -2,14 +2,13 @@
 
 namespace Modules\Module\Http\Controllers\Api;
 
+use App\Http\Controllers\AdminController;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Artisan;
-use Modules\Module\Transformers\ModuleRespurce;
 use Nwidart\Modules\Facades\Module;
 
-class ModuleController extends Controller
+class ModuleController extends AdminController
 {
     public function __construct()
     {
@@ -38,15 +37,6 @@ class ModuleController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     * @return Renderable
-     */
-    public function create()
-    {
-        return view('module::create');
-    }
-
-    /**
      * Store a newly created resource in storage.
      * @param Request $request
      * @return Renderable
@@ -54,26 +44,6 @@ class ModuleController extends Controller
     public function store(Request $request)
     {
         //
-    }
-
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function show($id)
-    {
-        return view('module::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
-     */
-    public function edit($id)
-    {
-        return view('module::edit');
     }
 
     /**
