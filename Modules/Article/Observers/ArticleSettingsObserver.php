@@ -4,7 +4,6 @@ namespace Modules\Article\Observers;
 
 use Illuminate\Support\Facades\Cache;
 use Modules\Article\Entities\ArticleSettings;
-use Modules\Article\Jobs\RegenerateImageSizes;
 
 class ArticleSettingsObserver
 {
@@ -16,8 +15,8 @@ class ArticleSettingsObserver
      */
     public function saved(ArticleSettings $articleSettings)
     {
-        RegenerateImageSizes::dispatch();
-        Cache::forget('article_sizes');
+        Cache::forget($articleSettings->name);
+        Cache::forget('article_' . $articleSettings->name);
     }
 
     /**
@@ -28,6 +27,7 @@ class ArticleSettingsObserver
      */
     public function deleted(ArticleSettings $articleSettings)
     {
-        Cache::forget('article_sizes');
+        Cache::forget($articleSettings->name);
+        Cache::forget('article_' . $articleSettings->name);
     }
 }

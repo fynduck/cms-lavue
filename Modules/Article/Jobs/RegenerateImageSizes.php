@@ -20,12 +20,18 @@ class RegenerateImageSizes implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
+    protected $type;
+
+    protected $settingsName;
+
     /**
      * Create a new job instance.
      */
-    public function __construct()
+    public function __construct(string $type, string $settingsName)
     {
-        //
+        $this->type = $type;
+
+        $this->settingsName = $settingsName;
     }
 
     /**
@@ -36,19 +42,28 @@ class RegenerateImageSizes implements ShouldQueue
      */
     public function handle(ArticleService $articleService)
     {
-        $imageSettings = ArticleSettings::where('name', 'sizes')->first();
+        $imageSettings = ArticleSettings::where('name', $this->settingsName)->first();
         if ($imageSettings) {
             $data = $articleService->prepareImgParams($imageSettings);
-            $articles = Article::where('image', '!=', '')->get(['image']);
+            $articles = Article::where('type', $this->type)
+                ->where('image', '!=', '')
+                ->get(['id', 'image']);
+
             foreach ($articles as $article) {
                 if ($article->image) {
                     $articleService->deleteImages($article->image);
                     $imageName = $articleService->getOriginalImageName($article->image);
-                    $path = Storage::get(Article::FOLDER_IMG . '/' . $imageName);
-                    $articleService->generateImageSizes($path, $data, $imageName);
-
                     $articleService->deleteImages($imageName);
+                    $path = Storage::get(Article::FOLDER_IMG . '/' . $imageName);
+                    $sizeSaveName = $articleService->setExtensionByEncode($imageName, $data['encode']);
+                    $articleService->generateImageSizes($path, $data, $sizeSaveName);
+
                     $articleService->generateReserveImg($data, $imageName, false);
+
+                    if ($sizeSaveName !== $article->image) {
+                        $article->image = $sizeSaveName;
+                        $article->save();
+                    }
                 }
             }
         }

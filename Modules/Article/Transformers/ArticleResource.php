@@ -5,10 +5,12 @@ namespace Modules\Article\Transformers;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Str;
 use Modules\Article\Entities\ArticleTrans;
-use Modules\Article\Services\ArticleService;
+use Modules\Article\Traits\ArticleImageTrait;
 
 class ArticleResource extends JsonResource
 {
+    use ArticleImageTrait;
+
     private $pageUrlsOnLang;
 
     public function __construct($resource)
@@ -55,14 +57,13 @@ class ArticleResource extends JsonResource
     private function imgObj(): array
     {
         return [
-            'src'     => (new ArticleService())->linkImage($this->image, 'biggest_size'),
-            'loading' => (new ArticleService())->linkImage($this->image, null, true)
+            'src'     => $this->linkImage($this->image, 'biggest_size'),
+            'loading' => $this->linkImage($this->image, null, true)
         ];
     }
 
     private function generateLink(): string
     {
-        $pageSlug = null;
         if ($this->pageUrlsOnLang && array_key_exists($this->type, $this->pageUrlsOnLang)) {
             $pageSlug = cache('urls_pages_' . config('app.locale_id'))[$this->type];
         } else {
@@ -79,7 +80,7 @@ class ArticleResource extends JsonResource
 
     private function srcset(): array
     {
-        return (new ArticleService())->linkImages($this->image);
+        return $this->linkImages($this->image);
     }
 
     private function generateMiniDescription(): string
@@ -88,11 +89,9 @@ class ArticleResource extends JsonResource
             return '';
         }
 
-        $description = null;
+        $description = $this->description;
         if ($this->short_desc) {
             $description = $this->short_desc;
-        } else {
-            $description = $this->description;
         }
 
         return html_entity_decode(Str::limit(strip_tags($description), 160));

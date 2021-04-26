@@ -113,10 +113,10 @@ class BannerService
     }
 
     /**
-     * @param $nameSize
+     * @param string $nameSize
      * @return array
      */
-    public function sizeSettings($nameSize): array
+    public function sizeSettings(string $nameSize): array
     {
         $settings = Cache::remember(
             "banner_$nameSize",
@@ -334,6 +334,7 @@ class BannerService
             $path = Storage::get(Banner::FOLDER_IMG . '/' . $imageName);
 
             $biggestSize = collect($data['sizes'])->sortBy('width')->sortBy('height')->last();
+            $data['sizes'] = [];
             $data['sizes'][$biggestSize['name']] = $biggestSize;
             $data['encode'] = explode('_', $imageName)[0];
 

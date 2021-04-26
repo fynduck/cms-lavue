@@ -5,10 +5,12 @@ namespace Modules\Article\Transformers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
-use Modules\Article\Services\ArticleService;
+use Modules\Article\Traits\ArticleImageTrait;
 
 class ArticleFormResource extends JsonResource
 {
+    use ArticleImageTrait;
+
     /**
      * Transform the resource into an array.
      *
@@ -38,7 +40,7 @@ class ArticleFormResource extends JsonResource
     {
         $old_image = null;
         if ($this->image) {
-            $old_image = (new ArticleService())->linkImage($this->image, null, true);
+            $old_image = $this->linkImage($this->image, null, true);
         }
 
         return $old_image;

@@ -14,12 +14,14 @@ class ArticleValidate extends FormRequest
     public function rules()
     {
         return [
-            'items.' . config('app.fallback_locale_id') . '.title' => 'required|unique:article_trans,title,' . $this->route(
-                    'article'
-                ) . ',article_id',
-            'items.' . config('app.fallback_locale_id') . '.slug'  => 'required|unique:article_trans,slug,' . $this->route(
-                    'article'
-                ) . ',article_id',
+            'items.' . config('app.fallback_locale_id') . '.title' => [
+                'required',
+                'unique:article_trans,title,' . $this->route('article') . ',article_id'
+            ],
+            'items.' . config('app.fallback_locale_id') . '.slug'  => [
+                'required',
+                'unique:article_trans,slug,' . $this->route('article') . ',article_id'
+            ],
             'type'                                                 => 'required',
         ];
     }

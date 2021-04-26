@@ -53,11 +53,16 @@ class RegenerateImageSizes implements ShouldQueue
                 if ($banner->image) {
                     $bannerService->deleteImages($banner->image);
                     $imageName = $bannerService->getOriginalImageName($banner->image);
-                    $path = Storage::get(Banner::FOLDER_IMG . '/' . $imageName);
-                    $bannerService->generateImageSizes($path, $data, $imageName);
-
                     $bannerService->deleteImages($imageName);
+                    $path = Storage::get(Banner::FOLDER_IMG . '/' . $imageName);
+                    $sizeSaveName = $bannerService->setExtensionByEncode($imageName, $data['encode']);
+                    $bannerService->generateImageSizes($path, $data, $sizeSaveName);
+
                     $bannerService->generateReserveImg($data, $imageName, false);
+
+                    if ($banner->image !== $sizeSaveName) {
+                        $banner->image = $sizeSaveName;
+                    }
                 }
 
                 if ($banner->mobile_image) {
@@ -73,12 +78,19 @@ class RegenerateImageSizes implements ShouldQueue
                         $imgSettings['sizes'] = $mobileSizes;
                     }
                     $imageName = $bannerService->getOriginalImageName($banner->mobile_image);
-                    $path = Storage::get(Banner::FOLDER_IMG . '/' . $imageName);
-                    $bannerService->generateImageSizes($path, $imgSettings, $imageName);
-
                     $bannerService->deleteImages($imageName);
+                    $path = Storage::get(Banner::FOLDER_IMG . '/' . $imageName);
+                    $sizeSaveName = $bannerService->setExtensionByEncode($imageName, $data['encode']);
+                    $bannerService->generateImageSizes($path, $imgSettings, $sizeSaveName);
+
                     $bannerService->generateReserveImg($data, $imageName, false);
+
+                    if ($banner->mobile_image !== $sizeSaveName) {
+                        $banner->mobile_image = $sizeSaveName;
+                    }
                 }
+
+                $banner->save();
             }
         }
     }
