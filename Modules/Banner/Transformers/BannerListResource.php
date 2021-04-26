@@ -5,11 +5,13 @@ namespace Modules\Banner\Transformers;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Cache;
 use Modules\Banner\Entities\Banner;
-use Modules\Banner\Services\BannerService;
+use Modules\Banner\Traits\BannerImageTrait;
 use Modules\Language\Entities\Language;
 
 class BannerListResource extends JsonResource
 {
+    use BannerImageTrait;
+
     /**
      * Transform the resource into an array.
      *
@@ -38,7 +40,7 @@ class BannerListResource extends JsonResource
      */
     private function pathImage(): string
     {
-        return (new BannerService())->linkImage($this->image, $this->position, null, true);
+        return $this->linkImage($this->image, $this->position, null, true);
     }
 
     /**

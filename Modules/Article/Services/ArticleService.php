@@ -17,22 +17,11 @@ use Illuminate\Support\Str;
 use Modules\Article\Entities\Article;
 use Modules\Article\Entities\ArticleSettings;
 use Modules\Article\Entities\ArticleTrans;
+use Modules\Article\Traits\ArticleImageTrait;
 
 class ArticleService
 {
-    public static function parseArticle(&$item, string $page = '', string $size = 'xs')
-    {
-        if (!$page) {
-            $page = cache('urls_pages_' . config('app.locale_id'))[$item->type];
-        }
-
-        $item->img = 'https://via.placeholder.com/480/250';
-        if ($item->image) {
-            $item->img = asset('storage/' . Article::FOLDER_IMG . '/' . $size . '/' . $item->image);
-        }
-
-        $item->link = route('pages', [$page, $item->url]);
-    }
+    use ArticleImageTrait;
 
     /**
      * @param Request $request
@@ -65,6 +54,10 @@ class ArticleService
         );
     }
 
+    /**
+     * @param int $id
+     * @param array $items
+     */
     public function addUpdateTrans(int $id, array $items)
     {
         foreach ($items as $lang_id => $item) {
@@ -87,6 +80,14 @@ class ArticleService
         }
     }
 
+    /**
+     * @param $limit
+     * @param $typeName
+     * @param $value
+     * @param $q
+     * @param $selected
+     * @return mixed
+     */
     public function searchArticles(&$limit, $typeName, $value, $q, $selected)
     {
         $current = ArticleTrans::selectRaw('article_id AS id, title, ' . $typeName);
@@ -102,6 +103,10 @@ class ArticleService
         return $current;
     }
 
+    /**
+     * @param Request $request
+     * @return array
+     */
     public function saveImages(Request $request): array
     {
         $nameImages = [
@@ -141,17 +146,21 @@ class ArticleService
         return $nameImages;
     }
 
-    public function settings(): array
+    /**
+     * @param string $nameSize
+     * @return array
+     */
+    public function sizeSettings(string $nameSize): array
     {
         $settings = Cache::remember(
-            'article_sizes',
+            "article_$nameSize",
             now()->addDay(),
-            function () {
-                return ArticleSettings::where('name', 'sizes')->first();
+            function () use ($nameSize) {
+                return ArticleSettings::where('name', $nameSize)->first();
             }
         );
 
-        $data = [];
+        $data = $this->defaultSizeSettings();
         if ($settings && !empty($settings->data['sizes'])) {
             $data = $settings->data;
             $sizes = [];
@@ -175,6 +184,9 @@ class ArticleService
         return $data;
     }
 
+    /**
+     * @return array
+     */
     public function defaultSizeSettings(): array
     {
         return [
@@ -192,123 +204,6 @@ class ArticleService
             'background' => null,
             'sizes'      => []
         ];
-    }
-
-    /**
-     * Get image link by size
-     * @param string|null $image
-     * @param null $size
-     * @param bool $first
-     * @return string
-     */
-    public function linkImage(?string $image, $size = null, bool $first = false): string
-    {
-        if (!$image) {
-            return asset('img/placeholder.jpg');
-        }
-
-        if (!$size && !$first) {
-            $image = $this->getOriginalImageName($image);
-            return asset('storage/' . Article::FOLDER_IMG . '/' . $image);
-        }
-
-        $settings = Cache::remember(
-            'article_sizes',
-            now()->addDay(),
-            function () {
-                return ArticleSettings::where('name', 'sizes')->first();
-            }
-        );
-
-        if ($settings && !empty($settings->data['sizes'])) {
-            $sortedSizes = collect($settings->data['sizes'])->sortBy('width')->sortBy('height');
-            if ($first) {
-                return asset('storage/' . Article::FOLDER_IMG . '/' . $sortedSizes->first()['name'] . '/' . $image);
-            }
-
-            if (array_key_exists($size, $settings->data['sizes'])) {
-                return asset('storage/' . Article::FOLDER_IMG . '/' . $size . '/' . $image);
-            } else {
-                $image = $this->getOriginalImageName($image);
-                return asset('storage/' . Article::FOLDER_IMG . '/' . $sortedSizes->last()['name'] . '/' . $image);
-            }
-        }
-
-        return asset('storage/' . Article::FOLDER_IMG . '/' . $image);
-    }
-
-    /**
-     * Get all links with image size
-     * @param $image
-     * @param bool $srcset
-     * @return array
-     */
-    public function linkImages($image, $srcset = true): array
-    {
-        $images = [];
-
-        $settings = Cache::remember(
-            'article_sizes',
-            now()->addDay(),
-            function () {
-                return ArticleSettings::where('name', 'sizes')->first();
-            }
-        );
-
-        if ($image && $settings && !empty($settings->data['sizes'])) {
-            $sortedSizes = collect($settings->data['sizes'])->sortByDesc('width')->sortByDesc('height');
-            foreach ($sortedSizes as $size => $sizes) {
-                $src = asset('storage/' . Article::FOLDER_IMG . '/' . $size . '/' . $image);
-                if ($srcset) {
-                    $src .= ' ' . $sizes['width'] . 'w';
-                }
-
-                $images[] = $src;
-            }
-        }
-
-        return $images;
-    }
-
-    /**
-     * @param $imageSettings
-     * @return array
-     */
-    public function prepareImgParams($imageSettings): array
-    {
-        $data['sizes'] = [];
-        $data['resizeMethod'] = null;
-        $data['greyscale'] = false;
-        $data['blur'] = 1;
-        $data['brightness'] = 0;
-        $data['background'] = null;
-        $data['optimize'] = false;
-        $data['encode'] = null;
-
-        if ($imageSettings && !empty($imageSettings->data['sizes'])) {
-            $data['sizes'] = $imageSettings->data['sizes'];
-            $data['resizeMethod'] = $imageSettings->data['action'];
-            if (!empty($imageSettings->data['greyscale'])) {
-                $data['greyscale'] = $imageSettings->data['greyscale'];
-            }
-            if (!empty($imageSettings->data['blur'])) {
-                $data['blur'] = $imageSettings->data['blur'];
-            }
-            if (!empty($imageSettings->data['brightness'])) {
-                $data['brightness'] = $imageSettings->data['brightness'];
-            }
-            if (!empty($imageSettings->data['background'])) {
-                $data['background'] = $imageSettings->data['background'];
-            }
-            if (!empty($imageSettings->data['optimize'])) {
-                $data['optimize'] = $imageSettings->data['optimize'];
-            }
-            if (!empty($imageSettings->data['encode'])) {
-                $data['encode'] = $imageSettings->data['encode'];
-            }
-        }
-
-        return $data;
     }
 
     /**
@@ -373,37 +268,6 @@ class ArticleService
     }
 
     /**
-     * @param string $file
-     * @return bool
-     */
-    public function isBase64(string $file): bool
-    {
-        return (bool)preg_match("/data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+).base64,.*/", $file);
-    }
-
-    /**
-     * @param string $imageName
-     * @return string
-     */
-    public function getOriginalImageName(string $imageName): string
-    {
-        $explodedImage = explode('_', $imageName);
-        $extension = $explodedImage[0];
-
-        if (in_array($extension, Article::FORMATS)) {
-            $imageName = implode('_', $explodedImage);
-            $explodedImage = explode('.', $imageName);
-
-            //Extract extension
-            array_pop($explodedImage);
-
-            $imageName = implode('.', $explodedImage) . '.' . $extension;
-        }
-
-        return $imageName;
-    }
-
-    /**
      * Generate reserve image size in case format is webp
      * @param array $data
      * @param string $imageName
@@ -418,6 +282,7 @@ class ArticleService
             $path = Storage::get(Article::FOLDER_IMG . '/' . $imageName);
 
             $biggestSize = collect($data['sizes'])->sortBy('width')->sortBy('height')->last();
+            $data['sizes'] = [];
             $data['sizes'][$biggestSize['name']] = $biggestSize;
             $data['encode'] = explode('_', $imageName)[0];
 

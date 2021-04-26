@@ -5,11 +5,13 @@ namespace Modules\Article\Transformers;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Cache;
 use Modules\Article\Entities\Article;
-use Modules\Article\Services\ArticleService;
+use Modules\Article\Traits\ArticleImageTrait;
 use Modules\Language\Entities\Language;
 
 class ArticleListResource extends JsonResource
 {
+    use ArticleImageTrait;
+
     /**
      * Transform the resource into an array.
      *
@@ -38,7 +40,7 @@ class ArticleListResource extends JsonResource
      */
     private function image(): string
     {
-        return (new ArticleService())->linkImage($this->image, null, true);
+        return $this->linkImage($this->image, null, true);
     }
 
     /**

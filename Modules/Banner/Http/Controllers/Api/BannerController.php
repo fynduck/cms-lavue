@@ -64,29 +64,28 @@ class BannerController extends AdminController
     /**
      * Store a newly created resource in storage.
      * @param BannerValidate $request
-     * @param BannerService $bannersService
      * @return bool
      * @throws Exception
      */
-    public function store(BannerValidate $request, BannerService $bannersService): bool
+    public function store(BannerValidate $request): bool
     {
         /**
          * Save image(s)
          */
-        $nameImages = $bannersService->saveImages($request);
+        $nameImages = $this->bannerService->saveImages($request);
 
         /**
          * Create banner
          */
         DB::beginTransaction();
-        $banner = $bannersService->addUpdate($request, $nameImages);
+        $banner = $this->bannerService->addUpdate($request, $nameImages);
 
-        $bannersService->addUpdateTrans($banner, $request->get('items'));
+        $this->bannerService->addUpdateTrans($banner, $request->get('items'));
 
         /**
          * Add show pages
          */
-        $bannersService->addUpdateShow($banner->id, $request->get('pagesShow'));
+        $this->bannerService->addUpdateShow($banner->id, $request->get('pagesShow'));
         DB::commit();
 
         return true;
@@ -115,30 +114,29 @@ class BannerController extends AdminController
     /**
      * Update the specified resource in storage.
      * @param BannerValidate $request
-     * @param BannerService $bannersService
      * @param Banner $banner
      * @return bool
      * @throws Throwable
      */
-    public function update(BannerValidate $request, BannerService $bannersService, Banner $banner): bool
+    public function update(BannerValidate $request, Banner $banner): bool
     {
         /**
          * Save image(s)
          */
-        $nameImages = $bannersService->saveImages($request);
+        $nameImages = $this->bannerService->saveImages($request);
 
         /**
          * Update banner
          */
         DB::beginTransaction();
-        $bannersService->addUpdate($request, $nameImages, $banner->id);
+        $this->bannerService->addUpdate($request, $nameImages, $banner->id);
 
-        $bannersService->addUpdateTrans($banner, $request->get('items'));
+        $this->bannerService->addUpdateTrans($banner, $request->get('items'));
 
         /**
          * Add show pages
          */
-        $bannersService->addUpdateShow($banner->id, $request->get('pagesShow'));
+        $this->bannerService->addUpdateShow($banner->id, $request->get('pagesShow'));
         DB::commit();
 
         return true;

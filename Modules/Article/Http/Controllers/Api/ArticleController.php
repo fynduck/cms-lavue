@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Modules\Article\Entities\Article;
 use Modules\Article\Entities\ArticleSettings;
 use Modules\Article\Http\Requests\SizeValidate;
+use Modules\Article\Jobs\RegenerateImageSizes;
 use Modules\Article\Services\ArticleService;
 use Modules\Article\Http\Requests\ArticleValidate;
 use Modules\Article\Transformers\ArticleFormResource;
@@ -16,9 +17,6 @@ use Modules\Language\Entities\Language;
 
 class ArticleController extends AdminController
 {
-
-    protected $types;
-
     protected $articleService;
 
     public function __construct(ArticleService $articleService)
@@ -26,13 +24,6 @@ class ArticleController extends AdminController
         $this->middleware('admin');
 
         $this->articleService = $articleService;
-
-        foreach (Article::getTypes() as $key => $type) {
-            $this->types[] = [
-                'value' => $key,
-                'text'  => $type,
-            ];
-        }
     }
 
     /**
@@ -47,9 +38,14 @@ class ArticleController extends AdminController
             ->orderBy('priority')
             ->orderBy('updated_at', 'DESC')->paginate(25);
 
+        $sizeSettings = [];
+        foreach (Article::getTypes() as $type => $title) {
+            $sizeSettings[$type] = $this->articleService->sizeSettings($type . '_sizes');
+        }
+
         $additional = [
             'languages' => Language::whereActive(1)->pluck('name', 'id'),
-            'settings'  => $this->articleService->settings()
+            'settings'  => array_filter($sizeSettings)
         ];
 
         return ArticleListResource::collection($articles)->additional($additional);
@@ -91,8 +87,16 @@ class ArticleController extends AdminController
             $item = new Article();
         }
 
+        $types = [];
+        foreach (Article::getTypes() as $key => $type) {
+            $types[] = [
+                'value' => $key,
+                'text'  => $type,
+            ];
+        }
+
         $additional = [
-            'types' => $this->types
+            'types' => $types
         ];
 
         return (new ArticleFormResource($item))->additional($additional);
@@ -155,7 +159,10 @@ class ArticleController extends AdminController
     {
         $data = $this->articleService->prepareSizeSettingsToSave($request);
 
-        ArticleSettings::updateOrCreate(['name' => 'sizes'], ['data' => $data]);
+        $settingsName = $request->get('type') . '_sizes';
+        ArticleSettings::updateOrCreate(['name' => $settingsName], ['data' => $data]);
+
+        RegenerateImageSizes::dispatch($request->get('type'), $settingsName);
 
         return true;
     }

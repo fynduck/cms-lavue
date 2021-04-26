@@ -113,7 +113,7 @@ export default {
             filter: null,
             loading: false,
             languages: {},
-            settings: [],
+            settings: {},
             timeout: null,
             confirmWindow: {
                 confirm: null,

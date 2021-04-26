@@ -15,7 +15,8 @@ class SizeValidate extends FormRequest
     {
         return [
             'sizes'  => 'required',
-            'action' => 'required'
+            'action' => 'required',
+            'type'   => 'required'
         ];
     }
 

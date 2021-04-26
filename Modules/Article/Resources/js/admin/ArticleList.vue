@@ -113,20 +113,7 @@ export default {
             filter: null,
             loading: false,
             languages: {},
-            settings: {
-                ratios: {
-                    width: 0,
-                    height: 0,
-                },
-                ratio: false,
-                action: 'resize-crop',
-                optimize: null,
-                greyscale: null,
-                blur: null,
-                brightness: null,
-                background: null,
-                sizes: []
-            },
+            settings: {},
             timeout: null,
             confirmWindow: {
                 confirm: null,
@@ -221,7 +208,7 @@ export default {
                 this.total = response.data.meta.total;
                 this.items = response.data.data;
                 this.languages = response.data.languages;
-                if (response.data.settings.sizes) {
+                if (Object.keys(response.data.settings).length) {
                     this.settings = response.data.settings;
                 }
                 this.loading = false;
