@@ -57,8 +57,8 @@ class ArticleResource extends JsonResource
     private function imgObj(): array
     {
         return [
-            'src'     => $this->linkImage($this->image, 'biggest_size'),
-            'loading' => $this->linkImage($this->image, null, true)
+            'src'     => $this->linkImage($this->image, $this->type, 'biggest_size'),
+            'loading' => $this->linkImage($this->image, $this->type, null, true)
         ];
     }
 
@@ -80,7 +80,7 @@ class ArticleResource extends JsonResource
 
     private function srcset(): array
     {
-        return $this->linkImages($this->image);
+        return $this->linkImages($this->image, $this->type);
     }
 
     private function generateMiniDescription(): string

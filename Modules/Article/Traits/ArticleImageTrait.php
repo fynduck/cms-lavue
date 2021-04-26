@@ -108,11 +108,12 @@ trait ArticleImageTrait
     /**
      * Get image link by size
      * @param string|null $image
+     * @param string $type
      * @param null $size
      * @param bool $first
      * @return string
      */
-    public function linkImage(?string $image, $size = null, bool $first = false): string
+    public function linkImage(?string $image, string $type, $size = null, bool $first = false): string
     {
         if (!$image) {
             return asset('img/placeholder.jpg');
@@ -124,10 +125,10 @@ trait ArticleImageTrait
         }
 
         $settings = Cache::remember(
-            'article_sizes',
+            "article_{$type}_sizes",
             now()->addDay(),
-            function () {
-                return ArticleSettings::where('name', 'sizes')->first();
+            function () use ($type){
+                return ArticleSettings::where('name', "{$type}_sizes")->first();
             }
         );
 
@@ -151,18 +152,19 @@ trait ArticleImageTrait
     /**
      * Get all links with image size
      * @param $image
+     * @param string $type
      * @param bool $srcset
      * @return array
      */
-    public function linkImages($image, $srcset = true): array
+    public function linkImages($image, string $type, $srcset = true): array
     {
         $images = [];
 
         $settings = Cache::remember(
-            'article_sizes',
+                    "article_{$type}_sizes",
             now()->addDay(),
-            function () {
-                return ArticleSettings::where('name', 'sizes')->first();
+            function () use ($type){
+                return ArticleSettings::where('name', "${$type}_sizes")->first();
             }
         );
 
