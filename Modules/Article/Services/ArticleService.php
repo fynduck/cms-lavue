@@ -117,12 +117,13 @@ class ArticleService
             $imgName = $request->get('items')[config('app.fallback_locale_id')]['title'];
         }
 
+        $type = $request->get('type') . '_sizes';
         if ($request->get('image') && $this->isBase64($request->get('image'))) {
             $settings = Cache::remember(
-                'article_sizes',
+                "article_$type",
                 now()->addDay(),
-                function () {
-                    return ArticleSettings::where('name', 'sizes')->first();
+                function () use ($type) {
+                    return ArticleSettings::where('name', $type)->first();
                 }
             );
 

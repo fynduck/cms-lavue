@@ -40,7 +40,7 @@ class ArticleFormResource extends JsonResource
     {
         $old_image = null;
         if ($this->image) {
-            $old_image = $this->linkImage($this->image, null, true);
+            $old_image = $this->linkImage($this->image, $this->type, null, true);
         }
 
         return $old_image;
