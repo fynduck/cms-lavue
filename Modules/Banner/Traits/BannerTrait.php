@@ -44,6 +44,11 @@ trait BannerTrait
                       'banner_trans.title', 'banner_trans.description']);
     }
 
+    /**
+     * Filter by range date
+     * @param $query
+     * @return mixed
+     */
     public function scopeBetweenDate($query)
     {
         return $query->where(function ($q) {

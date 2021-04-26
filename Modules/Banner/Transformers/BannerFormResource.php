@@ -5,10 +5,12 @@ namespace Modules\Banner\Transformers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Collection;
-use Modules\Banner\Services\BannerService;
+use Modules\Banner\Traits\BannerImageTrait;
 
 class BannerFormResource extends JsonResource
 {
+    use BannerImageTrait;
+
     /**
      * Transform the resource into an array.
      *
@@ -45,7 +47,7 @@ class BannerFormResource extends JsonResource
             return null;
         }
 
-        return (new BannerService())->linkImage($image, $this->position, null, true);
+        return $this->linkImage($image, $this->position, null, true);
     }
 
     private function getItems(): Collection
