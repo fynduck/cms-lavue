@@ -44,14 +44,4 @@ class BannerTrans extends Model
     {
         return BannerTrans::where('banner_id', $id)->get();
     }
-
-    /**
-     * Get all status
-     * @param $id
-     * @return mixed
-     */
-    static function getStatusLang($id)
-    {
-        return BannerTrans::where('banner_id', $id)->pluck('status', 'lang');
-    }
 }

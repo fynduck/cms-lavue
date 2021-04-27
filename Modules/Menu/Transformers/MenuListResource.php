@@ -6,10 +6,12 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Cache;
 use Modules\Language\Entities\Language;
 use Modules\Menu\Entities\Menu;
-use Modules\Menu\Services\MenuService;
+use Modules\Menu\Traits\MenuImageTrait;
 
 class MenuListResource extends JsonResource
 {
+    use MenuImageTrait;
+
     /**
      * Transform the resource into an array.
      *
@@ -39,7 +41,7 @@ class MenuListResource extends JsonResource
      */
     private function image(): string
     {
-        return (new MenuService())->linkImage($this->image, null, true);
+        return $this->linkImage($this->image, $this->position, null, true);
     }
 
     /**

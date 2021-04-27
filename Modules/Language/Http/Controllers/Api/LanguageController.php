@@ -3,8 +3,11 @@
 namespace Modules\Language\Http\Controllers\Api;
 
 use App\Http\Controllers\AdminController;
+use Exception;
 use Fynduck\FilesUpload\UploadFile;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -20,9 +23,10 @@ class LanguageController extends AdminController
     }
 
     /**
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @param Request $request
+     * @return AnonymousResourceCollection
      */
-    public function index(Request $request)
+    public function index(Request $request): AnonymousResourceCollection
     {
         $languages = Language::filter($request)
             ->paginate(30);
@@ -34,7 +38,7 @@ class LanguageController extends AdminController
      * @param StoreLanguageRequest $request
      * @return bool
      */
-    public function store(StoreLanguageRequest $request)
+    public function store(StoreLanguageRequest $request): bool
     {
         $image = null;
         if ($request->get('image')) {
@@ -69,7 +73,7 @@ class LanguageController extends AdminController
      * @param $id
      * @return LanguageListResource
      */
-    public function show($id)
+    public function show($id): LanguageListResource
     {
         $item = Language::find($id);
 
@@ -80,7 +84,12 @@ class LanguageController extends AdminController
         return (new LanguageListResource($item));
     }
 
-    public function update(StoreLanguageRequest $request, $id)
+    /**
+     * @param StoreLanguageRequest $request
+     * @param $id
+     * @return bool
+     */
+    public function update(StoreLanguageRequest $request, $id): bool
     {
         $language = Language::findOrFail($id);
 
@@ -114,17 +123,24 @@ class LanguageController extends AdminController
         return true;
     }
 
-    public function destroy(Request $request, Language $language)
+    /**
+     * @param Request $request
+     * @param Language $language
+     * @return bool
+     * @throws Exception
+     */
+    public function destroy(Request $request, Language $language): bool
     {
         Storage::disk('public')->delete(Language::FOLDER_IMG . '/' . $language->image);
 
-        $language->image = null;
-
         if (!$request->get('image')) {
-            $language->active = false;
+            File::deleteDirectory(resource_path('lang/' . $language->slug));
+            $language->delete();
+            Cache::forget('languages');
+        } else {
+            $language->image = null;
+            $language->save();
         }
-
-        $language->save();
 
         return true;
     }

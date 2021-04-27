@@ -55,12 +55,14 @@ class Menu extends Model
 {
     use MenuTrait;
 
-    const FOLDER_IMG = 'menus';
+    public const FOLDER_IMG = 'menus';
 
-    const TOP_MENU = 'top_menu';
-    const MAIN_MENU = 'home_menu';
-    const CUSTOM_MENU = 'custom_menu';
-    const FOOTER_LINKS = 'footer_links';
+    public const TOP_MENU = 'top_menu';
+    public const MAIN_MENU = 'home_menu';
+    public const CUSTOM_MENU = 'custom_menu';
+    public const FOOTER_LINKS = 'footer_links';
+
+    public const FORMATS = ['jpeg', 'jpg', 'png', 'gif', 'webp'];
 
     protected $fillable = [
         'parent_id',

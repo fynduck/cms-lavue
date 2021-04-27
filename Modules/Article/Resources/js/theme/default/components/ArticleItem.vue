@@ -1,5 +1,5 @@
 <template>
-    <div class="article">
+    <div class="article shadow-sm">
         <router-link :to="item.link">
             <picture>
                 <source :srcset="linkToImg(srcset)" :media="mediaWidth(srcset, srcKey)" v-for="(srcset, srcKey) in item.srcset">
@@ -15,8 +15,8 @@
                     <i class="far fa-clock"></i> {{ item.show_date }}
                 </time>
                 <span class="time_views">
-                <i class="far fa-eye"></i> <span>{{ item.views }}</span>
-            </span>
+                    <i class="far fa-eye"></i> <span>{{ item.views }}</span>
+                </span>
                 <div v-if="item.desc" class="desc mt-2">{{ item.desc }}</div>
             </router-link>
         </div>

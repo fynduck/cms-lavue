@@ -77,5 +77,6 @@
   "blur": "Blur",
   "brightness": "Brightness",
   "background": "Background",
-  "ratio": "Ratio"
+  "ratio": "Ratio",
+  "format": "Format"
 }
