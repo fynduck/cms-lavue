@@ -55,12 +55,10 @@ class SetLocale
                     }
                 }
             }
+        } elseif ($request->get('locale_id')) {
+            $preferLangSlug = Language::whereKey($request->get('locale_id'))->where('active', 1)->value('slug');
         } else {
-            if ($request->get('locale_id')) {
-                $preferLangSlug = Language::whereKey($request->get('locale_id'))->where('active', 1)->value('slug');
-            } else {
-                $preferLangSlug = $request->cookie('prefer_lang');
-            }
+            $preferLangSlug = $request->cookie('prefer_lang');
         }
 
         if (is_null($preferLangSlug)) {

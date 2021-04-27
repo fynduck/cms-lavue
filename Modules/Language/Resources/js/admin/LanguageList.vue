@@ -108,15 +108,15 @@
         },
         watch: {
             current_page() {
-                this.getItem();
+                this.getItems();
             },
             active() {
-                this.getItem();
+                this.getItems();
             },
             filter() {
                 clearTimeout(this.timeout);
                 this.timeout = setTimeout(() => {
-                    this.getItem();
+                    this.getItems();
                 }, 500);
             }
         },
@@ -152,10 +152,10 @@
             }
         },
         mounted() {
-            this.getItem();
+            this.getItems();
         },
         methods: {
-            getItem() {
+            getItems() {
                 this.loading = true;
                 let data = {
                     params: {
@@ -178,12 +178,12 @@
             changeSort() {
                 this.loading = true;
                 setTimeout(() => {
-                    this.getItem();
+                    this.getItems();
                 }, 200);
             },
             confirmDelete(item) {
                 this.confirmWindow.confirm = item.id;
-                this.confirmWindow.text = this.$t('Menu.you_really_delete') + ': ' + item.title;
+                this.confirmWindow.text = this.$t('Language.you_really_delete') + ': ' + item.name;
                 this.confirmWindow.openConfirm = true;
             },
             deleteItem(id) {
@@ -193,7 +193,6 @@
                     axios.delete(`${this.source}/${id}`).then(() => {
                         this.$toast.global.success(this.$t('Language.data_delete'))
                         this.getItems();
-                        this.loading = false;
                     }).catch(() => {
                     });
                 }

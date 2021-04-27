@@ -8,19 +8,22 @@
 
 namespace Modules\Menu\Services;
 
+use Fynduck\FilesUpload\ManipulationImage;
 use Fynduck\FilesUpload\UploadFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Modules\Menu\Entities\Menu;
 use Modules\Menu\Entities\MenuSettings;
 use Modules\Menu\Entities\MenuShow;
 use Modules\Menu\Entities\MenuTrans;
 use Modules\Menu\Http\Requests\MenuValidate;
+use Modules\Menu\Traits\MenuImageTrait;
 
 class MenuService
 {
+    use MenuImageTrait;
+
     /**
      * @param MenuValidate $request
      * @param array $imagesName
@@ -55,6 +58,11 @@ class MenuService
         );
     }
 
+    /**
+     * @param Menu $menu
+     * @param array $items
+     * @throws \Exception
+     */
     public function addUpdateTrans(Menu $menu, array $items)
     {
         foreach ($items as $lang_id => $item) {
@@ -79,6 +87,10 @@ class MenuService
         }
     }
 
+    /**
+     * @param int $id
+     * @param array $show_on
+     */
     public function showOn(int $id, array $show_on)
     {
         MenuShow::where('menu_id', $id)->delete();
@@ -101,7 +113,7 @@ class MenuService
      * @param Request $request
      * @return array
      */
-    public function saveImages(Request $request)
+    public function saveImages(Request $request): array
     {
         $nameImages = [
             'imageName' => null
@@ -111,62 +123,52 @@ class MenuService
             $imgName = $request->get('items')[config('app.fallback_locale_id')]['title'];
         }
 
-        if ($request->get('image')) {
-            if (!Str::contains($request->get('image'), Menu::FOLDER_IMG)) {
-                $settings = Cache::remember(
-                    'menu_sizes',
-                    now()->addDay(),
-                    function () {
-                        return MenuSettings::where('name', 'sizes')->first();
-                    }
-                );
-                $sizes = null;
-                $resizeMethod = null;
-                $greyscale = false;
-                $blur = 1;
-                $brightness = 0;
-                $background = null;
-                $optimize = false;
-
-                if ($settings && !empty($settings->data['sizes'])) {
-                    $sizes = $settings->data['sizes'];
-                    $resizeMethod = $settings->data['action'];
-                    $greyscale = !empty($settings->data['greyscale']) ? $settings->data['greyscale'] : $greyscale;
-                    $blur = !empty($settings->data['blur']) ? $settings->data['blur'] : $blur;
-                    $brightness = !empty($settings->data['brightness']) ? $settings->data['brightness'] : $brightness;
-                    $background = !empty($settings->data['background']) ? $settings->data['background'] : $background;
-                    $optimize = !empty($settings->data['optimize']) ? $settings->data['optimize'] : $optimize;
+        if ($request->get('image') && $this->isBase64($request->get('image'))) {
+            $positionSize = $request->get('position') . '_sizes';
+            $settings = Cache::remember(
+                "menu_$positionSize",
+                now()->addDay(),
+                function () use ($positionSize) {
+                    return MenuSettings::where('name', $positionSize)->first();
                 }
-                $nameImages['imageName'] = UploadFile::file($request->get('image'))
-                    ->setFolder(Menu::FOLDER_IMG)
-                    ->setName($imgName)
-                    ->setOverwrite($request->get('old_image'))
-                    ->setSizes($sizes)
-                    ->setGreyscale($greyscale)
-                    ->setBlur($blur)
-                    ->setBrightness($brightness)
-                    ->setBackground($background)
-                    ->setOptimize($optimize)
-                    ->save($resizeMethod);
-            } else {
-                $nameImages['imageName'] = $request->get('old_image');
-            }
+            );
+            $data = $this->prepareImgParams($settings);
+            $nameImages['imageName'] = UploadFile::file($request->get('image'))
+                ->setFolder(Menu::FOLDER_IMG)
+                ->setName($imgName)
+                ->setOverwrite($request->get('old_image'))
+                ->setSizes($data['sizes'])
+                ->setGreyscale($data['greyscale'])
+                ->setBlur($data['blur'])
+                ->setBrightness($data['brightness'])
+                ->setBackground($data['background'])
+                ->setOptimize($data['optimize'])
+                ->setEncodeFormat($data['encode'])
+                ->save($data['resizeMethod']);
+
+            $this->generateReserveImg($data, $nameImages['imageName']);
+        } else {
+            $nameImages['imageName'] = $request->get('old_image');
         }
 
         return $nameImages;
     }
 
-    public function settings()
+    /**
+     * @param string $nameSize
+     * @return array
+     */
+    public function sizeSettings(string $nameSize): array
     {
         $settings = Cache::remember(
-            'menu_sizes',
+            "menu_$nameSize",
             now()->addDay(),
-            function () {
-                return MenuSettings::where('name', 'sizes')->first();
+            function () use ($nameSize) {
+                return MenuSettings::where('name', $nameSize)->first();
             }
         );
 
-        $data = [];
+        $data = $this->defaultSizeSettings();
         if ($settings && !empty($settings->data['sizes'])) {
             $data = $settings->data;
             $sizes = [];
@@ -180,7 +182,7 @@ class MenuService
 
             $data['sizes'] = $sizes;
 
-            foreach ($this->defaultSettings() as $key => $defaultSetting) {
+            foreach ($this->defaultSizeSettings() as $key => $defaultSetting) {
                 if (!array_key_exists($key, $data)) {
                     $data[$key] = $defaultSetting;
                 }
@@ -190,7 +192,10 @@ class MenuService
         return $data;
     }
 
-    public function defaultSettings()
+    /**
+     * @return array
+     */
+    public function defaultSizeSettings(): array
     {
         return [
             'ratios'     => [
@@ -199,6 +204,7 @@ class MenuService
             ],
             'ratio'      => false,
             'action'     => 'resize-crop',
+            'encode'     => null,
             'optimize'   => null,
             'greyscale'  => null,
             'blur'       => null,
@@ -206,79 +212,6 @@ class MenuService
             'background' => null,
             'sizes'      => []
         ];
-    }
-
-    /**
-     * Get image link by size
-     * @param $image
-     * @param null $size
-     * @param bool $first
-     * @return string
-     */
-    public function linkImage($image, $size = null, $first = false): string
-    {
-        if (!$image) {
-            return asset('img/placeholder.jpg');
-        }
-
-        if (!$size && !$first) {
-            return asset('storage/' . Menu::FOLDER_IMG . '/' . $image);
-        }
-
-        $settings = Cache::remember(
-            'menu_sizes',
-            now()->addDay(),
-            function () {
-                return MenuSettings::where('name', 'sizes')->first();
-            }
-        );
-
-        if ($settings && !empty($settings->data['sizes'])) {
-            $sortedSizes = collect($settings->data['sizes'])->sortBy('width');
-            if ($first) {
-                return asset('storage/' . Menu::FOLDER_IMG . '/' . $sortedSizes->first()['name'] . '/' . $image);
-            }
-            if (array_key_exists($size, $settings->data['sizes'])) {
-                return asset('storage/' . Menu::FOLDER_IMG . '/' . $size . '/' . $image);
-            } else {
-                return asset('storage/' . Menu::FOLDER_IMG . '/' . key(end($sortedSizes)) . '/' . $image);
-            }
-        }
-
-        return asset('storage/' . Menu::FOLDER_IMG . '/' . $image);
-    }
-
-    public function prepareImgParams($imageSettings): array
-    {
-        $data['sizes'] = null;
-        $data['resizeMethod'] = null;
-        $data['greyscale'] = false;
-        $data['blur'] = 1;
-        $data['brightness'] = 0;
-        $data['background'] = null;
-        $data['optimize'] = false;
-
-        if ($imageSettings && !empty($imageSettings->data['sizes'])) {
-            $data['sizes'] = $imageSettings->data['sizes'];
-            $data['resizeMethod'] = $imageSettings->data['action'];
-            if (!empty($imageSettings->data['greyscale'])) {
-                $data['greyscale'] = $imageSettings->data['greyscale'];
-            }
-            if (!empty($imageSettings->data['blur'])) {
-                $data['blur'] = $imageSettings->data['blur'];
-            }
-            if (!empty($imageSettings->data['brightness'])) {
-                $data['brightness'] = $imageSettings->data['brightness'];
-            }
-            if (!empty($imageSettings->data['background'])) {
-                $data['background'] = $imageSettings->data['background'];
-            }
-            if (!empty($imageSettings->data['optimize'])) {
-                $data['optimize'] = $imageSettings->data['optimize'];
-            }
-        }
-
-        return $data;
     }
 
     /**
@@ -302,6 +235,7 @@ class MenuService
             'ratio'      => $request->get('ratio'),
             'ratios'     => $request->get('ratios'),
             'action'     => in_array($action, MenuSettings::resizeMethods()) ? $action : $defaultAction,
+            'encode'     => in_array($request->get('encode'), Menu::FORMATS) ? $request->get('encode') : null,
             'greyscale'  => $request->get('greyscale'),
             'blur'       => $blur,
             'brightness' => $brightness,
@@ -317,6 +251,29 @@ class MenuService
         }
 
         return $data;
+    }
+
+    /**
+     * Generate reserve image size in case format is webp
+     * @param array $data
+     * @param string $imageName
+     * @param bool $checkOriginalName
+     */
+    public function generateReserveImg(array $data, string $imageName, bool $checkOriginalName = true)
+    {
+        if ($data['encode'] === 'webp') {
+            if ($checkOriginalName) {
+                $imageName = $this->getOriginalImageName($imageName);
+            }
+            $path = Storage::get(Menu::FOLDER_IMG . '/' . $imageName);
+
+            $biggestSize = collect($data['sizes'])->sortBy('width')->sortBy('height')->last();
+            $data['sizes'] = [];
+            $data['sizes'][$biggestSize['name']] = $biggestSize;
+            $data['encode'] = explode('_', $imageName)[0];
+
+            $this->generateImageSizes($path, $data, $imageName);
+        }
     }
 
     /**
@@ -339,5 +296,25 @@ class MenuService
     public function deleteOriginalImage(string $image)
     {
         Storage::delete(Menu::FOLDER_IMG . '/' . $image);
+    }
+
+    /**
+     * @param string $path
+     * @param array $data
+     * @param string $imageName
+     */
+    public function generateImageSizes(string $path, array $data, string $imageName)
+    {
+        ManipulationImage::load($path)
+            ->setSizes($data['sizes'])
+            ->setName($imageName)
+            ->setFolder(Menu::FOLDER_IMG)
+            ->setGreyscale($data['greyscale'])
+            ->setBlur($data['blur'])
+            ->setBrightness($data['brightness'])
+            ->setBackground($data['background'])
+            ->setOptimize($data['optimize'])
+            ->setEncodeFormat($data['encode'])
+            ->save($data['resizeMethod']);
     }
 }

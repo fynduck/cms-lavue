@@ -3,7 +3,6 @@
 namespace Modules\Menu\Http\Controllers\Api;
 
 use App\Http\Controllers\AdminController;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
@@ -11,6 +10,8 @@ use Modules\Language\Entities\Language;
 use Modules\Menu\Entities\Menu;
 use Modules\Menu\Entities\MenuSettings;
 use Modules\Menu\Http\Requests\MenuValidate;
+use Modules\Menu\Http\Requests\SizeValidate;
+use Modules\Menu\Jobs\RegenerateImageSizes;
 use Modules\Menu\Services\MenuService;
 use Modules\Menu\Transformers\MenuFormResource;
 use Modules\Menu\Transformers\MenuListResource;
@@ -19,8 +20,6 @@ class MenuController extends AdminController
 {
     protected $targets = [];
 
-    protected $positions = [];
-
     protected $parents = [];
 
     protected $menuService;
@@ -28,8 +27,6 @@ class MenuController extends AdminController
     public function __construct(MenuService $menuService)
     {
         $this->middleware('admin:view');
-
-        $this->positions = Menu::positions();
 
         $this->parents = Menu::leftJoin('menu_trans', 'menus.id', '=', 'menu_trans.menu_id')
             ->where('lang_id', config('app.locale_id'))
@@ -52,9 +49,14 @@ class MenuController extends AdminController
             ->select('menus.*', 'menu_trans.title', 'menu_trans.lang_id', 'menu_trans.active')
             ->filter($request)->paginate(25);
 
+        $sizeSettings = [];
+        foreach (Menu::positions() as $position => $title) {
+            $sizeSettings[$position] = $this->menuService->sizeSettings($position . '_sizes');
+        }
+
         $additional = [
             'languages' => Language::whereActive(1)->pluck('name', 'id'),
-            'settings'  => $this->menuService->settings()
+            'settings'  => array_filter($sizeSettings)
         ];
 
         return MenuListResource::collection($menu)->additional($additional);
@@ -97,7 +99,7 @@ class MenuController extends AdminController
         $item = Menu::find($id);
 
         $additional = [
-            'positions' => $this->positions,
+            'positions' => Menu::positions(),
             'parents'   => $this->parents,
             'targets'   => $this->targets
         ];
@@ -115,6 +117,7 @@ class MenuController extends AdminController
      * @param MenuValidate $request
      * @param Menu $menu
      * @return bool
+     * @throws \Exception
      */
     public function update(MenuValidate $request, Menu $menu): bool
     {
@@ -158,21 +161,24 @@ class MenuController extends AdminController
 
     /**
      * Save menus settings
-     * @param Request $request
-     * @return JsonResponse
+     * @param SizeValidate $request
+     * @return bool
      */
-    public function saveSettings(Request $request): bool
+    public function saveSettings(SizeValidate $request): bool
     {
         $data = $this->menuService->prepareSizeSettingsToSave($request);
 
+        $settingsName = $request->get('position') . '_sizes';
         MenuSettings::updateOrCreate(
             [
-                'name' => 'sizes',
+                'name' => $settingsName,
             ],
             [
                 'data' => $data
             ]
         );
+
+        RegenerateImageSizes::dispatch($request->get('position'), $settingsName);
 
         return true;
     }

@@ -3,10 +3,13 @@
 namespace Modules\Menu\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Modules\Menu\Services\MenuService;
+use Illuminate\Support\Facades\Log;
+use Modules\Menu\Traits\MenuImageTrait;
 
 class MenuResource extends JsonResource
 {
+    use MenuImageTrait;
+
     /**
      * Transform the resource into an array.
      *
@@ -31,7 +34,7 @@ class MenuResource extends JsonResource
     private function image()
     {
         if ($this->image) {
-            return (new MenuService())->linkImage($this->image);
+            return $this->linkImage($this->image, $this->position);
         }
 
         return null;

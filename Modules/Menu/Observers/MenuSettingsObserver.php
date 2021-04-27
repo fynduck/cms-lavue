@@ -4,7 +4,6 @@ namespace Modules\Menu\Observers;
 
 use Illuminate\Support\Facades\Cache;
 use Modules\Menu\Entities\MenuSettings;
-use Modules\Menu\Jobs\RegenerateImageSizes;
 
 class MenuSettingsObserver
 {
@@ -17,7 +16,7 @@ class MenuSettingsObserver
      */
     public function saved(MenuSettings $menuSettings)
     {
-        RegenerateImageSizes::dispatch();
+        Cache::forget("menu_{$menuSettings->name}sizes");
         Cache::forget('menu_sizes');
     }
 
@@ -29,6 +28,7 @@ class MenuSettingsObserver
      */
     public function deleted(MenuSettings $menuSettings)
     {
+        Cache::forget("menu_{$menuSettings->name}sizes");
         Cache::forget('menu_sizes');
     }
 }

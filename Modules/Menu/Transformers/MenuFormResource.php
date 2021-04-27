@@ -2,19 +2,23 @@
 
 namespace Modules\Menu\Transformers;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Collection;
 use Modules\Menu\Entities\Menu;
-use Modules\Menu\Services\MenuService;
+use Modules\Menu\Traits\MenuImageTrait;
 
 class MenuFormResource extends JsonResource
 {
+    use MenuImageTrait;
+
     /**
      * Transform the resource into an array.
      *
-     * @param \Illuminate\Http\Request
+     * @param Request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         return [
             'id'         => $this->id,
@@ -29,7 +33,8 @@ class MenuFormResource extends JsonResource
             'attributes' => $this->attributes,
             'nofollow'   => $this->nofollow,
             'priority'   => $this->priority ?? 0,
-            'items'      => $this->items()
+            'items'      => $this->items(),
+            's' => count(config('app.locales'))
         ];
     }
 
@@ -37,7 +42,7 @@ class MenuFormResource extends JsonResource
     {
         $old_image = null;
         if ($this->image) {
-            $old_image = (new MenuService())->linkImage($this->image, null, true);
+            $old_image = $this->linkImage($this->image, $this->position, null, true);
         }
 
         return $old_image;
@@ -63,7 +68,7 @@ class MenuFormResource extends JsonResource
         }
     }
 
-    private function emptyItems(array $items = [], $locales = null)
+    private function emptyItems(array $items = [], $locales = null): Collection
     {
         if (is_null($locales)) {
             $locales = config('app.locales');
@@ -82,7 +87,7 @@ class MenuFormResource extends JsonResource
         return collect($items);
     }
 
-    private function pagesShow()
+    private function pagesShow(): array
     {
         $page_show = [];
         if ($this->getShow()->exists()) {

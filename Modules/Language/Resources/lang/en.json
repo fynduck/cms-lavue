@@ -23,5 +23,9 @@
   "action": "Action",
   "priority": "Priority",
   "data_saved": "Data has been saved",
-  "save": "Save"
+  "data_not_save": "Data not has been save",
+  "data_delete": "Data has been deleted",
+  "data_not_deletes": "Data not has been deleted",
+  "save": "Save",
+  "you_really_delete": "Do you really want to delete"
 }

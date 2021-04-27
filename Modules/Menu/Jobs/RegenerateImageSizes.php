@@ -20,12 +20,18 @@ class RegenerateImageSizes implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
+    protected $position;
+
+    protected $settingsName;
+
     /**
      * Create a new job instance.
      */
-    public function __construct()
+    public function __construct(string $position, string $settingsName)
     {
-        //
+        $this->position = $position;
+
+        $this->settingsName = $settingsName;
     }
 
     /**
@@ -36,36 +42,30 @@ class RegenerateImageSizes implements ShouldQueue
      */
     public function handle(MenuService $menuService)
     {
-        $imageSettings = MenuSettings::where('name', 'sizes')->first();
+        $imageSettings = MenuSettings::where('name', $this->settingsName)->first();
         if ($imageSettings) {
             $data = $menuService->prepareImgParams($imageSettings);
-            $menus = Menu::where('image', '!=', '')->get(['image']);
+            $menus = Menu::where('position', $this->position)
+                ->where('image', '!=', '')
+                ->get(['id', 'image']);
+
             foreach ($menus as $menu) {
-                $menuService->deleteImages($menu->image);
                 if ($menu->image) {
-                    $path = Storage::get(Menu::FOLDER_IMG . '/' . $menu->image);
-                    $this->generateBannerImages($path, $data, $menu->image);
+                    $menuService->deleteImages($menu->image);
+                    $imageName = $menuService->getOriginalImageName($menu->image);
+                    $menuService->deleteImages($imageName);
+                    $path = Storage::get(Menu::FOLDER_IMG . '/' . $imageName);
+                    $sizeSaveName = $menuService->setExtensionByEncode($imageName, $data['encode']);
+                    $menuService->generateImageSizes($path, $data, $sizeSaveName);
+
+                    $menuService->generateReserveImg($data, $imageName, false);
+
+                    if ($sizeSaveName !== $menu->image) {
+                        $menu->image = $sizeSaveName;
+                        $menu->save();
+                    }
                 }
             }
         }
-    }
-
-    /**
-     * @param string $path
-     * @param array $data
-     * @param string $image
-     */
-    private function generateBannerImages(string $path, array $data, string $image)
-    {
-        ManipulationImage::load($path)
-            ->setSizes($data['sizes'])
-            ->setName($image)
-            ->setFolder(Menu::FOLDER_IMG)
-            ->setGreyscale($data['greyscale'])
-            ->setBlur($data['blur'])
-            ->setBrightness($data['brightness'])
-            ->setBackground($data['background'])
-            ->setOptimize($data['optimize'])
-            ->save($data['resizeMethod']);
     }
 }
