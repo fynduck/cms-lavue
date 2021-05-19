@@ -25,8 +25,8 @@
                     return [
                         "advlist autolink lists link image charmap print preview hr anchor pagebreak",
                         "searchreplace wordcount visualblocks visualchars code fullscreen",
-                        "insertdatetime media nonbreaking save table contextmenu directionality",
-                        "emoticons template paste textcolor colorpicker textpattern imagetools codemirror"
+                        "insertdatetime media nonbreaking save table directionality",
+                        "emoticons template paste textpattern imagetools codemirror"
                     ];
                 }, type: Array
             },
