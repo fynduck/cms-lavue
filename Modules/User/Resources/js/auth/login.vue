@@ -1,75 +1,56 @@
 <template>
-    <div class="row justify-content-center my-5">
-        <div class="col-lg-8 m-auto">
-            <div class="card">
-                <div class="card-body">
-                    <form @submit.prevent="login" @keydown="form.onKeydown($event)">
-                        <!-- Email -->
-                        <div class="form-group row">
-                            <label class="col-md-3 col-form-label text-md-right">{{ $t('User.your_email') }}</label>
-                            <div class="col-md-7">
-                                <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" type="email"
-                                       name="email" class="form-control">
-                                <has-error :form="form" field="email"/>
-                            </div>
-                        </div>
+    <div class="sign_in text-center">
+        <form @submit.prevent="login" @keydown="form.onKeydown($event)">
+            <img class="mb-4" :src="logo" alt="" height="50" v-if="isLogo">
+            <h1 class="h3 mb-3 fw-normal" v-else>{{ logo }}</h1>
 
-                        <!-- Password -->
-                        <div class="form-group row">
-                            <label class="col-md-3 col-form-label text-md-right">{{ $t('User.password') }}</label>
-                            <div class="col-md-7">
-                                <input v-model="form.password" :class="{ 'is-invalid': form.errors.has('password') }"
-                                       type="password"
-                                       name="password" class="form-control">
-                                <has-error :form="form" field="password"/>
-                            </div>
-                        </div>
-
-                        <!-- Remember Me -->
-                        <div class="form-group row">
-                            <div class="col-md-5 offset-md-3">
-                                <div class="custom-control custom-switch switch-success d-flex">
-                                    <input
-                                        id="remember_me"
-                                        type="checkbox"
-                                        class="custom-control-input"
-                                        v-model="remember"
-                                    >
-                                    <label for="remember_me" class="custom-control-label my-auto">
-                                        {{ $t('User.remember_me') }}
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <router-link :to="{ name: 'password.request' }" class="small ml-auto my-auto text-success">
-                                    {{ $t('User.forgot_password') }}
-                                </router-link>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-md-7 offset-md-3 d-flex">
-                                <!-- Submit Button -->
-                                <button :class="{'btn btn-success': true, 'btn-loading': form.busy}" type="submit"
-                                        :disabled="form.busy">
-                                    {{ $t('User.login') }}
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+            <div class="form-floating mb-3">
+                <input type="email" name="email" v-model="form.email" placeholder="name@example.com"
+                       :class="{ 'is-invalid': form.errors.has('email'), 'form-control': true }" id="email">
+                <label for="email">{{ $t('User.your_email') }}</label>
             </div>
-        </div>
+            <div class="form-floating mb-3">
+                <input type="password" v-model="form.password" name="password" placeholder="Password"
+                       :class="{ 'is-invalid': form.errors.has('password'), 'form-control': true }" id="password">
+                <label for="password">{{ $t('User.password') }}</label>
+            </div>
+
+            <div class="custom-control custom-switch switch-success mb-3">
+                <input id="remember_me" type="checkbox" class="custom-control-input" v-model="remember">
+                <label for="remember_me" class="custom-control-label my-auto">
+                    {{ $t('User.remember_me') }}
+                </label>
+            </div>
+            <router-link :to="{ name: 'password.request' }" class="small ml-auto my-auto text-success">
+                {{ $t('User.forgot_password') }}
+            </router-link>
+            <button :class="{'btn btn-success btn-lg w-100 mt-3': true, 'btn-loading': form.busy}" type="submit"
+                    :disabled="form.busy">
+                {{ $t('User.login') }}
+            </button>
+            <p class="mt-5 mb-3 text-muted">© {{ $moment().format('YYYY') }}</p>
+        </form>
     </div>
 </template>
 
 <script>
 import Form from 'vform'
+import {mapGetters} from "vuex";
 
 export default {
     middleware: 'guest',
+    layout: 'auth',
     head() {
         return {title: this.$t('User.login')}
+    },
+
+    computed: {
+        ...mapGetters({
+            logo: 'logo'
+        }),
+        isLogo() {
+            return (/(jpg|gif|png|JPG|GIF|PNG|JPEG|jpeg)$/.test(this.logo))
+        }
     },
 
     data: () => ({
@@ -77,7 +58,7 @@ export default {
             email: '',
             password: ''
         }),
-        remember: false
+        remember: false,
     }),
 
     methods: {
@@ -107,3 +88,9 @@ export default {
     }
 }
 </script>
+<style lang="stylus" scoped>
+.sign_in {
+    width 100%
+    max-width 330px
+}
+</style>

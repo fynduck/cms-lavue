@@ -23,28 +23,6 @@
   &:hover
     transform translate3d(0, -2px, 5px)
 
-  figure
-    overflow hidden
-    position relative
-
-    &::before
-      position absolute
-      top 50%
-      left 50%
-      z-index 2
-      display block
-      content ''
-      width 0
-      height 0
-      background rgba(255, 255, 255, .2)
-      border-radius 100%
-      transform translate(-50%, -50%)
-      opacity 0
-
-    &:hover
-      &::before
-        animation: circle .75s;
-
   a
     color $black
     position relative
@@ -56,7 +34,7 @@
       color $black
 
   .info
-    padding 0 1rem 1rem
+    padding 1rem
 
     .title
       font-size 1.37rem
