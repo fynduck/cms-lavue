@@ -1,25 +1,17 @@
 <template>
-    <div class="row justify-content-center my-5">
-        <div class="col-lg-8 m-auto">
-            <template v-if="success">
-                <div class="alert alert-success" role="alert">
-                    {{ status }}
-                </div>
+    <div class="text-center">
+        <template v-if="success">
+            <div :class="`alert alert-${success ? 'success' : 'danger'}`" role="alert">
+                {{ status || $t('User.failed_to_verify_email') }}
+            </div>
 
-                <router-link :to="{ name: 'login' }" class="btn btn-success">
-                    {{ $t('User.login') }}
-                </router-link>
-            </template>
-            <template v-else>
-                <div class="alert alert-danger" role="alert">
-                    {{ status || $t('User.failed_to_verify_email') }}
-                </div>
-
-                <router-link :to="{ name: 'verification.resend' }" class="small float-right">
-                    {{ $t('User.resend_verification_link') }}
-                </router-link>
-            </template>
-        </div>
+            <router-link :to="{ name: 'login' }" class="btn btn-success" v-if="success">
+                {{ $t('User.login') }}
+            </router-link>
+            <router-link :to="{ name: 'verification.resend' }" class="small float-right" v-else>
+                {{ $t('User.resend_verification_link') }}
+            </router-link>
+        </template>
     </div>
 </template>
 
@@ -30,6 +22,7 @@ const qs = params => Object.keys(params).map(key => `${key}=${params[key]}`).joi
 
 export default {
     middleware: 'guest',
+    layout: 'auth',
 
     metaInfo() {
         return {title: this.$t('User.verify_email')}

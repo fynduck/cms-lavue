@@ -105,6 +105,6 @@ export default {
 <style lang="stylus" scoped>
 .sign_up {
     width 100%
-    max-width 330px
+    max-width 350px
 }
 </style>

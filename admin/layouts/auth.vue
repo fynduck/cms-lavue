@@ -1,5 +1,5 @@
 <template>
-    <main class="d-flex align-items-center justify-content-center vh-100">
+    <main class="container d-flex align-items-center justify-content-center vh-100">
         <nuxt/>
     </main>
 </template>
