@@ -25,14 +25,3 @@ Route::get(
         return file_get_contents(public_path('_nuxt/index.html'));
     }
 )->where('path', '(.*)');
-
-Route::get('test', function () {
-   $m = \Module::getCached();
-   dd($m);
-   $m = \Module::find('article');
-   $d = \Illuminate\Support\Facades\File::files($m->getPath() . '/Entities');
-    foreach ($d as $item) {
-        dd($item->getFilename());
-   }
-   dd($d);
-});
