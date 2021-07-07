@@ -17,7 +17,7 @@ class UpdateUserRequest extends FormRequest
             'username' => 'required|string|max:100|unique:users,username,' . ($this->route('user') ?? ''),
             'name'     => 'required|max:255',
             'birthday' => 'sometimes|date',
-            'email'    => 'required|email|max:255|unique:users,email,' . ($this->route('user') ?? ''),
+            'email'    => 'required|email:strict,dns|max:255|unique:users,email,' . ($this->route('user') ?? ''),
             'group_id' => 'required|numeric'
         ];
     }
