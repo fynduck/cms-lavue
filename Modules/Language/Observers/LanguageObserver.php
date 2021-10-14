@@ -20,7 +20,7 @@ class LanguageObserver
         } else {
             $default = Language::where('default', 1)->where('active', 1)->first();
             if (!$default) {
-                Language::first()->update(['default' => 1]);
+                Language::where('active', 1)->first()->update(['default' => 1]);
             }
         }
 
