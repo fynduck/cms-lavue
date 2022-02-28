@@ -1,10 +1,10 @@
 <template>
-    <ul class="navbar-nav position-relative">
+    <ul class="navbar-nav position-relative" v-if="showLanguages">
         <li class="nav-item">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                 {{ currentLang }}
             </a>
-            <div class="dropdown-menu dropdown-menu-dark dropdown-menu-end" v-show="showLanguages">
+            <div class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
                 <a class="dropdown-item" href="#" v-for="lang in listLanguages" @click.prevent="setLocale(lang)">
                     {{ lang.title }}
                 </a>
@@ -27,9 +27,9 @@ export default {
         }),
         currentLang() {
             const arrayLocales = Object.keys(this.locales)
-            for (let i = 0; i < arrayLocales.length; i++) {
-                if (this.locales[arrayLocales[i]].slug === this.locale)
-                    return this.locales[arrayLocales[i]].name
+            for (const item of arrayLocales) {
+                if (this.locales[item].slug === this.locale)
+                    return this.locales[item].name
             }
 
             return ''
