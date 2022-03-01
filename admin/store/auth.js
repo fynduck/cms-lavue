@@ -1,6 +1,5 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import route from "ziggy-js";
 
 // state
 export const state = () => ({
@@ -52,7 +51,7 @@ export const actions = {
 
     async fetchUser({commit}) {
         try {
-            const {data} = await axios.get(route('user'))
+            const {data} = await axios.get(this.route('user'))
 
             commit('FETCH_USER_SUCCESS', data.data)
         } catch (e) {
@@ -68,7 +67,7 @@ export const actions = {
 
     async logout({commit}) {
         try {
-            await axios.post(route('logout'))
+            await axios.post(this.route('logout'))
         } catch (e) {
         }
 
