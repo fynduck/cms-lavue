@@ -24,6 +24,8 @@ jobs:
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
     - name: Enable modules
       run: php artisan project:modules
+    - name: Generate ziggy routes
+      run: php artisan ziggy:generate
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
