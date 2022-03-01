@@ -60,7 +60,7 @@ module.exports = {
     ],
     bootstrapVue: {
         // bootstrapVueCSS: false,
-        bootstrapCSS: false
+        // bootstrapCSS: false
     },
     toast: {
         position: 'top-right',
