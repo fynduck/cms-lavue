@@ -4,7 +4,8 @@ import {cookieFromRequest} from '~/utils'
 export const state = () => ({
     contentMin: false,
     affix: false,
-    baseAPI: ''
+    baseAPI: '',
+    logo: process.env.app_name
 })
 
 // getters
@@ -12,6 +13,7 @@ export const getters = {
     container: state => state.contentMin,
     affix: state => state.affix,
     base: state => state.baseAPI,
+    logo: state => state.logo,
 }
 
 // mutations
@@ -30,6 +32,9 @@ export const mutations = {
     },
     SET_AFFIX(state, affix) {
         state.affix = affix
+    },
+    SET_LOGO(state, logo) {
+        state.logo = logo
     }
 }
 
@@ -39,6 +44,9 @@ export const actions = {
     },
     saveAffix({commit}, affix) {
         commit('SET_AFFIX', affix)
+    },
+    saveLogo({commit}, logo) {
+        commit('SET_LOGO', logo)
     },
     nuxtServerInit({commit}, {req}) {
         const token = cookieFromRequest(req, 'token')

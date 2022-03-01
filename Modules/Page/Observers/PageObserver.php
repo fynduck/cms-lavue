@@ -3,6 +3,7 @@
 namespace Modules\Page\Observers;
 
 use Illuminate\Support\Facades\Cache;
+use Modules\Language\Entities\Language;
 use Modules\Page\Entities\Page;
 
 class PageObserver
@@ -15,8 +16,9 @@ class PageObserver
      */
     public function saved(Page $page)
     {
-        Cache::forget('urls_pages_' . config('app.locale_id'));
-        Cache::forget('home_page_' . config('app.locale_id'));
+        foreach (Language::active()->get() as $language) {
+            Cache::forget('urls_pages_' . $language->id);
+        }
     }
 
     /**
@@ -27,7 +29,8 @@ class PageObserver
      */
     public function deleted(Page $page)
     {
-        Cache::forget('urls_pages_' . config('app.locale_id'));
-        Cache::forget('home_page_' . config('app.locale_id'));
+        foreach (Language::active()->get() as $language) {
+            Cache::forget('urls_pages_' . $language->id);
+        }
     }
 }

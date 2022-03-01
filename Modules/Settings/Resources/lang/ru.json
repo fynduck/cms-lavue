@@ -93,6 +93,7 @@
   "MAIL_FROM_NAME": "Почта от имя",
   "MAIL_FROM_ADDRESS": "Почта от адреса",
   "APP_URL": "Домен",
+  "API_URL": "API путь",
   "ASSET_URL": "Домен ссылок",
   "APP_SSL": "Протокол SSL (true, false)",
   "GOOGLE_KEY": "Google Maps API Key",

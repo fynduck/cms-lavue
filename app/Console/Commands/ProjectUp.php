@@ -38,19 +38,38 @@ class ProjectUp extends Command
      */
     public function handle()
     {
+        $bar = $this->output->createProgressBar(4);
+
+        $bar->start();
+        $this->newLine();
+
         $this->comment("Start enable modules");
         Artisan::call('project:modules');
         $this->info("Finish enable modules");
+
+        $bar->advance();
+        $this->newLine();
 
         $this->comment("Start migrations");
         Artisan::call('project:migrations');
         $this->info("Finish migrations");
 
+        $bar->advance();
+        $this->newLine();
+
         $this->comment("Start seeds");
         Artisan::call('project:seeds');
         $this->info("Finish seeds");
 
+        $bar->advance();
+        $this->newLine();
+
         Artisan::call('storage:link');
         $this->info('Link created!');
+
+        $bar->advance();
+        $this->newLine();
+
+        $bar->finish();
     }
 }

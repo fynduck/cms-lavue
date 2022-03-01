@@ -1,81 +1,64 @@
 <template>
-    <div class="row justify-content-center my-5">
-        <div class="col-lg-8 m-auto">
-            <div class="alert alert-success" role="alert" v-if="mustVerifyEmail">
-                {{ $t('User.verify_email_address') }}
+    <div class="alert alert-success" role="alert" v-if="mustVerifyEmail">
+        {{ $t('User.verify_email_address') }}
+    </div>
+    <div class="sign_up text-center" v-else>
+        <form @submit.prevent="register" @keydown="form.onKeydown($event)">
+            <img class="mb-4" :src="logo" alt="" height="50" v-if="isLogo">
+            <h1 class="h3 mb-3 fw-normal" v-else>{{ logo }}</h1>
+
+            <div class="form-floating mb-3">
+                <input type="text" name="name" v-model="form.name" placeholder="Joon"
+                       :class="{ 'is-invalid': form.errors.has('name'), 'form-control': true }" id="name">
+                <label for="email">{{ $t('User.your_name') }}</label>
+                <has-error :form="form" field="name"/>
             </div>
-            <div class="card" v-else>
-                <div class="card-body">
 
-                    <form @submit.prevent="register" @keydown="form.onKeydown($event)">
-                        <!-- Name -->
-                        <div class="form-group row">
-                            <label class="col-md-3 col-form-label text-md-right">{{ $t('User.your_name') }}</label>
-                            <div class="col-md-7">
-                                <input v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" type="text"
-                                       name="name"
-                                       class="form-control">
-                                <has-error :form="form" field="name"/>
-                            </div>
-                        </div>
-
-                        <!-- Email -->
-                        <div class="form-group row">
-                            <label class="col-md-3 col-form-label text-md-right">{{ $t('User.your_email') }}</label>
-                            <div class="col-md-7">
-                                <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" type="email"
-                                       name="email" class="form-control">
-                                <has-error :form="form" field="email"/>
-                            </div>
-                        </div>
-
-                        <!-- Password -->
-                        <div class="form-group row">
-                            <label class="col-md-3 col-form-label text-md-right">{{ $t('User.password') }}</label>
-                            <div class="col-md-7">
-                                <input v-model="form.password" :class="{ 'is-invalid': form.errors.has('password') }"
-                                       type="password"
-                                       name="password" class="form-control">
-                                <has-error :form="form" field="password"/>
-                            </div>
-                        </div>
-
-                        <!-- Password Confirmation -->
-                        <div class="form-group row">
-                            <label class="col-md-3 col-form-label text-md-right">{{ $t('User.confirm_password') }}</label>
-                            <div class="col-md-7">
-                                <input v-model="form.password_confirmation"
-                                       :class="{ 'is-invalid': form.errors.has('password_confirmation') }" type="password"
-                                       name="password_confirmation"
-                                       class="form-control"
-                                >
-                                <has-error :form="form" field="password_confirmation"/>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-md-7 offset-md-3 d-flex">
-                                <!-- Submit Button -->
-                                <button :class="{'btn btn-success': true, 'btn-loading': form.busy}" type="submit"
-                                        :disabled="form.busy">
-                                    {{ $t('User.register') }}
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+            <div class="form-floating mb-3">
+                <input type="email" name="email" v-model="form.email" placeholder="name@example.com"
+                       :class="{ 'is-invalid': form.errors.has('email'), 'form-control': true }" id="email">
+                <label for="email">{{ $t('User.your_email') }}</label>
+                <has-error :form="form" field="email"/>
             </div>
-        </div>
+            <div class="form-floating mb-3">
+                <input type="password" v-model="form.password" name="password" placeholder="Password"
+                       :class="{ 'is-invalid': form.errors.has('password'), 'form-control': true }" id="password">
+                <label for="password">{{ $t('User.password') }}</label>
+                <has-error :form="form" field="password"/>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="password" v-model="form.password_confirmation" name="password_confirmation"
+                       placeholder="Password confirmation" id="password_confirmation"
+                       :class="{ 'is-invalid': form.errors.has('password_confirmation'), 'form-control': true }">
+                <label for="password_confirmation">{{ $t('User.password_confirmation') }}</label>
+                <has-error :form="form" field="password_confirmation"/>
+            </div>
+            <button :class="{'btn btn-success btn-lg w-100 mt-3': true, 'btn-loading': form.busy}" type="submit"
+                    :disabled="form.busy">
+                {{ $t('User.register') }}
+            </button>
+            <p class="mt-5 mb-3 text-muted">© {{ $moment().format('YYYY') }}</p>
+        </form>
     </div>
 </template>
 
 <script>
 import Form from 'vform'
+import {mapGetters} from "vuex";
 
 export default {
     middleware: 'guest',
+    layout: 'auth',
     head() {
         return {title: this.$t('User.register')}
+    },
+    computed: {
+        ...mapGetters({
+            logo: 'logo'
+        }),
+        isLogo() {
+            return (/(jpg|gif|png|JPG|GIF|PNG|JPEG|jpeg)$/.test(this.logo))
+        }
     },
 
     data: () => ({
@@ -91,8 +74,7 @@ export default {
     methods: {
         async register() {
             let data
-            // Register the user.
-            // const {data} = await this.form.post('/register')
+
             try {
                 const response = await this.form.post('/register')
                 data = response.data
@@ -108,15 +90,21 @@ export default {
                 const {data: {token}} = await this.form.post('/login')
 
                 // Save the token.
-                this.$store.dispatch('auth/saveToken', {token})
+                await this.$store.dispatch('auth/saveToken', {token})
 
                 // Update the user.
                 await this.$store.dispatch('auth/updateUser', {user: data})
 
                 // Redirect home.
-                this.$router.push({name: 'home'})
+               await this.$router.push({name: 'home'})
             }
         }
     }
 }
 </script>
+<style lang="stylus" scoped>
+.sign_up {
+    width 100%
+    max-width 350px
+}
+</style>

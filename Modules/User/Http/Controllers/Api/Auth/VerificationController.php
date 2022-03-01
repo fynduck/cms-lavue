@@ -67,7 +67,7 @@ class VerificationController extends Controller
      */
     public function resend(Request $request)
     {
-        $this->validate($request, ['email' => 'required|email']);
+        $this->validate($request, ['email' => 'required|email:strict,dns']);
 
         $user = User::where('email', $request->email)->first();
 
