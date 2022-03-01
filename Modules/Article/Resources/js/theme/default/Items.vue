@@ -32,19 +32,18 @@ export default {
     async fetch() {
         this.loading = true;
         let data = {
-            params: {
-                page: this.current_page,
-                type: this.type
-            }
+            page: this.current_page,
+            type: this.type
         };
-        await axios.get(this.source, data).then(response => {
-            for (let i = 0; i < response.data.data.length; i++)
-                this.items.push(response.data.data[i]);
+        await axios.get(this.route('get-articles', {_query: data})).then(response => {
+            response.data.data.forEach(item => {
+                this.items.push(item);
+            })
 
             this.links = response.data.links;
             this.pageTitle = response.data.pageTitle;
             this.loading = false;
-        }).catch(error => {
+        }).catch(() => {
             this.loading = false;
         });
     },
@@ -72,11 +71,6 @@ export default {
                 prev: null,
             },
             current_page: 1
-        }
-    },
-    computed: {
-        source() {
-            return '/get-articles'
         }
     },
     methods: {

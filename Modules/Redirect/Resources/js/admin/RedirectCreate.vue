@@ -29,16 +29,19 @@
             <div class="row">
                 <div class="form-group col-md-6">
                     <label for="status_code">{{ $t('Redirect.status_code') }}</label>
-                    <input type="number" :class="['form-control', errors['status_code'] ? ' is-invalid' : '']"
+                    <input type="number" min="0" :class="['form-control', errors['status_code'] ? ' is-invalid' : '']"
                            v-model="item.status_code"
                            id="status_code">
                 </div>
                 <div class="form-group d-flex align-items-end col-md-6">
-                    <div class="custom-control custom-checkbox my-1 mr-sm-2">
-                        <input type="checkbox" class="custom-control-input" v-model="item.active" id="active"
-                               :value="1">
-                        <label class="custom-control-label" for="active">{{ $t('Redirect.active') }}</label>
-                    </div>
+                    <b-form-checkbox id="active"
+                                     class="switch-success"
+                                     switch
+                                     v-model="item.active"
+                                     :value="1"
+                                     :unchecked-value="0">
+                        {{ $t('Redirect.active') }}
+                    </b-form-checkbox>
                 </div>
             </div>
             <p class="text-right">

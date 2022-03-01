@@ -22,7 +22,7 @@ use Modules\User\Http\Controllers\Api\UserController;
 
 Route::middleware(['auth:api'])->group(
     function () {
-        Route::get('user', AccountInfo::class);
+        Route::get('user', AccountInfo::class)->name('user-info');
 
         Route::prefix('admin')->group(
             function () {

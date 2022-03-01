@@ -56,10 +56,6 @@ export default {
         SelectLanguage: () => import(`../../../../../Language/Resources/js/theme/${process.env.appTheme}/components/SelectLanguage`),
     },
     props: {
-        source: {
-            type: String,
-            required: true
-        },
         appName: {
             type: String,
             default: 'Name'
@@ -78,7 +74,7 @@ export default {
     },
     async fetch() {
         try {
-            let {data} = await axios.get(this.source)
+            let {data} = await axios.get(this.route('get-menu', {_query: {position: 'top_menu'}}))
             this.items = data.data
         } catch (error) {
         }

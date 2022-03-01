@@ -44,6 +44,7 @@ export const actions = {
             commit('SET_FALLBACK', data.fallback)
             commit('SET_LOCALES', data.locales)
         } catch (e) {
+            console.log(e)
         }
     }
 }

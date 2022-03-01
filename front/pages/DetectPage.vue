@@ -49,7 +49,7 @@ export default {
 
         let module = null;
         const pageSlug = typeof this.$route.params.page !== "undefined" ? this.$route.params.page : 'home'
-        const {data} = await axios.get(`/find-page/${pageSlug}`)
+        const {data} = await axios.get(this.route('find-page', pageSlug))
         module = data.data.module || 'Page'
 
         if (data.data.method === 'not_found' || !Object.keys(modules).includes(module) || !modules[module]) {
