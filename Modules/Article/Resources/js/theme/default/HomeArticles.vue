@@ -30,13 +30,11 @@ export default {
     async fetch() {
         this.loading = true;
         let data = {
-            params: {
-                type: this.type,
-                show_home: 1,
-                limit: 3
-            }
+            type: this.type,
+            show_home: 1,
+            limit: 3
         };
-        await axios.get(this.source, data).then(response => {
+        await axios.get(this.route('get-articles', {_query: data})).then(response => {
             this.items = response.data.data;
 
             this.links = response.data.links;
@@ -55,11 +53,6 @@ export default {
                 next: null,
                 prev: null,
             },
-        }
-    },
-    computed: {
-        source() {
-            return '/get-articles'
         }
     }
 }

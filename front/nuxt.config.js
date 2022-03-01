@@ -48,6 +48,7 @@ module.exports = {
         '~components/global',
         '~plugins/i18n',
         '~plugins/axios',
+        '~plugins/ziggy-routes',
         {src: '~plugins/bootstrap', mode: 'client'},
         {src: '~plugins/lazyImage', mode: 'client'}
     ],
@@ -108,6 +109,7 @@ module.exports = {
         },
         extend(config, ctx) {
             config.resolve.alias["vue"] = "vue/dist/vue.common";
+            config.resolve.alias["ziggy"] = "vendor/tightenco/ziggy/src/js";
         },
         babel: {compact: true}
     },

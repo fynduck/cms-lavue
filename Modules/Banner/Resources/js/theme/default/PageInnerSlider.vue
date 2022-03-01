@@ -6,7 +6,8 @@
                     v-for="(item, index) in items"></button>
         </div>
         <div class="carousel-inner">
-            <div :class="{'carousel-item': true, 'active': index === 0}" v-for="(item, index) in items" @click="toLink(item)">
+            <div :class="{'carousel-item': true, 'active': index === 0}" v-for="(item, index) in items"
+                 @click="toLink(item)">
                 <img class="d-block lazy-img w-100"
                      v-lazy.container="item.slide"
                      :src="item.slide.loading"
@@ -51,10 +52,7 @@ export default {
     computed: {
         showIndicators() {
             return this.items.length > 1 && this.carouselSettings.indicators
-        },
-        source() {
-            return '/get-slides'
-        },
+        }
     },
     data() {
         return {
@@ -62,20 +60,17 @@ export default {
             carouselSettings: []
         }
     },
-    async fetch() {
+    fetch() {
         let data = {
-            params: {
-                page_id: this.pageId,
-                type: this.pageType,
-                position: this.position
-            }
+            page_id: this.pageId,
+            type: this.pageType,
+            position: this.position
         };
-        await axios.get(this.source, data).then(response => {
+        axios.get(this.route('get-slides', {_query: data})).then(response => {
             this.items = response.data.data;
             if (typeof response.data.carousel_settings !== "undefined") {
                 this.carouselSettings = response.data.carousel_settings
             }
-        }).catch(() => {
         });
     },
 
@@ -88,8 +83,8 @@ export default {
             let srcset = item.srcset;
             if (!process.server && item.mobile_srcset.length) {
                 let mobileSizes = [];
-                item.mobile_srcset.forEach(item => {
-                    let itemSplit = item.split(' ')
+                item.mobile_srcset.forEach(i => {
+                    let itemSplit = i.split(' ')
                     if (itemSplit.length > 1) {
                         mobileSizes.push(parseInt(itemSplit[1]))
                     }

@@ -1,5 +1,6 @@
 import Cookies from 'js-cookie'
 import axios from "axios";
+import route from "ziggy-js";
 
 // state
 export const state = () => ({
@@ -38,7 +39,7 @@ export const actions = {
     async getConfig({commit}) {
 
         try {
-            const {data} = await axios.get(`${process.env.apiUrl}/admin/get-app-data`)
+            const {data} = await axios.get(route('app-data'))
 
             commit('SET_LOCALE', {locale: data.locale})
             commit('SET_FALLBACK', data.fallback)

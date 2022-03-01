@@ -6,7 +6,8 @@
                     v-for="(item, index) in items"></button>
         </div>
         <div class="carousel-inner">
-            <div :class="{'carousel-item': true, 'active': index === 0}" v-for="(item, index) in items" @click="toLink(item)">
+            <div :class="{'carousel-item': true, 'active': index === 0}" v-for="(item, index) in items"
+                 @click="toLink(item)">
                 <picture>
                     <source :srcset="linkToImg(srcset)" :media="mediaWidth(srcset, srcKey)"
                             v-for="(srcset, srcKey) in item.srcset">
@@ -33,7 +34,6 @@
 
 <script>
 import axios from "axios";
-import {mapGetters} from "vuex";
 
 export default {
     name: "SliderTop",
@@ -54,9 +54,6 @@ export default {
     computed: {
         showIndicators() {
             return this.items.length > 1 && this.carouselSettings.indicators
-        },
-        source() {
-            return '/get-slides'
         }
     },
     data() {
@@ -67,14 +64,12 @@ export default {
     },
     async fetch() {
         let params = {
-            params: {
-                page_id: this.pageId,
-                type: this.pageType,
-                position: this.position
-            }
+            page_id: this.pageId,
+            type: this.pageType,
+            position: this.position
         };
         try {
-            const {data} = await axios.get(this.source, params);
+            const {data} = await axios.get(this.route('get-slides', {_query: params}));
 
             this.items = data.data;
             if (typeof data.data.carousel_settings !== "undefined") {

@@ -1,7 +1,7 @@
 <template>
     <div>
         <header>
-            <top-menu :app-name="title" :source="source_menu"/>
+            <top-menu :app-name="title"/>
         </header>
         <main>
             <nuxt/>
@@ -36,8 +36,7 @@ export default {
         TopMenu: () => import(`../../Modules/Menu/Resources/js/theme/${process.env.appTheme}/TopMenu`)
     },
     data: () => ({
-        title: process.env.appName,
-        source_menu: '/get-menu?position=top_menu'
+        title: process.env.appName
     }),
     computed: {
         ...mapGetters({
