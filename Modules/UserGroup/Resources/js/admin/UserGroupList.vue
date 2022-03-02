@@ -12,7 +12,7 @@
                         </b-input-group-append>
                     </b-input-group>
                 </b-col>
-                <b-col xs="2" class="text-right" v-if="canCreate">
+                <b-col xs="2" class="text-end" v-if="canCreate">
                     <router-link class="btn btn-success" :to="{name: `${routeName}.create`}"
                                  :title="$t('UserGroup.add_group')">
                         <fa :icon="['fas', 'plus']"/>
@@ -107,7 +107,7 @@ export default {
         fields() {
             return [
                 {key: 'name', label: this.$t('UserGroup.title')},
-                {key: 'actions', label: this.$t('UserGroup.action'), 'class': 'text-right'}
+                {key: 'actions', label: this.$t('UserGroup.action'), 'class': 'text-end'}
             ]
         }
     },

@@ -14,56 +14,55 @@
                 <fa :icon="['fas', 'save']"/>
             </button>
             <div class="row">
-                <div class="form-group col-md-7">
-                    <label for="title">{{ $t('CustomForm.title') }}</label>
-                    <input type="text" :class="{'form-control': true, 'is-invalid': errors.form_name}"
-                           v-model="form.form_name"
+                <div class="mb-3 col-md-7">
+                    <label for="title" class="form-label">{{ $t('CustomForm.title') }}</label>
+                    <input type="text" :class="{'form-control': true, 'is-invalid': errors.form_name}" v-model="form.form_name"
                            name="form_name" id="title" placeholder="Feedback">
                 </div>
-                <div class="form-group col-md-5 d-flex align-items-end">
-                    <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                <div class="mb-3 col-md-5 d-flex align-items-end">
+                    <div class="custom-control custom-checkbox my-1 me-sm-2">
                         <input type="checkbox" name="file" class="custom-control-input" id="file" v-model="form.file">
                         <label class="custom-control-label" for="file">{{ $t('CustomForm.upload_file') }}</label>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="form-group col-md-6">
-                    <label for="form_class">{{ $t('CustomForm.form_class') }}</label>
+                <div class="mb-3 col-md-6">
+                    <label for="form_class" class="form-label">{{ $t('CustomForm.form_class') }}</label>
                     <input type="text" class="form-control" v-model="form.form_class" name="form_class" id="form_class"
                            placeholder="feedback">
                 </div>
-                <div class="form-group col-md-6">
-                    <label for="form_id">{{ $t('CustomForm.form_id') }}</label>
+                <div class="mb-3 col-md-6">
+                    <label for="form_id" class="form-label">{{ $t('CustomForm.form_id') }}</label>
                     <input type="text" class="form-control" v-model="form.form_id" name="form_id" id="form_id"
                            placeholder="feedback">
                 </div>
             </div>
             <div class="row">
-                <div class="form-group col-md-5">
-                    <label for="action">{{ $t('CustomForm.action') }}</label>
-                    <select name="action" id="action" :class="['form-control', errors.action ? 'is-invalid' : '']"
+                <div class="mb-3 col-md-5">
+                    <label for="action" class="form-label">{{ $t('CustomForm.action') }}</label>
+                    <select name="action" id="action" :class="['form-select', errors.action ? 'is-invalid' : '']"
                             v-model="form.action">
                         <option v-for="(title, action) in actions" :value="action">{{ $t(title) }}</option>
                     </select>
                 </div>
-                <div class="form-group col-md-4">
-                    <label for="method">{{ $t('CustomForm.method') }}</label>
-                    <select name="method" id="method" :class="['form-control', errors.method ? 'is-invalid': '']"
+                <div class="mb-3 col-md-4">
+                    <label for="method" class="form-label">{{ $t('CustomForm.method') }}</label>
+                    <select name="method" id="method" :class="['form-select', errors.method ? 'is-invalid': '']"
                             v-model="form.method">
                         <option v-for="(title, method) in methods" :value="method">{{ title }}</option>
                     </select>
                 </div>
-                <div class="form-group col-md-3">
-                    <label for="languages">{{ $t('CustomForm.languages') }}</label>
-                    <select name="lang" id="languages" :class="['form-control', errors.lang ? 'is-invalid': '']"
+                <div class="mb-3 col-md-3">
+                    <label for="languages" class="form-label">{{ $t('CustomForm.languages') }}</label>
+                    <select name="lang" id="languages" :class="['form-select', errors.lang ? 'is-invalid': '']"
                             v-model="form.lang_id">
                         <option v-for="(lang, id) in languages" :value="id">{{ lang }}</option>
                     </select>
                 </div>
             </div>
             <div class="row">
-                <div class="form-group col-md-6">
+                <div class="mb-3 col-md-6">
                     <custom-select v-model="form.show_on"
                                    :source="admin_search"
                                    :label="$t('CustomForm.show_on')"
@@ -72,7 +71,7 @@
                     ></custom-select>
                 </div>
                 <div class="col-md-6">
-                    <label>{{ $t('CustomForm.send_emails') }}</label>
+                    <label class="form-label">{{ $t('CustomForm.send_emails') }}</label>
                     <v-select
                         v-model="form.send_emails"
                         taggable
@@ -99,44 +98,50 @@
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">
                             <div class="row">
-                                <div class="form-group col-md-3">
-                                    <label :for="`block_class_${key}`">{{ $t('CustomForm.block_class') }}</label>
+                                <div class="mb-3 col-md-3">
+                                    <label :for="`block_class_${key}`" class="form-label">{{
+                                            $t('CustomForm.block_class')
+                                        }}</label>
                                     <input type="text" class="form-control" v-model="field.block_class" name="block_class"
-                                           :id="`block_class_${key}`" placeholder="input_block">
+                                           :id="`block_class_${key}`" placeholder="block_class">
                                 </div>
-                                <div class="form-group col-md-3">
-                                    <label :for="`field_class_${key}`">{{ $t('CustomForm.field_class') }}</label>
+                                <div class="mb-3 col-md-3">
+                                    <label :for="`field_class_${key}`" class="form-label">{{
+                                            $t('CustomForm.field_class')
+                                        }}</label>
                                     <input type="text" class="form-control" v-model="field.field_class" name="field_class"
-                                           :id="`field_class_${key}`" placeholder="custom_input">
+                                           :id="`field_class_${key}`" placeholder="field_class">
                                 </div>
-                                <div class="form-group col-md-3">
-                                    <label :for="`field_id_${key}`">{{ $t('CustomForm.field_id') }}</label>
+                                <div class="mb-3 col-md-3">
+                                    <label :for="`field_id_${key}`" class="form-label">{{ $t('CustomForm.field_id') }}</label>
                                     <input type="text" class="form-control" v-model="field.field_id" name="field_id"
-                                           :id="`field_id_${key}`" placeholder="custom_input">
+                                           :id="`field_id_${key}`" placeholder="field_id">
                                 </div>
-                                <div class="form-group col-md-3">
-                                    <label :for="`field_label_${key}`">{{ $t('CustomForm.field_label') }}</label>
+                                <div class="mb-3 col-md-3">
+                                    <label :for="`field_label_${key}`" class="form-label">{{
+                                            $t('CustomForm.field_label')
+                                        }}</label>
                                     <input type="text" class="form-control" v-model="field.label" name="field_label"
-                                           :id="`field_label_${key}`" placeholder="custom_input">
+                                           :id="`field_label_${key}`" placeholder="field_label">
                                 </div>
                             </div>
                         </li>
                         <li class="list-group-item">
                             <div class="row">
-                                <div class="form-group col-md-3">
-                                    <label :for="`placeholder_${key}`">{{ $t('CustomForm.placeholder') }}</label>
+                                <div class="mb-3 col-md-3">
+                                    <label :for="`placeholder_${key}`" class="form-label">
+                                        {{ $t('CustomForm.placeholder') }}
+                                    </label>
                                     <input type="text" class="form-control" name="placeholder" :id="`placeholder_${key}`"
-                                           placeholder="custom_input" v-model="field.placeholder">
+                                           placeholder="placeholder" v-model="field.placeholder">
                                 </div>
-                                <div class="form-group col-md-3">
-                                    <label :for="`name_${key}`">{{ $t('CustomForm.field_name') }}</label>
-                                    <input type="text"
-                                           :class="['form-control', errors[`fields.${key}.name`] ? 'is-invalid': '']"
-                                           name="name"
-                                           :id="`name_${key}`" placeholder="custom_input" v-model="field.name">
+                                <div class="mb-3 col-md-3">
+                                    <label :for="`name_${key}`" class="form-label">{{ $t('CustomForm.field_name') }}</label>
+                                    <input type="text" :id="`name_${key}`" placeholder="name" v-model="field.name" name="name"
+                                           :class="['form-control', errors[`fields.${key}.name`] ? 'is-invalid': '']">
                                 </div>
-                                <div class="form-group col-md-3">
-                                    <label :for="`type_${key}`">{{ $t('CustomForm.type_field') }}</label>
+                                <div class="mb-3 col-md-3">
+                                    <label :for="`type_${key}`" class="form-label">{{ $t('CustomForm.type_field') }}</label>
                                     <select name="type" :id="`type_${key}`"
                                             :class="['form-control', errors[`fields.${key}.type`] ? 'is-invalid': '']"
                                             v-model="field.type">
@@ -145,8 +150,8 @@
                                         </option>
                                     </select>
                                 </div>
-                                <div class="form-group col-md-3">
-                                    <label>{{ $t('CustomForm.field_validate') }}</label>
+                                <div class="mb-3 col-md-3">
+                                    <label class="form-label">{{ $t('CustomForm.field_validate') }}</label>
                                     <br>
                                     <v-select
                                         v-model="field.validate"
@@ -173,17 +178,20 @@
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item">
                                         <div class="row">
-                                            <div class="form-group col-md-6">
-                                                <label :for="`option_title_${option_key}`">
-                                                    {{ $t('CustomForm.text') }}</label>
+                                            <div class="mb-3 col-md-6">
+                                                <label :for="`option_title_${option_key}`" class="form-label">
+                                                    {{ $t('CustomForm.text') }}
+                                                </label>
                                                 <input type="text"
                                                        :class="['form-control', errors[`fields.${key}.options.${option_key}.title`] ? 'is-invalid': '']"
                                                        v-model="option.title" name="title"
                                                        :id="`option_title_${option_key}`"
                                                        placeholder="custom_input">
                                             </div>
-                                            <div class="form-group col-md-6">
-                                                <label :for="`value_${option_key}`">{{ $t('CustomForm.value') }}</label>
+                                            <div class="mb-3 col-md-6">
+                                                <label :for="`value_${option_key}`" class="form-label">{{
+                                                        $t('CustomForm.value')
+                                                    }}</label>
                                                 <input type="text"
                                                        :class="['form-control', errors[`fields.${key}.options.${option_key}.value`] ? 'is-invalid': '']"
                                                        v-model="option.value" name="value" :id="`value_${option_key}`"
@@ -193,17 +201,18 @@
                                     </li>
                                     <li class="list-group-item">
                                         <div class="row">
-                                            <div class="form-group col-md-6">
-                                                <label :for="`option_class_${option_key}`">
+                                            <div class="mb-3 col-md-6">
+                                                <label :for="`option_class_${option_key}`" class="form-label">
                                                     {{ $t('CustomForm.option_class') }}
                                                 </label>
                                                 <input type="text" class="form-control" v-model="option.option_class"
                                                        name="option_class"
                                                        :id="`option_class_${option_key}`" placeholder="custom_input">
                                             </div>
-                                            <div class="form-group col-md-6">
-                                                <label :for="`option_id_${option_key}`">
-                                                    {{ $t('CustomForm.option_id') }}</label>
+                                            <div class="mb-3 col-md-6">
+                                                <label :for="`option_id_${option_key}`" class="form-label">
+                                                    {{ $t('CustomForm.option_id') }}
+                                                </label>
                                                 <input type="text" class="form-control" v-model="option.option_id"
                                                        name="option_id"
                                                        :id="`option_id_${option_key}`" placeholder="custom_input">
@@ -217,7 +226,7 @@
                     <button class="btn btn-success btn-sm" type="button" @click.prevent="addOption(key)"
                             :title="$t('CustomForm.add_option')" v-if="fieldOptions.includes(field.type)">
                         <fa :icon="['fas', 'plus']"/>
-                        <span class="ml-2">{{ $t('CustomForm.add_option') }}</span>
+                        <span class="ms-2">{{ $t('CustomForm.add_option') }}</span>
                     </button>
                 </div>
             </draggable>
@@ -228,7 +237,7 @@
                         <fa :icon="['fas', 'plus']"/>
                     </button>
                 </div>
-                <div class="col text-right">
+                <div class="col text-end">
                     <router-link class="btn btn-light" :to="{name: 'custom-form.index'}"
                                  :title="$t('CustomForm.cancel')">
                         <fa :icon="['fas', 'reply']"/>

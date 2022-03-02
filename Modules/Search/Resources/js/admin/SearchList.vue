@@ -16,14 +16,19 @@
             <template #row-details="row">
                 <b-row class="mb-2">
                     <b-col v-for="(model, index) in row.item.models" :key="index">
-                        <b-form-checkbox v-model="model.active">
-                            {{ model.name }}
-                        </b-form-checkbox>
+                        <div class="form-check form-switch switch-success">
+                            <input type="checkbox" class="form-check-input"
+                                   v-model="model.active"
+                                   :id="`active_${index}`" :value="1">
+                            <label class="form-check-label" :for="`active_${index}`">
+                                {{ model.name }}
+                            </label>
+                        </div>
                     </b-col>
                 </b-row>
             </template>
         </b-table>
-        <p class="text-right" v-if="canEdit">
+        <p class="text-end" v-if="canEdit">
             <button :class="{'btn btn-success': true, 'btn-loading': submit}" type="button" :title="$t('Search.save')"
                     :disabled="submit" @click="save()">
                 <fa :icon="['fas', 'save']"/>

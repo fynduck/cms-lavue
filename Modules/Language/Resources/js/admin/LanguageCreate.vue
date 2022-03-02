@@ -15,28 +15,28 @@
             </button>
             <div class="tab-content pt-4">
                 <div class="row">
-                    <div class="form-group col-md-4">
-                        <label for="name">{{ $t('Language.title') }}</label>
+                    <div class="mb-3 col-md-4">
+                        <label for="name" class="form-label">{{ $t('Language.title') }}</label>
                         <input type="text" :class="['form-control', errors['name'] ? ' is-invalid' : '']"
                                :placeholder="$t('Language.title')"
                                id="name" v-model="item.name">
                     </div>
-                    <div class="form-group col-md-4">
-                        <label for="country_iso">{{ $t('Language.country_iso') }}</label>
+                    <div class="mb-3 col-md-4">
+                        <label for="country_iso" class="form-label">{{ $t('Language.country_iso') }}</label>
                         <input type="text" :class="['form-control', errors['country_iso'] ? ' is-invalid' : '']"
                                :placeholder="$t('Language.country_iso')" id="country_iso" v-model="item.country_iso">
                     </div>
-                    <div class="form-group col-md-4">
-                        <label for="slug">{{ $t('Language.slug') }}</label>
+                    <div class="mb-3 col-md-4">
+                        <label for="slug" class="form-label">{{ $t('Language.slug') }}</label>
                         <input type="text" :class="['form-control', errors['slug'] ? ' is-invalid' : '']"
                                :placeholder="$t('Language.slug')" id="slug" v-model="item.slug">
                     </div>
                 </div>
                 <div class="row align-items-center">
-                    <div class="form-group col-md-3 my-4">
+                    <div class="mb-3 col-md-3 my-4">
                         <upload v-model="item.image"></upload>
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="mb-3 col-md-3">
                         <b-form-checkbox id="checkbox_default"
                                          class="switch-success"
                                          switch
@@ -46,7 +46,7 @@
                             {{ $t('Language.default') }}
                         </b-form-checkbox>
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="mb-3 col-md-3">
                         <b-form-checkbox id="checkbox_active"
                                          class="switch-success"
                                          switch
@@ -56,14 +56,14 @@
                             {{ $t('Language.on_off') }}
                         </b-form-checkbox>
                     </div>
-                    <div class="form-group col-md-3">
-                        <label for="input-priority">{{ $t('Language.priority') }}</label>
+                    <div class="mb-3 col-md-3">
+                        <label for="input-priority" class="form-label">{{ $t('Language.priority') }}</label>
                         <input type="number" v-model="item.priority" id="input-priority" class="form-control"
                                :placeholder="$t('Language.priority')"
                                min="0">
                     </div>
                 </div>
-                <p class="text-right">
+                <p class="text-end">
                     <router-link class="btn btn-light" :to="{name: 'language.index'}" :title="$t('Language.cancel')">
                         <fa :icon="['fas', 'reply']"/>
                     </router-link>

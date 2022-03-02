@@ -1,7 +1,5 @@
-@import '~bootstrap/scss/functions';
 @import 'variables';
-@import '~bootstrap/scss/bootstrap';
-@import '~bootstrap-five/scss/forms/floating-labels';
+@import '~bootstrap-five/scss/bootstrap';
 //@import '~sweetalert2/src/sweetalert2';
 
 //@import 'elements/card';
@@ -36,17 +34,4 @@
     color: $white !important;
 }
 
-.custom-switch {
-    @each $color, $value in $theme-colors {
-        &.switch-#{$color} {
-            .custom-control-input:checked {
-                ~ .custom-control-label {
-                    &::before {
-                        background-color: $value;
-                        border-color: $value;
-                    }
-                }
-            }
-        }
-    }
-}
+@import "custom-check-input";

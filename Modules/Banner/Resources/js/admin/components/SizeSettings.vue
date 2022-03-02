@@ -10,12 +10,12 @@
             </b-form-checkbox>
             <b-row v-if="item.ratio && item.ratios">
                 <b-col class="mb-3">
-                    <label for="ration_width">{{ $t('Banner.width') }}</label>
+                    <label for="ration_width" class="form-label">{{ $t('Banner.width') }}</label>
                     <b-form-input id="ration_width" v-model.number="item.ratios.width" type="number"
                                   @input="calculateSizeWithRatio(index)"></b-form-input>
                 </b-col>
                 <b-col class="mb-3">
-                    <label for="ration_height">{{ $t('Banner.height') }}</label>
+                    <label for="ration_height" class="form-label">{{ $t('Banner.height') }}</label>
                     <b-form-input id="ration_height" v-model.number="item.ratios.height" type="number"
                                   @input="calculateSizeWithRatio(index)"></b-form-input>
                 </b-col>
@@ -37,12 +37,12 @@
                     </b-form-group>
                 </b-col>
                 <b-col cols="12" sm="4" class="mb-3">
-                    <label :for="`width_${index}_${key}`">{{ $t('Banner.width') }}</label>
+                    <label :for="`width_${index}_${key}`" class="form-label">{{ $t('Banner.width') }}</label>
                     <b-form-input :id="`width_${index}_${key}`" v-model.number="size.width" type="number"
                                   @input="calculateSizeWithRatio(index, size, 'w')"></b-form-input>
                 </b-col>
                 <b-col cols="12" sm="4" class="mb-3">
-                    <label :for="`height_${index}_${key}`">{{ $t('Banner.height') }}</label>
+                    <label :for="`height_${index}_${key}`" class="form-label">{{ $t('Banner.height') }}</label>
                     <b-form-input :id="`height_${index}_${key}`" v-model.number="size.height" type="number"
                                   @input="calculateSizeWithRatio(index, size, 'h')"></b-form-input>
                 </b-col>
@@ -61,12 +61,12 @@
                 </b-col>
                 <b-col class="mb-3">
                     <b-form-group :label="$t('Banner.action')" label-for="action">
-                        <b-form-select v-model="item.action" :options="resizes" size="sm" id="action"></b-form-select>
+                        <b-form-select class="form-select" v-model="item.action" :options="resizes" size="sm" id="action"></b-form-select>
                     </b-form-group>
                 </b-col>
                 <b-col class="mb-3">
                     <b-form-group :label="$t('Banner.format')" label-for="encode">
-                        <b-form-select v-model="item.encode" :options="formats" size="sm" id="encode"></b-form-select>
+                        <b-form-select class="form-select" v-model="item.encode" :options="formats" size="sm" id="encode"></b-form-select>
                     </b-form-group>
                 </b-col>
             </b-row>
@@ -106,7 +106,7 @@
                     </b-form-group>
                 </b-col>
                 <b-col md="4" class="mb-3">
-                    <label for="background">{{ $t('Banner.background') }}</label>
+                    <label for="background" class="form-label">{{ $t('Banner.background') }}</label>
                     <div class="btn-group d-flex">
                         <b-form-input v-model="item.background" id="background" type="color"></b-form-input>
                         <b-button @click="removeBg(index)">
@@ -117,7 +117,7 @@
             </b-row>
             <b-row>
                 <b-col cols="12" class="mb-3">
-                    <label for="interval">{{ $t('Banner.interval') }}</label>
+                    <label for="interval" class="form-label">{{ $t('Banner.interval') }}</label>
                     <b-form-input id="interval" v-model.number="item.interval" type="number" min="0"></b-form-input>
                 </b-col>
                 <b-col class="mb-2">
@@ -147,7 +147,7 @@
                         <fa :icon="['fas', 'plus']"/>
                     </b-button>
                 </b-col>
-                <b-col class="text-right">
+                <b-col class="text-end">
                     <b-button variant="primary" :class="{'btn-loading': loading_setting}" :title="$t('Banner.save')"
                               :disabled="loading_setting"
                               @click="saveSettings(index)">

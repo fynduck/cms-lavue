@@ -17,33 +17,33 @@
                 <b-tab :title="language.name" v-for="(language, locale_id) in locales" :key="locale_id" class="mt-4">
                     <b-card-text>
                         <div class="row">
-                            <div class="form-group col-md-6">
-                                <label :for="`title_${locale_id}`">{{ $t('Menu.title') }}</label>
+                            <div class="mb-3 col-md-6">
+                                <label :for="`title_${locale_id}`" class="form-label">{{ $t('Menu.title') }}</label>
                                 <input type="text"
                                        :class="['form-control', errors['items.' + locale_id + '.title'] ? ' is-invalid' : '']"
                                        v-model="item.items[locale_id].title" :id="`title_${locale_id}`"
                                        :placeholder="$t('Menu.title')">
                             </div>
-                            <div class="form-group col-md-6">
-                                <label :for="`link_${locale_id}`">{{ $t('Menu.link') }}</label>
+                            <div class="mb-3 col-md-6">
+                                <label :for="`link_${locale_id}`" class="form-label">{{ $t('Menu.link') }}</label>
                                 <input type="text" v-model="item.items[locale_id].link" :id="`link_${locale_id}`"
                                        :class="['form-control', errors['items.' + locale_id + '.link'] ? ' is-invalid' : '']"
                                        :placeholder="$t('Menu.link')">
                             </div>
                         </div>
                         <div class="row">
-                            <div class="form-group col-md-6">
-                                <label :for="`additional_${locale_id}`">{{ $t('Menu.additional_title') }}</label>
+                            <div class="mb-3 col-md-6">
+                                <label :for="`additional_${locale_id}`" class="form-label">{{ $t('Menu.additional_title') }}</label>
                                 <input type="text" :placeholder="$t('Menu.additional_title')"
                                        :class="['form-control', errors['items.' + locale_id + '.additional'] ? ' is-invalid' : '']"
                                        v-model="item.items[locale_id].additional" :id="`additional_${locale_id}`">
                             </div>
-                            <div class="form-group col-md-4 d-flex align-items-end">
-                                <div class="custom-control custom-switch switch-success my-1 mr-sm-2">
-                                    <input type="checkbox" class="custom-control-input"
+                            <div class="mb-3 col-md-4 d-flex align-items-end">
+                                <div class="form-check form-switch switch-success my-1 me-sm-2">
+                                    <input type="checkbox" class="form-check-input"
                                            v-model="item.items[locale_id].active"
                                            :id="`active_${locale_id}`" :value="1">
-                                    <label class="custom-control-label" :for="`active_${locale_id}`">
+                                    <label class="form-check-label" :for="`active_${locale_id}`">
                                         {{ $t('Menu.on_off') }}
                                     </label>
                                 </div>
@@ -54,21 +54,21 @@
             </b-tabs>
             <hr>
             <div class="row">
-                <div class="form-group col">
+                <div class="mb-3 col">
                     <upload v-model="item.image"></upload>
                 </div>
-                <div class="form-group col">
-                    <label for="position">{{ $t('Menu.position') }}</label>
-                    <select id="position" :class="['form-control', errors.position ? ' is-invalid' : '']" required
+                <div class="mb-3 col">
+                    <label for="position" class="form-label">{{ $t('Menu.position') }}</label>
+                    <select id="position" :class="['form-select', errors.position ? ' is-invalid' : '']" required
                             v-model="item.position">
                         <option v-for="(title, position) in positions" :value="position">
                             {{ $t(title) }}
                         </option>
                     </select>
                 </div>
-                <div class="form-group col">
-                    <label for="parent_id">{{ $t('Menu.menu_parent') }}</label>
-                    <select id="parent_id" class="form-control" v-model="item.parent_id">
+                <div class="mb-3 col">
+                    <label for="parent_id" class="form-label">{{ $t('Menu.menu_parent') }}</label>
+                    <select id="parent_id" class="form-select" v-model="item.parent_id">
                         <option value="">----</option>
                         <option v-for="parent in parents[item.position]" :value="parent.id">
                             {{ parent.title }}
@@ -77,18 +77,18 @@
                 </div>
             </div>
             <div class="row">
-                <div class="form-group col-md-4 col-lg-3">
-                    <label for="icon">{{ $t('Menu.fa_icon') }}</label>
+                <div class="mb-3 col-md-4 col-lg-3">
+                    <label for="icon" class="form-label">{{ $t('Menu.fa_icon') }}</label>
                     <input type="text" class="form-control" id="icon" placeholder="fas fa-question" v-model="item.icon">
                 </div>
-                <div class="form-group col-md-6 col-lg-5">
+                <div class="mb-3 col-md-6 col-lg-5">
                     <custom-select v-model="item.show_page"
                                    :source="admin_search"
                                    :label="$t('Menu.show_page')"
                                    :no_result="$t('Menu.no_results')"
                     ></custom-select>
                 </div>
-                <div class="form-group col-md-6 col-lg-4">
+                <div class="mb-3 col-md-6 col-lg-4">
                     <custom-select v-model="item.to_page"
                                    :source="admin_search"
                                    :label="$t('Menu.to_page')"
@@ -97,30 +97,30 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4 col-lg-3 form-group">
-                    <label for="target">{{ $t('Menu.target') }}</label>
-                    <select name="target" id="target" class="form-control" required v-model="item.target">
+                <div class="col-md-4 col-lg-3 mb-3">
+                    <label for="target" class="form-label">{{ $t('Menu.target') }}</label>
+                    <select name="target" id="target" class="form-select" required v-model="item.target">
                         <option v-for="target in targets" :value="target">{{ target }}</option>
                     </select>
                 </div>
-                <div class="col-md-3 col-lg-2 form-group">
-                    <label for="priority">{{ $t('Menu.priority') }}</label>
+                <div class="col-md-3 col-lg-2 mb-3">
+                    <label for="priority" class="form-label">{{ $t('Menu.priority') }}</label>
                     <input type="number" class="form-control" min="0" v-model="item.priority" id="priority"
                            :placeholder="$t('Menu.priority')">
                 </div>
-                <div class="col-md-3 form-group">
-                    <label for=attributes>{{ $t('Menu.custom_attributes') }}</label>
-                    <input type="attributes" class="form-control" id="attributes"
+                <div class="col-md-3 mb-3">
+                    <label for="attributes" class="form-label">{{ $t('Menu.custom_attributes') }}</label>
+                    <input type="text" class="form-control" id="attributes"
                            placeholder="style=color:red,margin:10px;data-info=10" v-model="item.attributes">
                 </div>
-                <div class="col-md-4 col-lg-3 form-group d-flex align-items-end">
-                    <div class="custom-control custom-switch switch-success my-1 mr-sm-2">
-                        <input type="checkbox" class="custom-control-input" id="nofollow" v-model="item.nofollow" :value="1">
-                        <label class="custom-control-label" for="nofollow">{{ $t('Menu.nofollow') }}</label>
+                <div class="col-md-4 col-lg-3 mb-3 d-flex align-items-end">
+                    <div class="form-check check-success my-1 me-sm-2">
+                        <input type="checkbox" class="form-check-input" id="nofollow" v-model="item.nofollow" :value="1">
+                        <label class="form-check-label" for="nofollow">{{ $t('Menu.nofollow') }}</label>
                     </div>
                 </div>
             </div>
-            <p class="text-right">
+            <p class="text-end">
                 <router-link class="btn btn-light" :to="{name: 'menu.index'}" :title="$t('Menu.cancel')">
                     <fa :icon="['fas', 'reply']"/>
                 </router-link>

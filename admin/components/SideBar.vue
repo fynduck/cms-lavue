@@ -3,7 +3,7 @@
         <skeleton-sideBar v-show="loading"></skeleton-sideBar>
         <b-list-group>
             <b-list-group-item v-for="(route, index) in routes" :key="index">
-                <router-link :to="{name: route.name}">
+                <router-link :to="{name: route.name}" class="text-decoration-none">
                     <fa :icon="route.meta.iconClass" v-if="route.meta.iconClass"/>
                     <fa :icon="['fas', 'align-justify']" v-else/>
                     <span class="sidebar-title">{{ $t(generateTransKey(route)) }}</span>

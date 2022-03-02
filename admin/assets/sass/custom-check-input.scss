@@ -1,0 +1,36 @@
+@each $name, $value in $theme-colors {
+    .form-switch {
+        &.switch-#{$name} {
+            .form-check-input {
+
+                &:checked {
+                    background-color: $value;
+                    border-color: $value;
+                    background-image: escape-svg(url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='3' fill='#{$white}'/></svg>"));
+                }
+
+                &:focus {
+                    &:not(:checked) {
+                        background-image: escape-svg(url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='3' fill='#{tint-color($value, 50%)}'/></svg>"));
+                    }
+
+                    border-color: tint-color($value, 50%);
+                    box-shadow: 0 0 $input-btn-focus-blur $input-btn-focus-width rgba($value, $input-btn-focus-color-opacity);
+                }
+            }
+        }
+    }
+
+    .check-#{$name} {
+        .form-check-input {
+            &:checked {
+                background-color: $value;
+                border-color: $value;
+            }
+            &:focus {
+                border-color: tint-color($value, 50%);
+                box-shadow: 0 0 $input-btn-focus-blur $input-btn-focus-width rgba($value, $input-btn-focus-color-opacity);
+            }
+        }
+    }
+}

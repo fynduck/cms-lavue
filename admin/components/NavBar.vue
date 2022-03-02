@@ -1,5 +1,5 @@
 <template>
-    <b-navbar type="dark" variant="dark" fixed="top" toggleable="lg">
+    <b-navbar type="dark" variant="dark" fixed="top" toggleable="lg" class="px-3">
         <div class="navbar-branding" :class="{open : hideAside}">
             <router-link class="navbar-brand text-success" :to="{name: 'dashboard.index'}">
                 <b>{{ appName }}</b>
@@ -13,7 +13,7 @@
                     {{ item.title }}
                 </b-nav-item>
             </b-navbar-nav>
-            <b-navbar-nav class="ml-auto">
+            <b-navbar-nav class="ms-auto">
                 <b-nav-item-dropdown class="text-capitalize" :text="locale" right>
                     <b-dropdown-item href="#" v-for="(lang, lang_id) in locales" @click.prevent="setLocale(lang.slug)"
                                      :key="lang_id">

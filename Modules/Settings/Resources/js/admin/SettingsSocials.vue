@@ -5,26 +5,26 @@
         </p>
         <form @submit.prevent="onSubmit">
             <div class="row" v-for="(item, index) in items">
-                <div class="col-sm-6 col-lg-3 form-group">
-                    <label for="name">{{ $t('Settings.title') }}</label>
+                <div class="col-sm-6 col-lg-3 mb-3">
+                    <label for="name" class="form-label">{{ $t('Settings.title') }}</label>
                     <input type="text" v-model="item.name" :class="['form-control', errors[index + '.name'] ? ' is-invalid' : '']"
                            id="name">
                 </div>
-                <div class="col-sm-6 col-lg-4 form-group">
-                    <label for="url">{{ $t('Settings.url') }}</label>
+                <div class="col-sm-6 col-lg-4 mb-3">
+                    <label for="url" class="form-label">{{ $t('Settings.url') }}</label>
                     <input type="text" v-model="item.url" :class="['form-control', errors[index + '.url'] ? ' is-invalid' : '']"
                            id="url">
                     <div class="invalid-feedback" v-if="errors[index + '.url']">
                         <strong v-for="error in errors[index + '.url']">{{ error }}</strong>
                     </div>
                 </div>
-                <div class="col-sm-6 col-lg-3 form-group">
-                    <label for="class_icon">{{ $t('Settings.class_icon') }}</label>
+                <div class="col-sm-6 col-lg-3 mb-3">
+                    <label for="class_icon" class="form-label">{{ $t('Settings.class_icon') }}</label>
                     <input type="text" v-model="item.class_icon"
                            :class="['form-control', errors[index + '.class_icon'] ? ' is-invalid' : '']" id="class_icon">
                 </div>
-                <div class="col-sm-5 col-lg-1 form-group">
-                    <label for="priority">{{ $t('Settings.priority') }}</label>
+                <div class="col-sm-5 col-lg-1 mb-3">
+                    <label for="priority" class="form-label">{{ $t('Settings.priority') }}</label>
                     <input type="text" v-model="item.priority" :class="['form-control', errors[index + '.priority'] ? ' is-invalid' : '']"
                            id="priority">
                 </div>

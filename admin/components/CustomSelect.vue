@@ -1,6 +1,6 @@
 <template>
     <div>
-        <label v-if="label">{{ label }}</label>
+        <label v-if="label" class="form-label">{{ label }}</label>
         <v-select v-model="selected"
                   :multiple="multiple"
                   :filterable="false"

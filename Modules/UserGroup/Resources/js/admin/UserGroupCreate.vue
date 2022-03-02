@@ -11,18 +11,18 @@
                     :disabled="submit">
                 <i class="fas fa-save"></i>
             </button>
-            <div class="form-group">
-                <label for="name">{{ $t('UserGroup.title') }}</label>
+            <div class="mb-3">
+                <label for="name" class="form-label">{{ $t('UserGroup.title') }}</label>
                 <input type="text" :class="['form-control', errors['name'] ? ' is-invalid' : '']" v-model="form.name" id="name">
                 <div class="invalid-feedback" v-if="errors['title']">
                     <strong v-for="error in errors['title']">{{ error }}</strong>
                 </div>
             </div>
-            <div class="form-group" v-for="(item, route_name) in routes">
+            <div class="mb-3" v-for="(item, route_name) in routes">
                 <label :for="route_name"><strong>{{ $t(`UserGroup.${route_name}`) }}</strong></label>
                 <div class="row">
-                    <div class="form-group col" v-for="(rights, right) in item">
-                        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                    <div class="mb-3 col" v-for="(rights, right) in item">
+                        <div class="custom-control custom-checkbox my-1 me-sm-2">
                             <input type="checkbox" class="custom-control-input" :id="`param-value-${ route_name }-${ right }`"
                                    v-model="routes[route_name][right]">
                             <label class="custom-control-label" :for="`param-value-${ route_name }-${ right }`">
@@ -33,7 +33,7 @@
                 </div>
 
             </div>
-            <p class="text-right">
+            <p class="text-end">
                 <router-link class="btn btn-light" :to="{name: 'user-group.index'}" :title="$t('UserGroup.cancel')">
                     <i class="fas fa-reply"></i>
                 </router-link>

@@ -47,7 +47,7 @@
                             </b-table>
                         </b-tab>
                     </b-tabs>
-                    <div class="text-right" v-if="!files_loading && canCreate">
+                    <div class="text-end" v-if="!files_loading && canCreate">
                         <button :class="{'btn btn-success': true, 'btn-loading': submit}" type="button"
                                 :title="$t('Translate.save')"
                                 :disabled="submit"

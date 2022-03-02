@@ -12,8 +12,8 @@
                 <fa :icon="['fas', 'save']"/>
             </button>
             <div class="row">
-                <div class="form-group col-md-6 col-lg-4">
-                    <label for="username">{{ $t('User.username') }}</label>
+                <div class="mb-3 col-md-6 col-lg-4">
+                    <label for="username" class="form-label">{{ $t('User.username') }}</label>
                     <input type="text" :class="['form-control', errors['username'] ? ' is-invalid' : '']"
                            v-model="form.username"
                            id="username">
@@ -21,14 +21,14 @@
                         <strong v-for="error in errors['username']">{{ error }}</strong>
                     </div>
                 </div>
-                <div class="form-group col-md-6 col-lg-4">
-                    <label for="name">{{ $t('User.name') }}</label>
+                <div class="mb-3 col-md-6 col-lg-4">
+                    <label for="name" class="form-label">{{ $t('User.name') }}</label>
                     <input type="text" :class="['form-control', errors['name'] ? ' is-invalid' : '']"
                            v-model="form.name"
                            id="name">
                 </div>
-                <div class="form-group col-md-6 col-lg-4">
-                    <label for="email">{{ $t('User.email') }}</label>
+                <div class="mb-3 col-md-6 col-lg-4">
+                    <label for="email" class="form-label">{{ $t('User.email') }}</label>
                     <input type="email" :class="['form-control', errors['email'] ? ' is-invalid' : '']"
                            v-model="form.email"
                            id="email">
@@ -36,8 +36,8 @@
                         <strong v-for="error in errors['email']">{{ error }}</strong>
                     </div>
                 </div>
-                <div class="form-group col-md-6 col-lg-4">
-                    <label for="birthday">{{ $t('User.birthday') }}</label>
+                <div class="mb-3 col-md-6 col-lg-4">
+                    <label for="birthday" class="form-label">{{ $t('User.birthday') }}</label>
                     <input type="date" :class="['form-control', errors['birthday'] ? ' is-invalid' : '']"
                            v-model="form.birthday"
                            id="birthday">
@@ -45,27 +45,27 @@
                         <strong v-for="error in errors['birthday']">{{ error }}</strong>
                     </div>
                 </div>
-                <div class="form-group col-md-6 col-lg-4">
-                    <label for="phone">{{ $t('User.phone') }}</label>
+                <div class="mb-3 col-md-6 col-lg-4">
+                    <label for="phone" class="form-label">{{ $t('User.phone') }}</label>
                     <input type="text" :class="['form-control', errors['phone'] ? ' is-invalid' : '']"
                            v-model="form.phone"
                            id="phone">
                 </div>
-                <div class="form-group col-md-6 col-lg-4">
-                    <label for="group">{{ $t('User.group') }}</label>
+                <div class="mb-3 col-md-6 col-lg-4">
+                    <label for="group" class="form-label">{{ $t('User.group') }}</label>
                     <select v-model="form.group_id" id="group"
-                            :class="['form-control', errors['group_id'] ? ' is-invalid' : '']">
+                            :class="['form-select', errors['group_id'] ? ' is-invalid' : '']">
                         <option :value="group_id" v-for="(group, group_id) in groups">{{ group }}</option>
                     </select>
                 </div>
-                <div class="form-group col-md-6 col-lg-4">
-                    <label for="password">{{ $t('User.password') }}</label>
+                <div class="mb-3 col-md-6 col-lg-4">
+                    <label for="password" class="form-label">{{ $t('User.password') }}</label>
                     <input type="text" :class="['form-control', errors['password'] ? ' is-invalid' : '']"
                            v-model="form.password"
                            id="password">
                 </div>
             </div>
-            <p class="text-right">
+            <p class="text-end">
                 <router-link class="btn btn-light" :to="{name: 'user.index'}" :title="$t('User.cancel')">
                     <fa :icon="['fas', 'reply']"/>
                 </router-link>

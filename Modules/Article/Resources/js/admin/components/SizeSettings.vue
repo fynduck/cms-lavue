@@ -53,12 +53,12 @@
                 </b-col>
                 <b-col class="mb-3">
                     <b-form-group :label="$t('Article.action')" label-for="action">
-                        <b-form-select v-model="item.action" :options="resizes" size="sm" id="action"></b-form-select>
+                        <b-form-select class="form-select" v-model="item.action" :options="resizes" size="sm" id="action"></b-form-select>
                     </b-form-group>
                 </b-col>
                 <b-col class="mb-3">
                     <b-form-group :label="$t('Article.format')" label-for="encode">
-                        <b-form-select v-model="item.encode" :options="formats" size="sm" id="encode"></b-form-select>
+                        <b-form-select class="form-select" v-model="item.encode" :options="formats" size="sm" id="encode"></b-form-select>
                     </b-form-group>
                 </b-col>
             </b-row>
@@ -113,7 +113,7 @@
                         <fa :icon="['fas', 'plus']"/>
                     </b-button>
                 </b-col>
-                <b-col class="text-right">
+                <b-col class="text-end">
                     <b-button variant="primary" :class="{'btn-loading': loading_setting}" :title="$t('Article.save')"
                               :disabled="loading_setting"
                               @click="saveSettings(index)">

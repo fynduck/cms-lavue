@@ -11,19 +11,19 @@
                     </b-input-group>
                 </b-col>
                 <b-col sm="6" md="3" class="my-1 d-flex align-items-center">
-                    <b-form-select v-model="lang_id" :options="langOptions"></b-form-select>
+                    <b-form-select class="form-select" v-model="lang_id" :options="langOptions"></b-form-select>
                 </b-col>
                 <b-col sm="6" md="3" class="my-1 d-flex align-items-center">
-                    <b-form-checkbox id="checkbox_status"
-                                     class="switch-success"
-                                     switch
-                                     v-model="active"
-                                     :value="1"
-                                     :unchecked-value="0">
-                        {{ $t('Menu.active_s') }}
-                    </b-form-checkbox>
+                    <div class="form-check form-switch switch-success">
+                        <input type="checkbox" class="form-check-input"
+                               v-model="active"
+                               id="checkbox_status" :value="1">
+                        <label class="form-check-label" for="checkbox_status">
+                            {{ $t('Menu.active_s') }}
+                        </label>
+                    </div>
                 </b-col>
-                <b-col sm="6" md="3" lg="2" class="text-right" v-if="canCreate">
+                <b-col sm="6" md="3" lg="2" class="text-end" v-if="canCreate">
                     <b-button v-b-modal.menu-settings variant="info">{{ $t('Menu.settings') }}</b-button>
                     <router-link class="btn btn-success" :to="{name: `${routeName}.create`}"
                                  :title="$t('Menu.add_menu')">
@@ -86,6 +86,9 @@
                  v-if="confirmWindow.openConfirm"
         ></confirm>
         <b-modal id="menu-settings" hide-footer centered>
+            <template #modal-header="{close}">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="close()"></button>
+            </template>
             <size-settings :settings="settings" :source="source"></size-settings>
         </b-modal>
         <b-pagination align="center" v-if="total > per_page" size="md" :total-rows="total" v-model="current_page"

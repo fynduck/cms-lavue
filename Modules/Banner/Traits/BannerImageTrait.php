@@ -72,7 +72,7 @@ trait BannerImageTrait
     public function prepareImgParams($imageSettings): array
     {
         $data['sizes'] = [];
-        $data['resizeMethod'] = null;
+        $data['resizeMethod'] = '';
         $data['greyscale'] = false;
         $data['blur'] = 1;
         $data['brightness'] = 0;

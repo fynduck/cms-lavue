@@ -2,6 +2,8 @@ $enable-print-styles: false;
 
 // Body
 $body-bg: #f7f9fb;
+$gray-800: #343a40 !default;
+$gray-900: $gray-800 !default;
 $vue-green: #4ae387;
 
 // Cards
@@ -15,20 +17,14 @@ $border-radius: .125rem;
 $border-radius-lg: .2rem;
 $border-radius-sm: .15rem;
 
-$form-floating-height:            add(3.5rem, 1px) !default;
-$form-floating-padding-x:         .75rem !default;
-$form-floating-padding-y:         1rem !default;
-$form-floating-input-padding-t:   1.625rem !default;
-$form-floating-input-padding-b:   .625rem !default;
-$form-floating-label-opacity:     .65 !default;
-$form-floating-label-transform:   scale(.85) translateY(-.5rem) translateX(.15rem) !default;
-$form-floating-transition:        opacity .1s ease-in-out, transform .1s ease-in-out !default;
-
 $custom-file-text: (
         en: "Browse",
         es: "Elegir",
         ru: "Выберите"
 );
+
+$list-group-item-padding-y:         .75rem !default;
+$list-group-item-padding-x:         1.25rem !default;
 
 $vs-border-radius: .125rem !default;
 $vs-component-line-height: 1.5 !default;

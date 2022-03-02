@@ -3,7 +3,7 @@
         <template v-slot:overlay>
             <p><strong>{{ text }}</strong></p>
             <div class="d-flex justify-content-center">
-                <b-button variant="outline-danger" class="mr-3" @click="handleSelect('cancel')">
+                <b-button variant="outline-danger" class="me-3" @click="handleSelect('cancel')">
                     {{ cancel }}
                 </b-button>
                 <b-button variant="outline-success" @click="handleSelect('yes')">{{ yes }}</b-button>

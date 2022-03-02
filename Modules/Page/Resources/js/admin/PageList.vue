@@ -11,19 +11,19 @@
                     </b-input-group>
                 </b-col>
                 <b-col sm="6" lg="3" class="my-1">
-                    <b-form-select v-model="lang_id" :options="langOptions"></b-form-select>
+                    <b-form-select class="form-select" v-model="lang_id" :options="langOptions"></b-form-select>
                 </b-col>
                 <b-col sm="6" lg="3" class="my-1 d-flex align-items-center">
-                    <b-form-checkbox id="checkbox_status"
-                                     class="switch-success"
-                                     switch
-                                     v-model="active"
-                                     :value="1"
-                                     :unchecked-value="0">
-                        {{ $t('Page.active_s') }}
-                    </b-form-checkbox>
+                    <div class="form-check form-switch switch-success">
+                        <input type="checkbox" class="form-check-input"
+                               v-model="active"
+                               id="checkbox_status" :value="1">
+                        <label class="form-check-label" for="checkbox_status">
+                            {{ $t('Page.active_s') }}
+                        </label>
+                    </div>
                 </b-col>
-                <b-col sm="6" lg="2" class="text-right" v-if="canCreate">
+                <b-col sm="6" lg="2" class="text-end" v-if="canCreate">
                     <router-link class="btn btn-success" :to="{name: `${routeName}.create`}" :title="$t('Page.add_page')">
                         <fa :icon="['fas', 'plus']"/>
                     </router-link>
@@ -57,16 +57,16 @@
                 </div>
             </template>
             <template v-slot:cell(slug)="row">
-                <a :href="row.item.link" target="_blank">{{ row.item.slug }}</a>
+                <a :href="row.item.link" target="_blank" class="link-dark">{{ row.item.slug }}</a>
             </template>
             <template v-slot:cell(seo_complete)="row">
-                <b-badge variant="danger" v-if="row.item.seo_complete <= 50">
+                <b-badge variant="danger" class="bg-danger" v-if="row.item.seo_complete <= 50">
                     {{row.item.seo_complete}}%
                 </b-badge>
-                <b-badge variant="warning" v-else-if="row.item.seo_complete > 50 && row.item.seo_complete <= 70">
+                <b-badge variant="warning" class="bg-warning" v-else-if="row.item.seo_complete > 50 && row.item.seo_complete <= 70">
                     {{row.item.seo_complete}}%
                 </b-badge>
-                <b-badge variant="success" v-else>
+                <b-badge variant="success" class="bg-success" v-else>
                     {{row.item.seo_complete}}%
                 </b-badge>
             </template>
@@ -154,7 +154,7 @@
                     {key: 'active', label: this.$t('Page.status'), sortable: true, 'class': 'text-center active'},
                     {key: 'lang', label: this.$t('Page.lang'), sortable: true, 'class': 'text-center'},
                     {key: 'socials', label: this.$t('Page.socials_on_off'), 'class': 'text-center active'},
-                    {key: 'actions', label: this.$t('Page.action'), 'class': 'text-right'}
+                    {key: 'actions', label: this.$t('Page.action'), 'class': 'text-end'}
                 ]
             },
             langOptions() {
