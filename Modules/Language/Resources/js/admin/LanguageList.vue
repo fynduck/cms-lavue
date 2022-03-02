@@ -11,16 +11,16 @@
                     </b-input-group>
                 </b-col>
                 <b-col sm="6" md="3" class="my-1 d-flex align-items-center">
-                    <b-form-checkbox id="checkbox_active"
-                                     class="switch-success"
-                                     switch
-                                     v-model="active"
-                                     :value="1"
-                                     :unchecked-value="0">
-                        {{ $t('Language.active_s') }}
-                    </b-form-checkbox>
+                    <div class="form-check form-switch switch-success">
+                        <input type="checkbox" class="form-check-input"
+                               v-model="active"
+                               id="checkbox_status" :value="1">
+                        <label class="form-check-label" for="checkbox_status">
+                            {{ $t('Language.active_s') }}
+                        </label>
+                    </div>
                 </b-col>
-                <b-col sm="6" md="3" class="text-right" v-if="canCreate">
+                <b-col sm="6" md="3" class="text-end" v-if="canCreate">
                     <router-link class="btn btn-success" :to="{name: `${routeName}.create`}"
                                  :title="$t('Language.add_language')">
                         <fa :icon="['fas', 'plus']"/>
@@ -147,7 +147,7 @@
                     {key: 'default', label: this.$t('Language.default')},
                     {key: 'active', label: this.$t('Language.status'), sortable: true, 'class': 'text-center status'},
                     {key: 'priority', label: this.$t('Language.priority'), sortable: true, 'class': 'text-center'},
-                    {key: 'actions', label: this.$t('Language.action'), 'class': 'text-right'}
+                    {key: 'actions', label: this.$t('Language.action'), 'class': 'text-end'}
                 ]
             }
         },

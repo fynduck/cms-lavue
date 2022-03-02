@@ -14,37 +14,37 @@
                 <fa :icon="['fas', 'save']"/>
             </button>
             <div class="row">
-                <div class="form-group col-md-6">
+                <div class="mb-3 col-md-6">
                     <label for="from">{{ $t('Redirect.from') }}</label>
                     <input type="text" :class="['form-control', errors['from'] ? ' is-invalid' : '']"
                            v-model="item.from"
                            id="from">
                 </div>
-                <div class="form-group col-md-6">
+                <div class="mb-3 col-md-6">
                     <label for="to">{{ $t('Redirect.to') }}</label>
                     <input type="text" :class="['form-control', errors['to'] ? ' is-invalid' : '']" v-model="item.to"
                            id="to">
                 </div>
             </div>
             <div class="row">
-                <div class="form-group col-md-6">
+                <div class="mb-3 col-md-6">
                     <label for="status_code">{{ $t('Redirect.status_code') }}</label>
                     <input type="number" min="0" :class="['form-control', errors['status_code'] ? ' is-invalid' : '']"
                            v-model="item.status_code"
                            id="status_code">
                 </div>
-                <div class="form-group d-flex align-items-end col-md-6">
-                    <b-form-checkbox id="active"
-                                     class="switch-success"
-                                     switch
-                                     v-model="item.active"
-                                     :value="1"
-                                     :unchecked-value="0">
-                        {{ $t('Redirect.active') }}
-                    </b-form-checkbox>
+                <div class="mb-3 d-flex align-items-end col-md-6">
+                    <div class="form-check form-switch switch-success">
+                        <input type="checkbox" class="form-check-input"
+                               v-model="item.active"
+                               id="active" :value="1">
+                        <label class="form-check-label" for="active">
+                            {{ $t('Redirect.active') }}
+                        </label>
+                    </div>
                 </div>
             </div>
-            <p class="text-right">
+            <p class="text-end">
                 <router-link class="btn btn-light" :to="{name: 'redirect.index'}" :title="$t('Redirect.cancel')">
                     <fa :icon="['fas', 'reply']"/>
                 </router-link>

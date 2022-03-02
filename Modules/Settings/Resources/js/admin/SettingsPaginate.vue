@@ -5,15 +5,15 @@
         </p>
         <form @submit.prevent="onSubmit">
             <div class="row" v-for="(item, index) in items">
-                <div class="col-sm-6 col-lg-3 form-group">
+                <div class="col-sm-6 col-lg-3 mb-3">
                     <input type="text" :readonly="item.readonly" v-model="item.on"
                            :class="['form-control', errors[index + '.on'] ? ' is-invalid' : '']">
                 </div>
-                <div class="col-sm-6 col-lg-4 form-group">
+                <div class="col-sm-6 col-lg-4 mb-3">
                     <input type="text" :readonly="item.readonly" v-model="item.for"
                            :class="['form-control', errors[index + '.for'] ? ' is-invalid' : '']">
                 </div>
-                <div class="col-sm-6 col-lg-3 form-group">
+                <div class="col-sm-6 col-lg-3 mb-3">
                     <input type="text" v-model="item.value"
                            :class="['form-control', errors[index + '.value'] ? ' is-invalid' : '']">
                 </div>

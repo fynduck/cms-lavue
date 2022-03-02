@@ -13,16 +13,13 @@
                  :sort-desc.sync="sortDesc"
         >
             <template v-slot:cell(active)="row">
-                <b-form-checkbox :id="`checkbox_module_status_${row.item.name}`"
-                                 class="switch-success"
-                                 switch
-                                 v-model="row.item.active"
-                                 :value="1"
-                                 :unchecked-value="0"
-                                 v-if="canEdit && !exceptDisable.includes(row.item.name)"
-                                 @change="changeStatus(row.item)">
-                    {{ active ? $t('Module.inactive') : $t('Module.active') }}
-                </b-form-checkbox>
+                <div class="form-check form-switch switch-success d-flex justify-content-center" v-if="canEdit && !exceptDisable.includes(row.item.name)">
+                    <input type="checkbox" class="form-check-input"
+                           v-model="row.item.active" :id="`checkbox_module_status_${row.item.name}`" :value="1">
+                    <label class="form-check-label ms-2" :for="`checkbox_module_status_${row.item.name}`">
+                        {{ active ? $t('Module.inactive') : $t('Module.active') }}
+                    </label>
+                </div>
                 <div v-else>
                     <fa :icon="['far', 'check-circle']" class="text-success" v-if="row.item.active"/>
                     <fa :icon="['far', 'times-circle']" class="text-danger" v-else/>

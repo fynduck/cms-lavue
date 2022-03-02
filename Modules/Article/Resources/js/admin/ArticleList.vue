@@ -13,7 +13,7 @@
                     </b-input-group>
                 </b-col>
                 <b-col sm="6" lg="3" class="my-1">
-                    <b-form-select v-model="lang_id" :options="langOptions"></b-form-select>
+                    <b-form-select class="form-select" v-model="lang_id" :options="langOptions"></b-form-select>
                 </b-col>
                 <b-col sm="6" lg="3" class="my-1 d-flex align-items-center">
                     <b-form-checkbox id="checkbox_status"
@@ -25,7 +25,7 @@
                         {{ active ? $t('Article.inactive_s') : $t('Article.active_s') }}
                     </b-form-checkbox>
                 </b-col>
-                <b-col sm="6" lg="2" class="text-right" v-if="canCreate">
+                <b-col sm="6" lg="2" class="text-end" v-if="canCreate">
                     <b-button v-b-modal.article-settings variant="info">{{ $t('Article.settings') }}</b-button>
                     <router-link class="btn btn-success" :to="{name: `${routeName}.create`}"
                                  :title="$t('Article.add_article')">

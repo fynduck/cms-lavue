@@ -16,24 +16,24 @@
                 <b-tab :title="language.name" v-for="(language, locale_id) in locales" :key="locale_id" class="mt-4">
                     <b-card-text>
                         <div class="row">
-                            <div class="form-group col-md-8">
-                                <label :for="`title_${locale_id}`">{{ $t('Banner.title') }}</label>
+                            <div class="mb-3 col-md-8">
+                                <label :for="`title_${locale_id}`" class="form-label">{{ $t('Banner.title') }}</label>
                                 <input :class="['form-control', errors['items.' + locale_id + '.title'] ? ' is-invalid' : '']"
                                        type="text" v-model="item.items[locale_id].title" :id="`title_${locale_id}`">
                             </div>
-                            <div class="form-group col-md-4 d-flex align-items-end">
-                                <b-form-checkbox :id="`active_${locale_id}`"
-                                                 class="switch-success"
-                                                 switch
-                                                 v-model="item.items[locale_id].active"
-                                                 :value="1"
-                                                 :unchecked-value="0">
-                                    {{ $t('Banner.on_off') }}
-                                </b-form-checkbox>
+                            <div class="mb-3 col-md-4 d-flex align-items-end">
+                                <div class="form-check form-switch switch-success my-1 me-sm-2">
+                                    <input type="checkbox" class="form-check-input"
+                                           v-model="item.items[locale_id].active"
+                                           :id="`active_${locale_id}`" :value="1">
+                                    <label class="form-check-label" :for="`active_${locale_id}`">
+                                        {{ $t('Banner.on_off') }}
+                                    </label>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label :for="`description_${locale_id}`">{{ $t('Banner.description') }}</label>
+                        <div class="mb-3">
+                            <label :for="`description_${locale_id}`" class="form-label">{{ $t('Banner.description') }}</label>
                             <tinymce :id="`description_${locale_id}`" :path_absolute="`${baseAPI}/admin/filemanager`"
                                      :lang="locale"
                                      :token="token" v-model="item.items[locale_id].description"></tinymce>
@@ -43,13 +43,13 @@
             </b-tabs>
             <hr>
             <div class="row">
-                <div class="col-md-7 col-lg-6 col-xl-4 d-flex align-items-center my-2">
+                <div class="col-md-7 col-lg-6 col-xl-4 d-flex align-items-center my-2 mb-3">
                     <upload v-model="item.image"></upload>
                     <b-alert variant="danger" :show="!!errors['image']">
                         <strong v-for="error in errors['image']">{{ error }}</strong>
                     </b-alert>
                 </div>
-                <div class="col-md-7 col-lg-6 col-xl-4 d-flex align-items-center my-2">
+                <div class="col-md-7 col-lg-6 col-xl-4 d-flex align-items-center my-2 mb-3">
                     <upload v-model="item.mobile_image"></upload>
                     <b-alert variant="danger" :show="!!errors['mobile_image']">
                         <strong v-for="error in errors['mobile_image']">{{ error }}</strong>
@@ -57,55 +57,55 @@
                 </div>
             </div>
             <div class="row">
-                <div class="form-group col-md-6 col-lg-3">
-                    <label for="position">{{ $t('Banner.position') }}</label>
-                    <select id="position" :class="['form-control', errors.position ? ' is-invalid' : '']" required
+                <div class="mb-3 col-md-6 col-lg-3">
+                    <label for="position" class="form-label">{{ $t('Banner.position') }}</label>
+                    <select id="position" :class="['form-select', errors.position ? ' is-invalid' : '']" required
                             v-model="item.position">
                         <option v-for="(title, position) in positions" :value="position">
                             {{ $t(title) }}
                         </option>
                     </select>
                 </div>
-                <div class="form-group col-md-6 col-lg-9 col-xl-4" v-if="!loading">
+                <div class="mb-3 col-md-6 col-lg-9 col-xl-4" v-if="!loading">
                     <custom-select v-model="item.pagesShow"
                                    :source="admin_search"
                                    :label="$t('Menu.show_page')"
                                    :no_result="$t('Menu.no_results')"
                     ></custom-select>
                 </div>
-                <div class="form-group col-md-6 col-lg-4 col-xl-2">
-                    <label for="link">{{ $t('Banner.link') }}</label>
+                <div class="mb-3 col-md-6 col-lg-4 col-xl-2">
+                    <label for="link" class="form-label">{{ $t('Banner.link') }}</label>
                     <input :class="['form-control', errors['link'] ? ' is-invalid' : '']" type="text" v-model="item.link"
                            id="link">
                 </div>
-                <div class="form-group col-md-6 col-lg-4 col-xl-3" v-if="!loading">
+                <div class="mb-3 col-md-6 col-lg-4 col-xl-3" v-if="!loading">
                     <custom-select v-model="item.toPage"
                                    :source="admin_search"
                                    :label="$t('Menu.to_page')"
                                    :no_result="$t('Menu.no_results')"
                     ></custom-select>
                 </div>
-                <div class="col-md-6 col-lg-4 col-xl-2 form-group">
-                    <label for="target">{{ $t('Menu.target') }}</label>
+                <div class="col-md-6 col-lg-4 col-xl-2 mb-3">
+                    <label for="target" class="form-label">{{ $t('Menu.target') }}</label>
                     <select name="target" id="target" class="form-control" required v-model="item.target">
                         <option v-for="target in targets" :value="target">{{ target }}</option>
                     </select>
                 </div>
-                <div class="col-md-6 col-lg-2 form-group d-flex justify-content-center flex-column">
-                    <label for="priority">{{ $t('Banner.priority') }}</label>
+                <div class="col-md-6 col-lg-2 mb-3 d-flex justify-content-center flex-column">
+                    <label for="priority" class="form-label">{{ $t('Banner.priority') }}</label>
                     <input type="number" min="0" class="form-control" id="priority" v-model="item.priority">
                 </div>
-                <div class="col-md-6 col-lg-4 form-group d-flex justify-content-center flex-column">
-                    <label>{{ $t('Banner.date_from') }}</label>
+                <div class="col-md-6 col-lg-4 mb-3 d-flex justify-content-center flex-column">
+                    <label class="form-label">{{ $t('Banner.date_from') }}</label>
                     <date-time-picker v-model="item.date_from" :locale="locale"></date-time-picker>
                 </div>
-                <div class="col-md-6 col-lg-4 form-group d-flex justify-content-center flex-column">
-                    <label>{{ $t('Banner.date_to') }}</label>
+                <div class="col-md-6 col-lg-4 mb-3 d-flex justify-content-center flex-column">
+                    <label class="form-label">{{ $t('Banner.date_to') }}</label>
                     <date-time-picker v-model="item.date_to" :locale="locale"></date-time-picker>
                 </div>
 
             </div>
-            <p class="text-right">
+            <p class="text-end">
                 <router-link class="btn btn-light" :to="{name: 'article.index'}" :title="$t('Article.cancel')">
                     <fa :icon="['fas', 'reply']"/>
                 </router-link>

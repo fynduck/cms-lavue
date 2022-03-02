@@ -4,7 +4,7 @@
             <div class="flex-fill">
                 @isset($menus[\Modules\Menu\Entities\Menu::TOP_MENU])
                     <div class="collapse navbar-collapse" id="top_menu">
-                        <ul class="navbar-nav mr-auto w-100 nav-fill">
+                        <ul class="navbar-nav me-auto w-100 nav-fill">
                             @foreach($menus[\Modules\Menu\Entities\Menu::TOP_MENU] as $key => $top_menu)
                                 <li class="nav-item">
                                     @if($top_menu->icon)<i class="{{ $top_menu->icon }}"></i>@endif

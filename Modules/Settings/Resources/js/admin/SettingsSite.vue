@@ -13,23 +13,23 @@
                 <b-tab :title="language.name" v-for="(language, locale_id) in locales" :key="locale_id" class="mt-4">
                     <b-card-text>
                         <div class="row">
-                            <div class="form-group col-sm-6 col-md-3">
-                                <label :for="`name_site_${locale_id}`">{{ $t('Settings.name_site') }}</label>
+                            <div class="mb-3 col-sm-6 col-md-3">
+                                <label :for="`name_site_${locale_id}`" class="form-label">{{ $t('Settings.name_site') }}</label>
                                 <input type="text" v-model="items[locale_id].name_site" :id="`name_site_${locale_id}`"
                                        :class="['form-control', errors['items.' + locale_id + '.name_site'] ? ' is-invalid' : '']">
                             </div>
-                            <div class="form-group col-sm-6 col-md-3">
-                                <label :for="`city_${locale_id}`">{{ $t('Settings.city') }}</label>
+                            <div class="mb-3 col-sm-6 col-md-3">
+                                <label :for="`city_${locale_id}`" class="form-label">{{ $t('Settings.city') }}</label>
                                 <input type="text" v-model="items[locale_id].city" :id="`city_${locale_id}`"
                                        :class="['form-control', errors['items.' + locale_id + '.city'] ? ' is-invalid' : '']">
                             </div>
-                            <div class="form-group col-sm-8 col-md-4">
-                                <label :for="`street_${locale_id}`">{{ $t('Settings.street') }}</label>
+                            <div class="mb-3 col-sm-8 col-md-4">
+                                <label :for="`street_${locale_id}`" class="form-label">{{ $t('Settings.street') }}</label>
                                 <input type="text" v-model="items[locale_id].street" :id="`street_${locale_id}`"
                                        :class="['form-control', errors['items.' + locale_id + '.street'] ? ' is-invalid' : '']">
                             </div>
-                            <div class="form-group col-sm-4 col-md-2">
-                                <label for="post_code">{{ $t('Settings.post_code') }}</label>
+                            <div class="mb-3 col-sm-4 col-md-2">
+                                <label for="post_code" class="form-label">{{ $t('Settings.post_code') }}</label>
                                 <input type="text" class="form-control" id="post_code" v-model="items[0].post_code">
                             </div>
                         </div>
@@ -38,32 +38,32 @@
             </b-tabs>
             <hr class="my-4">
             <div class="row">
-                <div class="form-group col-sm-6 col-lg-3">
-                    <label for="contact_phone">{{ $t('Settings.contact_phone') }}</label>
+                <div class="mb-3 col-sm-6 col-lg-3">
+                    <label for="contact_phone" class="form-label">{{ $t('Settings.contact_phone') }}</label>
                     <input type="text" class="form-control" id="contact_phone" v-model="items[0].contact_phone">
                 </div>
-                <div class="form-group col-sm-6 col-lg-3">
-                    <label for="contact_email">{{ $t('Settings.contact_email') }}</label>
+                <div class="mb-3 col-sm-6 col-lg-3">
+                    <label for="contact_email" class="form-label">{{ $t('Settings.contact_email') }}</label>
                     <input type="text" class="form-control" id="contact_email" v-model="items[0].contact_email">
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-4 mb-3">
-                    <label>{{ $t('Settings.logo') }}</label>
+                    <label class="form-label">{{ $t('Settings.logo') }}</label>
                     <upload v-model="items[0].logo"></upload>
                 </div>
             </div>
-            <div class="form-group">
-                <label for="analytics_top">{{ $t('Settings.arbitrary_code') }}</label>
+            <div class="mb-3">
+                <label for="analytics_top" class="form-label">{{ $t('Settings.arbitrary_code') }}</label>
                 <textarea class="form-control" rows="3" id="analytics_top" v-model="items[0].analytics_top"
                           placeholder="<head>"></textarea>
             </div>
-            <div class="form-group">
-                <label for="analytics">{{ $t('Settings.arbitrary_code') }}</label>
+            <div class="mb-3">
+                <label for="analytics" class="form-label">{{ $t('Settings.arbitrary_code') }}</label>
                 <textarea class="form-control" rows="3" id="analytics" v-model="items[0].analytics"
                           placeholder="</body>"></textarea>
             </div>
-            <p class="text-right" v-if="canCreate">
+            <p class="text-end" v-if="canCreate">
                 <button :class="{'btn btn-success': true, 'btn-loading': submit}" type="submit" :title="$t('Settings.save')"
                         :disabled="submit">
                     <fa :icon="['fas', 'save']"/>

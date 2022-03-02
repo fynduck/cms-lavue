@@ -1,18 +1,9 @@
 <template>
     <div class="d-flex flex-wrap">
-        <b-form-file
-            class="upload_files"
-            :multiple="multiple"
-            v-model="file"
-            :placeholder="$t('choose_file_drag')"
-            :drop-placeholder="$t('drop_files')" @input="onFileChange"
-            :accept="accept"
-            browse-text=""
-        >
-            <template slot="file-name" slot-scope="{ names }">
-                <span>{{ $t('selected') }}:{{ urls.length }}</span>
-            </template>
-        </b-form-file>
+        <div class="upload_files">
+            <input class="form-control" type="file" id="formFile" @input="onFileChange" :multiple="multiple">
+            <label for="formFile" class="form-label">{{ $t('choose_file_drag') }}</label>
+        </div>
         <div v-for="(img, index) in urls" v-if="urls.length" class="list_uploaded">
             <div class="hover">
                 <fa :icon="['fas', 'trash-alt']" @click.prevent="confirmRemove(index)"/>
@@ -23,7 +14,7 @@
             <template v-slot:overlay>
                 <p><strong>{{ $t('are_you_sure') }}</strong></p>
                 <div class="d-flex">
-                    <b-button variant="outline-danger" class="mr-3" @click="cancelRemove()">
+                    <b-button variant="outline-danger" class="me-3" @click="cancelRemove()">
                         {{ $t('cancel') }}
                     </b-button>
                     <b-button variant="outline-success" @click="removeItem">{{ $t('yes') }}</b-button>
@@ -65,18 +56,19 @@ export default {
     },
     methods: {
         onFileChange(e) {
-            if (Array.isArray(e)) {
-                for (let i = 0; i < e.length; i++) {
-                    this.convertToBase64(e[i])
-                    this.generateUrls(e[i])
+            const el = e.target.files
+            if (Array.isArray(el) || typeof el === 'object') {
+                for (const item of el) {
+                    this.convertToBase64(item)
+                    this.generateUrls(item)
                 }
             } else {
-                this.convertToBase64(e)
+                this.convertToBase64(el)
 
                 if (!Array.isArray(this.value))
                     this.urls = [];
 
-                this.generateUrls(e)
+                this.generateUrls(el)
             }
         },
         convertToBase64(file) {
@@ -124,31 +116,32 @@ export default {
 }
 </script>
 <style lang="stylus">
-.custom-file
-    &.upload_files
-        width 120px
-        height 120px
+&.upload_files
+    width 120px
+    height 120px
+    cursor pointer
+    margin .1rem
+    overflow hidden
+
+    .form-control
+        display none
+        height 100%
         cursor pointer
-        margin .1rem
-        overflow hidden
 
-        .custom-file-input
-            height 100%
-            cursor pointer
+        ~ .form-label::after
+            content none
 
-            ~ .custom-file-label::after
-                content none
-
-        .custom-file-label
-            height 100%
-            cursor pointer
-            font-size 14px
-            color #cccccc
-            display flex
-            align-items center
-            border-width 4px
-            border-style dotted
-            white-space pre-wrap
+    .form-label
+        height 100%
+        cursor pointer
+        font-size 14px
+        color #cccccc
+        display flex
+        align-items center
+        border-width 4px
+        border-style dotted
+        white-space pre-wrap
+        padding 1rem
 
 .list_uploaded
     width 120px

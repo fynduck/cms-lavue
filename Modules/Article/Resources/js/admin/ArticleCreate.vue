@@ -17,14 +17,14 @@
                     <b-card-text>
                         <div class="row">
                             <div class="mb-3 col-md-4">
-                                <label :for="`title_${locale_id}`">{{ $t('Article.title') }}</label>
+                                <label :for="`title_${locale_id}`" class="form-label">{{ $t('Article.title') }}</label>
                                 <input type="text" @change="changeTitle(locale_id)"
                                        :class="['form-control', errors['items.' + locale_id + '.title'] ? ' is-invalid' : '']"
                                        v-model="item.items[locale_id].title" :id="`title_${locale_id}`"
                                        :placeholder="$t('Article.title')">
                             </div>
                             <div class="mb-3 col-md-4">
-                                <label :for="`slug_${locale_id}`">{{ $t('Article.slug') }}</label>
+                                <label :for="`slug_${locale_id}`" class="form-label">{{ $t('Article.slug') }}</label>
                                 <input type="text"
                                        :class="['form-control', errors['items.' + locale_id + '.slug'] ? ' is-invalid' : '']"
                                        v-model="item.items[locale_id].slug" :id="`slug_${locale_id}`"
@@ -42,29 +42,29 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label :for="`description_${locale_id}`">{{ $t('Article.description') }}</label>
+                            <label :for="`description_${locale_id}`" class="form-label">{{ $t('Article.description') }}</label>
                             <tinymce :id="`description_${locale_id}`" :path_absolute="`${baseAPI}/admin/filemanager`" :lang="locale"
                                      :token="token" v-model="item.items[locale_id].description"></tinymce>
                         </div>
                         <div class="mb-3">
-                            <label :for="`short_desc_${locale_id}`">{{ $t('Article.short_desc') }}</label>
+                            <label :for="`short_desc_${locale_id}`" class="form-label">{{ $t('Article.short_desc') }}</label>
                             <textarea class="form-control" v-model="item.items[locale_id].short_desc"
                                       :id="`short_desc_${locale_id}`" rows="5"></textarea>
                         </div>
                         <div class="mb-3">
-                            <label :for="`meta_title_${locale_id}`">{{ $t('Article.meta_title') }}</label>
+                            <label :for="`meta_title_${locale_id}`" class="form-label">{{ $t('Article.meta_title') }}</label>
                             <input type="text"
                                    :class="['form-control', errors['items.' + locale_id + '.meta_title'] ? ' is-invalid' : '']"
                                    v-model="item.items[locale_id].meta_title" :id="`meta_title_${locale_id}`"
                                    :placeholder="$t('Article.meta_title')">
                         </div>
                         <div class="mb-3">
-                            <label :for="`meta_description_${locale_id}`">{{ $t('Article.meta_description') }}</label>
+                            <label :for="`meta_description_${locale_id}`" class="form-label">{{ $t('Article.meta_description') }}</label>
                             <textarea class="form-control" v-model="item.items[locale_id].meta_description"
                                       :id="`meta_description_${locale_id}`" rows="5"></textarea>
                         </div>
                         <div class="mb-3">
-                            <label :for="`meta_keywords_${locale_id}`">{{ $t('Article.meta_keywords') }}</label>
+                            <label :for="`meta_keywords_${locale_id}`" class="form-label">{{ $t('Article.meta_keywords') }}</label>
                             <textarea class="form-control" v-model="item.items[locale_id].meta_keywords"
                                       :id="`meta_keywords_${locale_id}`" rows="5"></textarea>
                         </div>
@@ -80,28 +80,28 @@
                     </b-alert>
                 </div>
                 <div class="col-md-5 col-lg-3 mb-3 d-flex justify-content-center flex-column">
-                    <label for="type">{{ $t('Article.type_article') }}</label>
+                    <label for="type" class="form-label">{{ $t('Article.type_article') }}</label>
                     <b-select v-model="item.type" :options="types" id="type"
                               :class="[errors['type'] ? ' is-invalid' : '']"></b-select>
                 </div>
                 <div class="col-md-6 col-lg-4 col-xl-2 mb-3 d-flex justify-content-center flex-column" v-if="item.type === 'promotions'">
-                    <label for="discount">{{ $t('Article.discount') }}</label>
+                    <label for="discount" class="form-label">{{ $t('Article.discount') }}</label>
                     <input type="number" class="form-control" id="discount" v-model="item.discount">
                 </div>
                 <div class="col-md-6 col-lg-4 col-xl-3 mb-3 d-flex justify-content-center flex-column" v-if="item.type === 'promotions'">
-                    <label>{{ $t('Article.date_from') }}</label>
+                    <label class="form-label">{{ $t('Article.date_from') }}</label>
                     <date-time-picker v-model="item.date_from" :locale="locale"></date-time-picker>
                 </div>
                 <div class="col-md-6 col-lg-4 col-xl-3 mb-3 d-flex justify-content-center flex-column" v-if="item.type === 'promotions'">
-                    <label>{{ $t('Article.date_to') }}</label>
+                    <label class="form-label">{{ $t('Article.date_to') }}</label>
                     <date-time-picker v-model="item.date_to" :locale="locale"></date-time-picker>
                 </div>
                 <div class="col-md-6 col-lg-4 col-xl-3 mb-3 d-flex justify-content-center flex-column">
-                    <label>{{ $t('Article.date') }}</label>
+                    <label class="form-label">{{ $t('Article.date') }}</label>
                     <date-time-picker v-model="item.date" :locale="locale"></date-time-picker>
                 </div>
                 <div class="col-md-4 col-xl-2 mb-3 d-flex justify-content-center flex-column">
-                    <label for="priority">{{ $t('Article.priority') }}</label>
+                    <label for="priority" class="form-label">{{ $t('Article.priority') }}</label>
                     <input type="number" min="0" class="form-control" id="priority" v-model="item.priority"
                            :placeholder="$t('Article.priority')">
                 </div>
@@ -126,7 +126,7 @@
                     </b-form-checkbox>
                 </div>
             </div>
-            <p class="text-right">
+            <p class="text-end">
                 <router-link class="btn btn-light" :to="{name: 'article.index'}" :title="$t('Article.cancel')">
                     <fa :icon="['fas', 'reply']"/>
                 </router-link>

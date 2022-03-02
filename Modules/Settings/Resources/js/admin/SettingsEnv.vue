@@ -5,9 +5,9 @@
         </p>
         <b-alert variant="danger" show>{{ $t('Settings.alert_info') }}</b-alert>
         <form @submit.prevent="onSubmit">
-            <div class="form-group" v-for="(item, index) in items"
+            <div class="mb-3" v-for="(item, index) in items"
                  v-if="!['APP_KEY', 'CACHE_DRIVER', 'SESSION_DRIVER', 'JWT_SECRET'].includes(item.key)">
-                <label :for="index">{{ $t(`Settings.${item.key}`) }}</label>
+                <label :for="index" class="form-label">{{ $t(`Settings.${item.key}`) }}</label>
                 <fa :icon="['fas', 'question-circle']" v-b-popover.hover.top="`http://php.net/manual/${locale}/timezones.php`"
                     title="Example" v-if="item.key === 'TIMEZONE'"/>
                 <input type="text" v-model="item.value" class="form-control" :id="index">

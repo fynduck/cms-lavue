@@ -8,6 +8,7 @@
                 <input type="email" name="email" v-model="form.email" placeholder="name@example.com"
                        :class="{ 'is-invalid': form.errors.has('email'), 'form-control': true }" id="email">
                 <label for="email">{{ $t('User.your_email') }}</label>
+                <div class="invalid-feedback" v-if="form.errors.has('email')" v-html="form.errors.get('email')"></div>
             </div>
             <div class="form-floating mb-3">
                 <input type="password" v-model="form.password" name="password" placeholder="Password"

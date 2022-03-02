@@ -14,14 +14,14 @@
                 </b-col>
                 <b-col class="my-1" md="5" lg="4">
                     <b-form-group class="mb-0">
-                        <b-form-select class="form-control" :options="groups" v-model="group">
+                        <b-form-select class="form-select" :options="groups" v-model="group">
                             <template slot="first">
                                 <option :value="null">{{ $t('User.default_option') }}</option>
                             </template>
                         </b-form-select>
                     </b-form-group>
                 </b-col>
-                <b-col md="2" class="text-right" v-if="canCreate">
+                <b-col md="2" class="text-end" v-if="canCreate">
                     <router-link class="btn btn-success" :to="{name: `${routeName}.create`}"
                                  :title="$t('User.add_user')">
                         <fa :icon="['fas', 'plus']"/>
@@ -118,7 +118,7 @@ export default {
                 {key: 'name', label: this.$t('User.name')},
                 {key: 'email', label: this.$t('User.email')},
                 {key: 'group', label: this.$t('User.group')},
-                {key: 'actions', label: this.$t('User.action'), 'class': 'text-right'}
+                {key: 'actions', label: this.$t('User.action'), 'class': 'text-end'}
             ]
         }
     },

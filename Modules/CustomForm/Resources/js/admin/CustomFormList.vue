@@ -6,14 +6,13 @@
                     <b-input-group>
                         <b-form-input v-model="filter" :placeholder="$t('CustomForm.insert_query')"/>
                         <b-input-group-append>
-                            <b-btn :disabled="!filter" @click="filter = ''" variant="outline-info">{{
-                                    $t('CustomForm.clear')
-                                }}
+                            <b-btn :disabled="!filter" @click="filter = ''" variant="outline-info">
+                                {{ $t('CustomForm.clear') }}
                             </b-btn>
                         </b-input-group-append>
                     </b-input-group>
                 </b-col>
-                <b-col sm="5" class="text-right" v-if="canCreate">
+                <b-col sm="5" class="text-end" v-if="canCreate">
                     <router-link class="btn btn-success" :to="{name: `${routeName}.create`}" :title="$t('CustomForm.add_form')">
                         <fa :icon="['fas', 'plus']"/>
                     </router-link>
@@ -93,7 +92,7 @@
         </b-modal>
         <b-modal v-model="show_copy" hide-footer :title="$t('CustomForm.make_copy')">
             <b-form-input v-model="copy_form.form_name"></b-form-input>
-            <b-form-select v-model="copy_form.lang_id" :options="languages" class="mt-3"></b-form-select>
+            <b-form-select class="form-select mt-3" v-model="copy_form.lang_id" :options="languages"></b-form-select>
             <b-button class="mt-3" block @click="saveCopy" variant="primary">{{ $t('CustomForm.save') }}</b-button>
         </b-modal>
         <confirm v-model="confirmWindow.confirm"

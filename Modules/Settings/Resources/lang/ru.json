@@ -102,5 +102,6 @@
   "SMS_LOGIN": "SMS логин",
   "SMS_PASSWORD": "SMS пароль",
   "SMS_SENDER": "SMS подпись",
-  "SMS_MESSAGE": "SMS сообщение"
+  "SMS_MESSAGE": "SMS сообщение",
+  "THEME": "Тема"
 }
