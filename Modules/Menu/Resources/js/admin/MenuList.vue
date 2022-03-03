@@ -15,9 +15,7 @@
                 </b-col>
                 <b-col sm="6" md="3" class="my-1 d-flex align-items-center">
                     <div class="form-check form-switch switch-success">
-                        <input type="checkbox" class="form-check-input"
-                               v-model="active"
-                               id="checkbox_status" :value="1">
+                        <input type="checkbox" class="form-check-input" v-model="active" id="checkbox_status" :value="1">
                         <label class="form-check-label" for="checkbox_status">
                             {{ $t('Menu.active_s') }}
                         </label>
