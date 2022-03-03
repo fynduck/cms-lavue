@@ -10,7 +10,7 @@ class FrontController extends Controller
 {
     public function findPage($slug): PageClientResource
     {
-        $response = null;
+        \Log::info(request()->ip() .' '. request()->header('User-Agent'));
         if ($slug != 'home') {
             $page = Page::getPageBySlug($slug);
         } else {

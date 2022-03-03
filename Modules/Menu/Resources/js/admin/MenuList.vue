@@ -56,7 +56,7 @@
                 <img :src="row.item.show_img" alt="" width="40">
             </template>
             <template v-slot:cell(show_page)="row">
-                <a :href="row.item.show_page" target="_blank">{{ row.item.show_page }}</a>
+                <a :href="row.item.show_page" target="_blank" class="link-dark">{{ row.item.show_page }}</a>
             </template>
             <template v-slot:cell(position)="row">
                 {{ $t(row.item.position) }}

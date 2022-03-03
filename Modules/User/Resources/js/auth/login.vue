@@ -16,9 +16,11 @@
                 <label for="password">{{ $t('User.password') }}</label>
             </div>
 
-            <div class="custom-control custom-switch switch-success mb-3">
-                <input id="remember_me" type="checkbox" class="custom-control-input" v-model="remember">
-                <label for="remember_me" class="custom-control-label my-auto">
+            <div class="form-check form-switch switch-success d-flex justify-content-center">
+                <input type="checkbox" class="form-check-input"
+                       v-model="remember"
+                       id="remember_me" :value="1">
+                <label class="form-check-label ms-2" for="remember_me">
                     {{ $t('User.remember_me') }}
                 </label>
             </div>
