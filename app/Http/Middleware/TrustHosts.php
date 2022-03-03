@@ -14,6 +14,9 @@ class TrustHosts extends Middleware
     public function hosts()
     {
         return [
+            'md021.punct.org',
+            'md021.punct.org:81',
+            'md021.punct.org:82',
             $this->allSubdomainsOfApplicationUrl(),
         ];
     }
