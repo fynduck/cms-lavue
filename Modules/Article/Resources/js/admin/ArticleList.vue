@@ -16,14 +16,14 @@
                     <b-form-select class="form-select" v-model="lang_id" :options="langOptions"></b-form-select>
                 </b-col>
                 <b-col sm="6" lg="3" class="my-1 d-flex align-items-center">
-                    <b-form-checkbox id="checkbox_status"
-                                     class="switch-success"
-                                     switch
-                                     v-model="active"
-                                     :value="1"
-                                     :unchecked-value="0">
-                        {{ active ? $t('Article.inactive_s') : $t('Article.active_s') }}
-                    </b-form-checkbox>
+                    <div class="form-check form-switch switch-success">
+                        <input type="checkbox" class="form-check-input"
+                               v-model="active"
+                               id="checkbox_status" :value="1">
+                        <label class="form-check-label" for="checkbox_status">
+                            {{ active ? $t('Article.inactive_s') : $t('Article.active_s') }}
+                        </label>
+                    </div>
                 </b-col>
                 <b-col sm="6" lg="2" class="text-end" v-if="canCreate">
                     <b-button v-b-modal.article-settings variant="info">{{ $t('Article.settings') }}</b-button>

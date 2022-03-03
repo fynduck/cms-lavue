@@ -37,30 +37,29 @@
                         <upload v-model="item.image"></upload>
                     </div>
                     <div class="mb-3 col-md-3">
-                        <b-form-checkbox id="checkbox_default"
-                                         class="switch-success"
-                                         switch
-                                         v-model="item.default"
-                                         :value="1"
-                                         :unchecked-value="0">
-                            {{ $t('Language.default') }}
-                        </b-form-checkbox>
+                        <div class="form-check form-switch switch-success">
+                            <input type="checkbox" class="form-check-input"
+                                   v-model="item.default"
+                                   id="checkbox_default" :value="1">
+                            <label class="form-check-label" for="checkbox_default">
+                                {{ $t('Language.default') }}
+                            </label>
+                        </div>
                     </div>
                     <div class="mb-3 col-md-3">
-                        <b-form-checkbox id="checkbox_active"
-                                         class="switch-success"
-                                         switch
-                                         v-model="item.active"
-                                         :value="1"
-                                         :unchecked-value="0">
-                            {{ $t('Language.on_off') }}
-                        </b-form-checkbox>
+                        <div class="form-check form-switch switch-success">
+                            <input type="checkbox" class="form-check-input"
+                                   v-model="item.active"
+                                   id="checkbox_active" :value="1">
+                            <label class="form-check-label" for="checkbox_active">
+                                {{ $t('Language.default') }}
+                            </label>
+                        </div>
                     </div>
                     <div class="mb-3 col-md-3">
                         <label for="input-priority" class="form-label">{{ $t('Language.priority') }}</label>
                         <input type="number" v-model="item.priority" id="input-priority" class="form-control"
-                               :placeholder="$t('Language.priority')"
-                               min="0">
+                               :placeholder="$t('Language.priority')" min="0">
                     </div>
                 </div>
                 <p class="text-end">

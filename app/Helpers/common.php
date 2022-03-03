@@ -130,7 +130,7 @@ function generateRoute($item, $urlsPages = null)
     }
 
     if (!$item->link && $item->trans) {
-        $link = $item->trans->link ?? $item->trans->link;
+        $link = $item->trans->link ?? null;
     } else {
         $link = $item->link;
     }
@@ -142,13 +142,16 @@ function generateRoute($item, $urlsPages = null)
         switch ($item->type_page) {
             case 'page':
                 $pageSlug = PageTrans::pageId($item->page_id)->active()->value('slug');
+                $lang = null;
+
+                if (count(config('app.locales')) > 1) {
+                    $lang = $item->lang_id ? config('app.locales.' . $item->lang_id . '.slug') : config('app.locale');
+                }
                 $params = [
-                    count(config('app.locales')) > 1 ? ($item->lang_id ? config(
-                        'app.locales.' . $item->lang_id . '.slug'
-                    ) : config('app.locale')) : null,
+                    $lang,
                     $pageSlug
                 ];
-                $link = '/' . implode('/', $params);
+                $link = '/' . collect(array_filter($params))->implode('/');
                 break;
             case 'article':
             case 'articles':
@@ -159,6 +162,8 @@ function generateRoute($item, $urlsPages = null)
                     $articlesTrans->slug
                 ];
                 $link = '/' . implode('/', $params);
+                break;
+            default:
                 break;
         }
     }
