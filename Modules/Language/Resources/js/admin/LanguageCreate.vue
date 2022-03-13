@@ -52,7 +52,7 @@
                                    v-model="item.active"
                                    id="checkbox_active" :value="1">
                             <label class="form-check-label" for="checkbox_active">
-                                {{ $t('Language.default') }}
+                                {{ $t('Language.on_off') }}
                             </label>
                         </div>
                     </div>
