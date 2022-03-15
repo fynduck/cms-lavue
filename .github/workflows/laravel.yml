@@ -8,7 +8,7 @@ jobs:
   laravel-tests:
 
     runs-on: ubuntu-latest
-    
+
     strategy:
       matrix:
         php-version: [7.3, 7.4, 8.0, 8.1, 8.2]
@@ -36,3 +36,5 @@ jobs:
       run: php artisan project:migrations
     - name: Run seeds
       run: php artisan project:seeds
+    - name: Run unit tests
+      run: vendor/bin/phpunit
