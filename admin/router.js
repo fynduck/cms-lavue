@@ -38,7 +38,7 @@ let routes = [
         component: () => import(`../Modules/User/Resources/js/auth/verification/resend.vue`).then(m => m.default || m)
     },
     {
-        path: '/admin/dashboard',
+        path: '/dashboard',
         name: 'dashboard.index',
         component: page('dashboard.vue'),
         meta: {
@@ -106,7 +106,7 @@ for (let moduleName of Object.keys(modules)) {
             })
         }
         let routeParams = {
-            path: `/admin/${arrayWords.join('-').toLowerCase()}`,
+            path: `/${arrayWords.join('-').toLowerCase()}`,
             name: `${arrayWords.join('-').toLowerCase()}.index`,
             children: children,
             component: () => import(`../Modules/${moduleName}/Resources/js/admin/${moduleName}List.vue`).then(m => m.default || m),
@@ -124,7 +124,7 @@ for (let moduleName of Object.keys(modules)) {
 
         if (!['Settings', 'Translate'].includes(moduleName)) {
             routes.push({
-                path: `/admin/${arrayWords.join('-').toLowerCase()}/create`,
+                path: `/${arrayWords.join('-').toLowerCase()}/create`,
                 name: `${arrayWords.join('-').toLowerCase()}.create`,
                 component: () => import(`../Modules/${moduleName}/Resources/js/admin/${moduleName}Create.vue`).then(m => m.default || m),
                 meta: {
@@ -132,7 +132,7 @@ for (let moduleName of Object.keys(modules)) {
                 }
             })
             routes.push({
-                path: `/admin/${arrayWords.join('-').toLowerCase()}/:id`,
+                path: `/${arrayWords.join('-').toLowerCase()}/:id`,
                 name: `${arrayWords.join('-').toLowerCase()}.edit`,
                 component: () => import(`../Modules/${moduleName}/Resources/js/admin/${moduleName}Create.vue`).then(m => m.default || m),
                 meta: {
